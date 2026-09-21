@@ -4,6 +4,9 @@
 
 **不需要你的电脑开机，也不需要任何代理** —— 任务在 GitHub 的服务器上跑，那台机器本身就在墙外。
 
+> **状态：已上线** · 仓库 https://github.com/E-guangxu/SL-Trendings
+> 2026-09-21 手动触发验证通过（run #1，32 秒，success，结果已自动提交回仓库）。
+
 ---
 
 ## 为什么不用本机跑
@@ -24,20 +27,27 @@
 
 ## 用法
 
-1. 在 GitHub 上新建一个仓库（public 或 private 都行，建议 **public**，Actions 完全免费无额度上限）
-2. 把本目录所有文件推上去：
+**已经部署好了，日常什么都不用做。** 每早 8 点结果自动出现在 `data/latest.md`。
+
+想手动跑一次：
+
+1. 打开 https://github.com/E-guangxu/SL-Trendings/actions
+2. 左侧选 `daily-hot` → 右侧 **Run workflow** → **Run workflow**
+3. 约 30 秒后刷新，会出现一次新的运行记录，结果同时提交到 `data/`
+
+### 换一台机器 / 重新部署
 
 ```bash
-git init
+git clone https://github.com/E-guangxu/SL-Trendings.git
+cd SL-Trendings
+# 改完 scripts/hot.py 后
 git add -A
-git commit -m "init daily hot"
-git branch -M main
-git remote add origin https://github.com/<你的用户名>/<仓库名>.git
-git push -u origin main
+git commit -m "chore: 调整抓取目标"
+git push
 ```
 
-3. 到仓库的 **Actions** 标签页，左侧选 `daily-hot`，点 **Run workflow** 手动跑一次验证
-4. 之后每天早 8 点自动执行，结果在 `data/` 目录下（`latest.md` 是最新一份）
+推代码时的 Git 凭据存在 **Windows 凭据管理器**里（`git:https://github.com`），
+不用每次输密码，也没有明文 token 文件。
 
 ---
 
