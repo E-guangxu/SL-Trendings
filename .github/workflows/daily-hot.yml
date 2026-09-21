@@ -1,0 +1,33 @@
+name: daily-hot
+
+on:
+  schedule:
+    # UTC 00:00 = 北京时间 08:00
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: 抓取热榜
+        run: python scripts/hot.py
+
+      - name: 提交结果
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: 每日热榜 $(date -u +%F)"
+          fi
+          git push
