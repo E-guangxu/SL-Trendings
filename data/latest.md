@@ -2,15 +2,15 @@
 
 ## Reddit · r/all
 1. [NASA just released these new photos from the surface of Mars.](https://www.reddit.com/r/Damnthatsinteresting/comments/1wm4txm/nasa_just_released_these_new_photos_from_the/)
-2. [People hate Flock so much its employees are now demoralized and thinking of quitting](https://www.reddit.com/r/technology/comments/1wm2b9s/people_hate_flock_so_much_its_employees_are_now/)
-3. [Who got 3 Cones is the winner 🏆🏆](https://www.reddit.com/r/interestingasfuck/comments/1wm421i/who_got_3_cones_is_the_winner/)
-4. [The Wait. [OC]](https://www.reddit.com/r/comics/comments/1wm6f6u/the_wait_oc/)
+2. [The Wait. [OC]](https://www.reddit.com/r/comics/comments/1wm6f6u/the_wait_oc/)
+3. [People hate Flock so much its employees are now demoralized and thinking of quitting](https://www.reddit.com/r/technology/comments/1wm2b9s/people_hate_flock_so_much_its_employees_are_now/)
+4. [Who got 3 Cones is the winner 🏆🏆](https://www.reddit.com/r/interestingasfuck/comments/1wm421i/who_got_3_cones_is_the_winner/)
 5. [Meirl](https://www.reddit.com/r/meirl/comments/1wm4dyg/meirl/)
-6. [When youre about to get carjacked but youre late for work](https://www.reddit.com/r/dashcams/comments/1wm0at8/when_youre_about_to_get_carjacked_but_youre_late/)
-7. [Baby Rhino Protects Mom](https://www.reddit.com/r/MadeMeSmile/comments/1wm0rs5/baby_rhino_protects_mom/)
-8. [Poor snake](https://www.reddit.com/r/Unexpected/comments/1wm0nvz/poor_snake/)
-9. [OC Price of gas in Deadhorse, Alaska September, 2026](https://www.reddit.com/r/pics/comments/1wlzp95/oc_price_of_gas_in_deadhorse_alaska_september_2026/)
-10. [Such hypocrite](https://www.reddit.com/r/memes/comments/1wm0zgm/such_hypocrite/)
+6. [they can't help it can they](https://www.reddit.com/r/pcmasterrace/comments/1wm6k2j/they_cant_help_it_can_they/)
+7. [When youre about to get carjacked but youre late for work](https://www.reddit.com/r/dashcams/comments/1wm0at8/when_youre_about_to_get_carjacked_but_youre_late/)
+8. [Baby Rhino Protects Mom](https://www.reddit.com/r/MadeMeSmile/comments/1wm0rs5/baby_rhino_protects_mom/)
+9. [Poor snake](https://www.reddit.com/r/Unexpected/comments/1wm0nvz/poor_snake/)
+10. [OC Price of gas in Deadhorse, Alaska September, 2026](https://www.reddit.com/r/pics/comments/1wlzp95/oc_price_of_gas_in_deadhorse_alaska_september_2026/)
 
 ## YouTube 全球热门
 1. [Escape From Playtime | Release Date Trailer](https://youtu.be/fAXzLmsbrd8)
