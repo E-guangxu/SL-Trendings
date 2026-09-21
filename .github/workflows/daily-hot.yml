@@ -20,6 +20,9 @@ jobs:
           python-version: '3.12'
 
       - name: 抓取热榜
+        env:
+          # Server酱 SendKey，存在仓库 Secret 里；没配则自动跳过推送，不会报错
+          SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
         run: python scripts/hot.py
 
       - name: 提交结果

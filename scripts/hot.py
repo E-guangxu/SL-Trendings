@@ -10,17 +10,27 @@
 import os
 import re
 import html
+import json
 import sys
 import time
 import datetime
 import pathlib
 import urllib.request
+import urllib.parse
+import urllib.error
 
 UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 )
 PROXY = os.environ.get("SCRAPE_PROXY", "").strip()
+
+# ---- 微信推送（Server酱）----
+# 在 GitHub 仓库 Settings → Secrets and variables → Actions 里配 SERVERCHAN_KEY。
+# 本地调试可以临时 set SERVERCHAN_KEY=xxx。留空则跳过推送。
+SERVERCHAN_KEY = os.environ.get("SERVERCHAN_KEY", "").strip()
+# 单条消息正文上限（Server酱 Turbo 是 32KB，留点余量）
+MAX_PUSH_BYTES = 30000
 
 # ---- 想追的 Reddit 版块 ----
 # 注意：Reddit 对未认证请求限流很紧（同一 IP 约每分钟 1 次）。
@@ -157,6 +167,39 @@ def build_report():
     return "\n".join(lines)
 
 
+def notify_serverchan(title, body):
+    """把报告推到微信（Server酱）。设计上永不抛异常 —— 推送失败不能拖垮抓取任务。"""
+    if not SERVERCHAN_KEY:
+        print("[notify] 未配置 SERVERCHAN_KEY，跳过微信推送")
+        return False
+
+    raw_bytes = body.encode("utf-8")
+    if len(raw_bytes) > MAX_PUSH_BYTES:
+        body = raw_bytes[:MAX_PUSH_BYTES].decode("utf-8", "ignore") + "\n\n...(内容过长已截断)"
+        print("[notify] 正文超长，已截断")
+
+    url = "https://sctapi.ftqq.com/%s.send" % SERVERCHAN_KEY
+    payload = urllib.parse.urlencode({"title": title, "desp": body}).encode("utf-8")
+    req = urllib.request.Request(url, data=payload, headers={"User-Agent": UA})
+    try:
+        with OPENER.open(req, timeout=30) as resp:
+            raw = resp.read().decode("utf-8", "ignore")
+        code = json.loads(raw).get("code")
+        print("[notify] 微信推送 %s: %s" % ("成功" if code == 0 else "失败", raw[:200]))
+        return code == 0
+    except urllib.error.HTTPError as exc:
+        detail = ""
+        try:
+            detail = exc.read().decode("utf-8", "ignore")[:300]
+        except Exception:
+            pass
+        print("[notify] 微信推送 HTTP %s: %s" % (exc.code, detail or exc))
+        return False
+    except Exception as exc:
+        print("[notify] 微信推送异常: %s" % exc)
+        return False
+
+
 def main():
     report = build_report()
     data_dir = pathlib.Path("data")
@@ -165,6 +208,7 @@ def main():
     (data_dir / ("%s.md" % today)).write_text(report, encoding="utf-8")
     (data_dir / "latest.md").write_text(report, encoding="utf-8")
     sys.stdout.write(report + "\n")
+    notify_serverchan("每日热榜 · %s" % today, report)
 
 
 if __name__ == "__main__":
