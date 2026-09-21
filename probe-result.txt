@@ -1,0 +1,19 @@
+# GitHub runner 出口连通性探测
+
+时间: 2026-09-21T09:35:27Z
+
+| 目标 | HTTP | 耗时(s) |
+|---|---|---|
+| https://qyapi.weixin.qq.com/cgi-bin/webhook/send | 200 | 0.692719 |
+| https://www.pushplus.plus/ | 200 | 1.286092 |
+| https://sctapi.ftqq.com/ | 200 | 1.009662 |
+| https://api.telegram.org | 302 | 0.448015 |
+| https://www.workbuddy.cn | 200 | 0.940406 |
+
+## qyapi 返回体（无 key 时应是 JSON 错误码）
+```
+{"errcode":93000,"errmsg":"invalid webhook url, hint: [1789983332197391378372385], from ip: 64.236.176.201, more info at https://open.work.weixin.qq.com/devtool/query?e=93000"}```
+
+## pushplus 返回体
+```
+{"code":999,"data":"token不能为空","msg":"服务端验证错误"}```
