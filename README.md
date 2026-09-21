@@ -4,9 +4,10 @@
 
 **不需要你的电脑开机，也不需要任何代理** —— 任务在 GitHub 的服务器上跑，那台机器本身就在墙外。
 
-> **状态：已上线** · 仓库 https://github.com/E-guangxu/SL-Trendings
-> 2026-09-21 手动触发验证通过（run #1，32 秒，success，结果已自动提交回仓库）。
-> 每日榜单同时推送到微信（Server酱）。
+> **状态：已上线，微信通道已验证打通**
+> 仓库 https://github.com/E-guangxu/SL-Trendings
+> 2026-09-21 验证：run #1 抓取成功（32 秒）；run #2 端到端成功（13 秒），
+> 日志中 `[notify] 微信推送 成功`，微信实际收到榜单。
 
 ---
 
@@ -81,7 +82,10 @@ channel_id 的拿法：打开频道页 → 查看网页源代码 → 搜 `channe
 
 每天早上抓完，除了写进 `data/`，还会把整份榜单**直接推到你微信**（走 Server酱）。
 
-配置只有一步：在仓库 **Settings → Secrets and variables → Actions → New repository secret** 里加一个名为 `SERVERCHAN_KEY` 的 Secret，值填你的 Server酱 SendKey。
+**已配置完成**：仓库 Secret `SERVERCHAN_KEY` 已写入，无需再操作。
+
+如果要换 key 或在新仓库重新配置，在 **Settings → Secrets and variables → Actions → New repository secret** 里加一个名为 `SERVERCHAN_KEY` 的 Secret，值填你的 Server酱 SendKey。
+（本机也可以用 `~/.workbuddy/bin/gh.mjs setsecret SERVERCHAN_KEY <keyfile>` 直接写，Secret 会自动做 libsodium 加密。）
 
 - 没配这个 Secret 也能正常跑，只是不发微信（日志里会打 `[notify] 未配置 SERVERCHAN_KEY，跳过微信推送`）
 - **推送失败不会让任务变红** —— 代码里做了兜底，抓到的数据照样提交。微信收不到请看 Actions 日志里的 `[notify]` 行
