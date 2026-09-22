@@ -52,39 +52,45 @@ KEEP_GLOBAL = os.environ.get("KEEP_GLOBAL", "").strip().lower() in ("1", "true",
 # 中文话题在 Reddit 这类英文源上几乎搜不到东西（实测「科技」近 24 小时 0 条），
 # 所以给常见话题配一个英文搜索词，**只用于 Reddit 段**；
 # 新闻（Google News 中文版）和 YouTube 仍用原词。
-# 想加词或覆盖：环境变量 TOPIC_ALIAS="科技=tech, 数码=gadgets"
+#
+# 用 `subreddit:xxx` 版块限定写法，比裸关键词准得多 —— 实测同一个话题：
+#   `us stocks`            → 6 条全是噪声（猫、ADHD 药、食品银行）
+#   `subreddit:stocks`     → 6 条全是 r/stocks 的真股票讨论 ✅
+# 版块名如果写错也别怕：reddit_search() 会退回用版块名当关键词再搜一次。
+# 想覆盖：环境变量 TOPIC_ALIAS="科技=technology, 数码=gadgets"
 TOPIC_ALIASES = {
-    "科技": "technology",
-    "人工智能": "artificial intelligence",
-    "编程": "programming",
-    "游戏": "gaming",
-    "电竞": "esports",
-    "美股": "us stocks",
-    "港股": "hong kong stocks",
-    "A股": "china stocks",
-    "财经": "finance",
-    "加密货币": "crypto",
-    "比特币": "bitcoin",
-    "手机": "smartphone",
-    "数码": "gadgets",
-    "汽车": "cars",
-    "新能源": "electric vehicles",
-    "机器人": "robotics",
-    "航天": "space",
-    "军事": "military",
-    "影视": "movies",
-    "综艺": "tv shows",
-    "音乐": "music",
-    "体育": "sports",
-    "足球": "football",
-    "篮球": "nba",
-    "健身": "fitness",
-    "旅行": "travel",
-    "美食": "food",
-    "健康": "health",
-    "教育": "education",
-    "宠物": "pets",
-    "时尚": "fashion",
+    "科技": "subreddit:technology",
+    "AI": "subreddit:artificial",
+    "人工智能": "subreddit:artificial",
+    "编程": "subreddit:programming",
+    "游戏": "subreddit:gaming",
+    "电竞": "subreddit:esports",
+    "美股": "subreddit:stocks",
+    "港股": "subreddit:HKstocks",
+    "A股": "subreddit:China_Stock",
+    "财经": "subreddit:economics",
+    "加密货币": "subreddit:CryptoCurrency",
+    "比特币": "subreddit:Bitcoin",
+    "手机": "subreddit:smartphones",
+    "数码": "subreddit:gadgets",
+    "汽车": "subreddit:cars",
+    "新能源": "subreddit:electricvehicles",
+    "机器人": "subreddit:robotics",
+    "航天": "subreddit:space",
+    "军事": "subreddit:Military",
+    "影视": "subreddit:movies",
+    "综艺": "subreddit:television",
+    "音乐": "subreddit:music",
+    "体育": "subreddit:sports",
+    "足球": "subreddit:soccer",
+    "篮球": "subreddit:nba",
+    "健身": "subreddit:fitness",
+    "旅行": "subreddit:travel",
+    "美食": "subreddit:food",
+    "健康": "subreddit:health",
+    "教育": "subreddit:education",
+    "宠物": "subreddit:aww",
+    "时尚": "subreddit:femalefashionadvice",
 }
 
 
@@ -104,6 +110,13 @@ ALIAS_OVERRIDES = _load_alias_overrides()
 def topic_query(topic):
     """话题在英文源（Reddit）上搜索时用的词。"""
     return ALIAS_OVERRIDES.get(topic) or TOPIC_ALIASES.get(topic, topic)
+
+# ---- 中文圈热点（国内榜单）----
+# 实测 2026-09-22：这四个接口在**海外出口**（GitHub runner 的美国 IP）下也能拿到数据：
+#   微博热搜 52 条 / 抖音热榜 50 条 / B站排行 100 条 / 头条热榜 50 条
+# 但 B站 会间歇性返回 code=-352（风控），所以逐源容错：单源失败只跳过它自己，不影响整体。
+CN_HOT = (os.environ.get("CN_HOT", "").strip().lower() or "on") not in ("0", "false", "no", "off")
+CN_HOT_LIMIT = int(os.environ.get("CN_HOT_LIMIT", "").strip() or "10")
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 TOPICS_FILE = REPO_ROOT / "config" / "topics.txt"
@@ -174,6 +187,21 @@ def fetch(url, timeout=40):
         return resp.read().decode("utf-8", "ignore")
 
 
+def fetch_retry(url, retries=3, backoff=4, timeout=40):
+    """带重试的 fetch。Google News 会偶发 SSL 中断
+    （实测 `[SSL: UNEXPECTED_EOF_WHILE_READING]`），重试基本就好，
+    别让一次抖动把整段新闻变成「抓取失败」。"""
+    last = None
+    for attempt in range(retries):
+        try:
+            return fetch(url, timeout=timeout)
+        except Exception as exc:
+            last = exc
+            if attempt < retries - 1:
+                time.sleep(backoff * (attempt + 1))
+    raise last
+
+
 def load_topics():
     """话题来源：环境变量 TOPICS 优先，其次 config/topics.txt。"""
     parts = []
@@ -232,32 +260,36 @@ def reddit_hot(sub, limit=10):
 
 def reddit_search(query, limit=TOPIC_REDDIT_LIMIT):
     """按话题搜 Reddit，先「近一天 + 票数最高(top)」，没结果退到「近一周 + top」。
-    实测（2026-09-22，话题 科技→technology）：
-      sort=top / t=day    → 6 条里 4 条来自 r/technology，是真实科技热点 ✅
-      sort=hot / t=day    → 全是小版块的梗图、子版块首页，基本不可用 ❌
-      sort=relevance/t=day→ 杂（IndianStreetBets、Helldivers 都混进来）❌
-    中文关键词在 day 窗口下经常一条都搜不到，所以调用方先用 topic_query() 换英文词。"""
+    实测（2026-09-22）：
+      sort=top / t=day    → r/technology 的真实热点，可用 ✅
+      sort=hot / t=day    → 全是小版块的梗图 ❌
+      sort=relevance/t=day→ 杂（股票版、游戏版都混进来）❌
+    话题词会被 topic_query() 换成英文或 `subreddit:xxx` 版块限定（中文词在 Reddit 上搜不到）。"""
 
-    def grab(sort, t):
-        n = max(limit * 2, 10)
+    def grab(sort, t, q, n):
         url = "https://www.reddit.com/search.rss?" + urllib.parse.urlencode(
-            {"q": query, "sort": sort, "t": t, "limit": n}
+            {"q": q, "sort": sort, "t": t, "limit": n}
         )
         items = reddit_entries(_reddit_fetch(url), n)
         # search.rss 会把版块首页（/r/xxx/，不含 /comments/）也当成结果塞进来，
         # 那不是帖子，滤掉。
         return [it for it in items if "/comments/" in it[1]][:limit]
 
-    items = grab("top", "day")
+    n = max(limit * 2, 10)
+    items = grab("top", "day", query, n)
     if not items:
         time.sleep(REDDIT_GAP)
-        items = grab("top", "week")
+        items = grab("top", "week", query, n)
+    if not items and query.startswith("subreddit:"):
+        # 版块名可能不存在（或该版块近一周没热帖），退一步拿版块名当关键词搜
+        time.sleep(REDDIT_GAP)
+        items = grab("top", "week", query.split(":", 1)[1], n)
     return items
 
 
 def kworb_trending(limit=15):
     """YouTube 全球热门榜。聚合站是纯 HTML，无需登录，最稳"""
-    page = fetch("https://kworb.net/youtube/trending_overall.html")
+    page = fetch_retry("https://kworb.net/youtube/trending_overall.html", retries=2)
     rows = re.findall(
         r'href="/youtube/trending/video/([A-Za-z0-9_\-]{6,})\.html">([^<]+)</a>', page
     )
@@ -296,7 +328,7 @@ def gnews_topic(query, limit=TOPIC_NEWS_LIMIT):
     url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
         {"q": query, "hl": "zh-CN", "gl": "CN", "ceid": "CN:zh-Hans"}
     )
-    xml = fetch(url)
+    xml = fetch_retry(url)
     out = []
     for item in re.findall(r"<item>([\s\S]*?)</item>", xml)[:limit]:
         t = re.search(r"<title>([\s\S]*?)</title>", item)
@@ -355,7 +387,7 @@ def _yt_search_raw(query, sp, cap):
     params = {"search_query": query}
     if sp:
         params["sp"] = sp
-    page = fetch("https://www.youtube.com/results?" + urllib.parse.urlencode(params))
+    page = fetch_retry("https://www.youtube.com/results?" + urllib.parse.urlencode(params), retries=2)
     m = re.search(r"var ytInitialData = (\{[\s\S]*?\});</script>", page)
     if not m:
         raise RuntimeError("结果页里找不到 ytInitialData（可能被换了模板或弹出同意页）")
@@ -462,6 +494,198 @@ def global_sections(lines):
             lines.append("")
 
 
+def _cn_num(v):
+    """把热度数字写成「320.9万」这种可读形式。"""
+    try:
+        v = float(v)
+    except (TypeError, ValueError):
+        return ""
+    if v >= 1e8:
+        return "%.1f亿" % (v / 1e8)
+    if v >= 1e4:
+        return "%.0f万" % (v / 1e4)
+    return str(int(v))
+
+
+def _cn_weibo(j, limit):
+    out = []
+    for x in ((j.get("data") or {}).get("realtime") or []):
+        word = (x.get("word") or "").strip()
+        if not word:
+            continue
+        tag = x.get("label_name") or x.get("icon_desc") or ""
+        num = x.get("num")
+        meta = " · ".join(v for v in (tag, ("热 " + _cn_num(num)) if num else "") if v)
+        out.append(
+            (word, "https://s.weibo.com/weibo?q=%s" % urllib.parse.quote("#" + word + "#"), meta)
+        )
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _cn_douyin(j, limit):
+    out = []
+    for x in (j.get("word_list") or []):
+        word = (x.get("word") or "").strip()
+        if not word:
+            continue
+        hv = x.get("hot_value")
+        out.append(
+            (
+                word,
+                "https://www.douyin.com/search/%s" % urllib.parse.quote(word),
+                ("热度 " + _cn_num(hv)) if hv else "",
+            )
+        )
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _cn_bili(j, limit):
+    out = []
+    for x in ((j.get("data") or {}).get("list") or []):
+        title = (x.get("title") or "").strip()
+        if not title:
+            continue
+        owner = (x.get("owner") or {}).get("name") or ""
+        views = (x.get("stat") or {}).get("view") or 0
+        meta = " · ".join(v for v in (owner, ("播放 " + _cn_num(views)) if views else "") if v)
+        bvid = x.get("bvid") or ""
+        out.append(
+            (title, "https://www.bilibili.com/video/%s" % bvid if bvid else "", meta)
+        )
+        if len(out) >= limit:
+            break
+    return out
+
+
+def _cn_toutiao(j, limit):
+    out = []
+    for x in (j.get("data") or []):
+        title = (x.get("Title") or "").strip()
+        if not title:
+            continue
+        hv = x.get("HotValue")
+        # 头条给的 URL 后面挂着一长串跟踪参数（实测每条 700+ 字节，
+        # 10 条就把消息撑大 7KB），只保留 /trending/<id>/ 这一段。
+        link = (x.get("Url") or "").split("?")[0]
+        out.append((title, link, ("热度 " + _cn_num(hv)) if hv else ""))
+        if len(out) >= limit:
+            break
+    return out
+
+
+# 顺序就是推送里的顺序：微博 → 抖音 → B站 → 头条
+CN_SOURCES = [
+    {
+        "label": "微博热搜",
+        "url": "https://weibo.com/ajax/side/hotSearch",
+        "referer": "https://weibo.com/",
+        "parse": _cn_weibo,
+    },
+    {
+        "label": "抖音热榜",
+        "url": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
+        "referer": "https://www.douyin.com/",
+        "parse": _cn_douyin,
+    },
+    {
+        "label": "B站全站排行",
+        "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all",
+        # ranking 接口会间歇性返回 code=-352（风控，实测约一半概率中招）。
+        # 两道保险：① 先访问主页拿 cookie 带上（不带时几乎必挂）
+        #           ② 仍失败就退到「热门视频」接口（返回结构一样，共用同一个解析器）
+        "referer": "https://www.bilibili.com/",
+        "parse": _cn_bili,
+        "cookie": True,
+        "fallback": "https://api.bilibili.com/x/web-interface/popular?ps=20&pn=1",
+    },
+    {
+        "label": "今日头条热榜",
+        "url": "https://www.toutiao.com/hot-event/hot-board/?origin=toutiao_pc",
+        "referer": "https://www.toutiao.com/",
+        "parse": _cn_toutiao,
+    },
+]
+
+_bili_cookie_cache = {"v": None}
+
+
+def _bili_cookie():
+    """访问一次 B站主页，把它发的 cookie 原样带上再调接口。"""
+    if _bili_cookie_cache["v"] is not None:
+        return _bili_cookie_cache["v"]
+    jar = ""
+    try:
+        req = urllib.request.Request(
+            "https://www.bilibili.com/",
+            headers={"User-Agent": UA, "Accept": "text/html,*/*"},
+        )
+        with OPENER.open(req, timeout=20) as resp:
+            jar = "; ".join(
+                c.split(";")[0].strip() for c in (resp.headers.get_all("Set-Cookie") or [])
+            )
+    except Exception as exc:
+        print("[cn] B站 cookie 预热失败: %s" % exc)
+    _bili_cookie_cache["v"] = jar
+    return jar
+
+
+def _cn_json(url, referer, cookie=None):
+    headers = {
+        "User-Agent": UA,
+        "Accept": "application/json,text/html,*/*",
+        "Referer": referer,
+    }
+    if cookie:
+        headers["Cookie"] = cookie
+    req = urllib.request.Request(url, headers=headers)
+    with OPENER.open(req, timeout=30) as resp:
+        return json.loads(resp.read().decode("utf-8", "ignore"))
+
+
+def _cn_items(src, limit, retries=2):
+    """抓单个国内榜单。主接口失败会退到 fallback（配了的话）。
+    每个 URL 重试 retries 次 —— B站 的 -352 是概率性的，重试常有奇效。"""
+    urls = [src["url"]] + ([src["fallback"]] if src.get("fallback") else [])
+    last = None
+    for url in urls:
+        for attempt in range(retries):
+            try:
+                cookie = _bili_cookie() if src.get("cookie") else None
+                j = _cn_json(url, src["referer"], cookie)
+                if isinstance(j, dict) and j.get("code") not in (None, 0):
+                    raise RuntimeError("接口返回 code=%s" % j.get("code"))
+                items = src["parse"](j, limit)
+                if not items:
+                    raise RuntimeError("解析为空（接口可能改版）")
+                return items
+            except Exception as exc:
+                last = exc
+                if attempt < retries - 1:
+                    time.sleep(3)
+    raise last
+
+
+def cn_sections(lines):
+    """中文圈热点：国内四个榜单，逐源容错 —— 挂一个不影响其他。"""
+    lines.append("## 中文圈热点")
+    lines.append("")
+    for src in CN_SOURCES:
+        lines.append("### %s" % src["label"])
+        try:
+            for i, (t, link, meta) in enumerate(_cn_items(src, CN_HOT_LIMIT), 1):
+                if link:
+                    lines.append("%d. [%s](%s)%s" % (i, t, link, (" · " + meta) if meta else ""))
+                else:
+                    lines.append("%d. %s%s" % (i, t, (" · " + meta) if meta else ""))
+        except Exception as exc:
+            lines.append("(抓取失败: %s)" % exc)
+        lines.append("")
+
+
 def topic_sections(lines, topics):
     """话题模式：每个话题 = 最新新闻 + Reddit 讨论 + YouTube 最新视频。"""
     for idx, topic in enumerate(topics):
@@ -520,6 +744,13 @@ def build_report(topics):
     if topics:
         lines.append("> 话题：%s" % " / ".join(topics))
         lines.append("")
+
+    # 中文圈热点放最前：国内榜单是每天第一眼要看的东西。
+    # 临时查询（adhoc + 指定话题）时不带 —— 那次的目的就是看这个话题，别塞一堆大盘进来。
+    if CN_HOT and not (MODE == "adhoc" and topics):
+        cn_sections(lines)
+
+    if topics:
         topic_sections(lines, topics)
         if not KEEP_GLOBAL:
             return "\n".join(lines)
@@ -528,17 +759,36 @@ def build_report(topics):
     return "\n".join(lines)
 
 
-def notify_serverchan(title, body):
-    """把报告推到微信（Server酱）。设计上永不抛异常 —— 推送失败不能拖垮抓取任务。"""
-    if not SERVERCHAN_KEY:
-        print("[notify] 未配置 SERVERCHAN_KEY，跳过微信推送")
-        return False
+def split_report(body, limit):
+    """把报告切成若干块，每块 ≤ limit 字节，切点尽量落在 `## ` 段边界上。
 
-    raw_bytes = body.encode("utf-8")
-    if len(raw_bytes) > MAX_PUSH_BYTES:
-        body = raw_bytes[:MAX_PUSH_BYTES].decode("utf-8", "ignore") + "\n\n...(内容过长已截断)"
-        print("[notify] 正文超长，已截断")
+    为什么要切：内容全开（中文圈热点 + 多话题 + 全站榜）实测约 33KB，
+    超过 Server酱 单条正文上限，截断会把最后几段整段丢掉。
+    宁可多发一条，也别丢内容。"""
+    blocks, cur = [], []
+    for line in body.split("\n"):
+        if line.startswith("## ") and cur:
+            blocks.append("\n".join(cur))
+            cur = [line]
+        else:
+            cur.append(line)
+    if cur:
+        blocks.append("\n".join(cur))
 
+    chunks, buf = [], ""
+    for b in blocks:
+        cand = (buf + "\n" + b) if buf else b
+        if buf and len(cand.encode("utf-8")) > limit:
+            chunks.append(buf)
+            buf = b
+        else:
+            buf = cand
+    if buf:
+        chunks.append(buf)
+    return chunks
+
+
+def _push_once(title, body):
     url = "https://sctapi.ftqq.com/%s.send" % SERVERCHAN_KEY
     payload = urllib.parse.urlencode({"title": title, "desp": body}).encode("utf-8")
     req = urllib.request.Request(url, data=payload, headers={"User-Agent": UA})
@@ -559,6 +809,31 @@ def notify_serverchan(title, body):
     except Exception as exc:
         print("[notify] 微信推送异常: %s" % exc)
         return False
+
+
+def notify_serverchan(title, body):
+    """把报告推到微信（Server酱）。设计上永不抛异常 —— 推送失败不能拖垮抓取任务。
+    内容过长时自动按段拆成多条发送（单条上限见 MAX_PUSH_BYTES）。"""
+    if not SERVERCHAN_KEY:
+        print("[notify] 未配置 SERVERCHAN_KEY，跳过微信推送")
+        return False
+
+    chunks = split_report(body, MAX_PUSH_BYTES)
+    total = len(chunks)
+    ok = True
+    for idx, chunk in enumerate(chunks, 1):
+        part = title if total == 1 else "%s（%d/%d）" % (title, idx, total)
+        if idx > 1:
+            time.sleep(3)  # 连着发太快会被限流
+        if len(chunk.encode("utf-8")) > MAX_PUSH_BYTES:
+            chunk = (
+                chunk.encode("utf-8")[:MAX_PUSH_BYTES].decode("utf-8", "ignore")
+                + "\n\n...(过长已截断)"
+            )
+            print("[notify] 第 %d 段仍超长，已截断" % idx)
+        ok = _push_once(part, chunk) and ok
+    print("[notify] 共 %d 条（%s）" % (total, "内容分段，避免截断" if total > 1 else "单条发完"))
+    return ok
 
 
 def slugify(text):

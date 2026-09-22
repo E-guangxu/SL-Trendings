@@ -39,6 +39,10 @@ on:
         description: '话题模式下是否仍附带全站榜（Reddit r/all + YouTube 全球热门）。每日那次默认就是「全站榜 + 话题」'
         type: boolean
         default: true
+      cn_hot:
+        description: '是否附带中文圈热点（微博/抖音/B站/头条）。每日那次默认开'
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -60,6 +64,8 @@ jobs:
           echo "inputs.force    = ${{ github.event.inputs.force }}"
           echo "inputs.topics   = ${{ github.event.inputs.topics }}"
           echo "inputs.mode     = ${{ github.event.inputs.mode }}"
+          echo "inputs.keep_global = ${{ github.event.inputs.keep_global }}"
+          echo "inputs.cn_hot   = ${{ github.event.inputs.cn_hot }}"
           echo "run_number      = ${{ github.run_number }}"
           date -u '+现在(UTC)       = %F %T'
 
@@ -77,6 +83,8 @@ jobs:
           # 定时触发时 inputs 为空 → 兜底 'true'，所以每日 = 全站榜 + 话题；
           # 手动触发时以勾选框为准（取消勾选才变 false）。
           KEEP_GLOBAL: ${{ github.event.inputs.keep_global || 'true' }}
+          # 中文圈热点（微博/抖音/B站/头条）：每日那次默认开，手动触发可关。
+          CN_HOT: ${{ github.event.inputs.cn_hot || 'true' }}
         run: python scripts/hot.py
 
       - name: 提交结果

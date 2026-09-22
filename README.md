@@ -1,6 +1,7 @@
 # 每日热榜 · 云端自动抓取
 
-每早 8 点（北京时间）自动抓取 Reddit 热榜和 YouTube 全球热门榜，结果自动提交回本仓库。
+每早 8 点（北京时间）自动抓取**中文圈热点**（微博 / 抖音 / B站 / 头条）+ **你指定的话题**
++ **全站榜**（Reddit r/all、YouTube 全球热门），结果自动提交回本仓库。
 
 **不需要你的电脑开机，也不需要任何代理** —— 任务在 GitHub 的服务器上跑，那台机器本身就在墙外。
 
@@ -34,6 +35,30 @@
 ## 用法
 
 **已经部署好了，日常什么都不用做。** 每早 8 点结果自动出现在 `data/latest.md`。
+
+### 推送里有什么
+
+| 段落 | 来源 | 条数 |
+|---|---|---|
+| 中文圈热点 · 微博热搜 | `weibo.com/ajax/side/hotSearch` | 10 |
+| 中文圈热点 · 抖音热榜 | `iesdouyin.com/…/hotsearch/billboard/word` | 10 |
+| 中文圈热点 · B站全站排行 | `api.bilibili.com/x/web-interface/ranking/v2` | 10 |
+| 中文圈热点 · 今日头条热榜 | `toutiao.com/hot-event/hot-board` | 10 |
+| 话题：每个话题一段 | Google News + Reddit 搜索 + YouTube 搜索 | 6 + 6 + 6 |
+| Reddit · r/all | Reddit 热榜 RSS | 10 |
+| YouTube 全球热门 | kworb 聚合榜 | 15 |
+
+中文圈热点**逐源容错**：某个源挂了只在那一节写「抓取失败」，不影响其他部分。
+
+B站 的 ranking 接口会间歇性返回 `code=-352`（风控，实测约一半概率中招），做了两道保险：
+先访问一次主页把它发的 cookie 带上（不带时几乎必挂），仍失败就退到「热门视频」接口
+（返回结构相同，共用同一个解析器），再失败才跳过这一节。
+
+内容全开时报告约 30KB，接近 Server酱 单条正文上限。超过就会**自动拆成 2 条发送**
+（标题带 `（1/2）`），不会把尾部几段截掉。
+
+默认全开。想关掉某一类：网页触发时取消勾选 `cn_hot` / `keep_global`，
+本机跑时用环境变量 `CN_HOT=0` / `KEEP_GLOBAL=0`。
 
 想手动跑一次：
 
@@ -93,12 +118,14 @@ channel_id 的拿法：打开频道页 → 查看网页源代码 → 搜 `channe
 | 段落 | 来源 | 特点 |
 |---|---|---|
 | 最新新闻 | Google News RSS 搜索 | 无需 key、最稳，标题自带来源，用原话题词（中文照搜） |
-| Reddit 讨论（近 24 小时） | Reddit 搜索 RSS | 中文话题自动换英文搜索词；排序必须用 `top`（实测 `hot`/`relevance` 全是小版块梗图），无结果退到「近一周 + top」 |
+| Reddit 讨论（近 24 小时） | Reddit 搜索 RSS | 中文话题自动换成 `subreddit:xxx` 版块限定；排序必须用 `top`（实测 `hot`/`relevance` 全是小版块梗图），无结果退到「近一周 + top」 |
 | YouTube 最新视频 | 搜索结果页 + 时间窗 | 日期排序参数实测不可靠，改为按时间窗从紧到松试，默认只留 30 天内（`YT_MAX_AGE_DAYS` 可调） |
 
-**中文话题在 Reddit 上基本搜不到东西**（实测「科技」近 24 小时 0 条），所以常见中文话题内置了英文搜索词
-（`科技→technology`、`美股→us stocks`、`游戏→gaming`……，共 30 个），**只作用于 Reddit 段**。
-要临时加词：本机跑时设 `TOPIC_ALIAS="数码=gadgets, 摄影=photography"`。
+**中文话题在 Reddit 上基本搜不到东西**（实测「科技」近 24 小时 0 条），所以常见中文话题内置了 Reddit 搜索词，
+而且用的是**版块限定**写法：`科技→subreddit:technology`、`美股→subreddit:stocks`、`游戏→subreddit:gaming`……
+实测同一个话题，裸关键词 `us stocks` 返回的全是噪声（猫图、ADHD 药），`subreddit:stocks` 则是 6/6 全是 r/stocks 的真讨论。
+**只作用于 Reddit 段**，新闻和 YouTube 仍用中文原词。版块名写错会自动退回关键词搜索。
+要临时覆盖：本机跑时设 `TOPIC_ALIAS="数码=subreddit:gadgets"`。
 
 ### 用法 1：每天固定多跟几个话题（最常用）
 
