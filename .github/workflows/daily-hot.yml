@@ -38,6 +38,14 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: 触发信息（诊断用）
+        run: |
+          echo "event_name      = ${{ github.event_name }}"
+          echo "event.schedule  = ${{ github.event.schedule }}"
+          echo "inputs.force    = ${{ github.event.inputs.force }}"
+          echo "run_number      = ${{ github.run_number }}"
+          date -u '+现在(UTC)       = %F %T'
+
       - name: 抓取热榜
         env:
           # Server酱 SendKey，存在仓库 Secret 里；没配则自动跳过推送，不会报错

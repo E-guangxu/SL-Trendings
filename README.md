@@ -99,7 +99,11 @@ SendKey 的拿法：打开 https://sct.ftqq.com → 微信扫码登录 → 「Se
 
 ---
 
-## 定时为什么会漏跑（重要）
+## 定时为什么会漏跑（重要，2026-09-22 实测）
+
+有两层原因，第二层是决定性的。
+
+### 第一层：GitHub 的 cron 本身就不精确
 
 GitHub Actions 的 `schedule` **不是精确调度器，是"尽力而为"**。官方原文：
 
@@ -107,11 +111,28 @@ GitHub Actions 的 `schedule` **不是精确调度器，是"尽力而为"**。�
 > High load times include the start of every hour. **If the load is sufficiently high enough,
 > some queued jobs may be dropped.**
 
-翻译过来就是：**整点最堵；堵到一定程度，排队的任务会被直接丢掉**，而且**不会补跑**。
+**整点最堵；堵到一定程度任务被直接丢弃，而且不补跑。** 而 `0 0 * * *`（UTC 零点）
+恰好是全世界最多人用的时段。
 
-而 `0 0 * * *`（UTC 零点）恰好是全世界最多人用的时段——几乎所有人的"每日任务"都写在这个点上。
+### 第二层（决定性）：GitHub 当前的 schedule 派发故障
 
-### 本项目的三重防护
+2026-09-22 实测发现：**这个仓库的 cron 从来没派发过任何一次运行。**
+
+| 检查项 | 结果 |
+|---|---|
+| 工作流 state | `active` |
+| 文件在默认分支 main | ✅ |
+| 仓库被禁用 / 归档 | 否 |
+| `workflow_dispatch` 手动触发 | ✅ 3 秒内启动 |
+| **`event=schedule` 的累计运行数** | **0** |
+| 用 `*/5`（每 5 分钟）实测 35 分钟 | **仍然是 0** |
+
+配置全对、手动能跑，但**定时这条链路完全不工作**。这与 GitHub 社区正在处理的故障一致
+（[讨论 #207211](https://github.com/orgs/community/discussions/207211)，2026-09-08：
+最小 `*/5` 工作流在多个仓库都完全不产生运行；有人撰文记录了这轮故障，
+并说明自己的解法是"把时钟移出 GitHub"）。注意 GitHub 状态页当时仍显示 Actions "Normal"。
+
+### 本项目的三步防护
 
 ```yaml
 schedule:
@@ -126,25 +147,43 @@ schedule:
 | 冗余 | 同一小时内排三次 | 前面被丢弃，后面自动补上 |
 | 不重复 | `hot.py` 里检查 `data/{今天}.md` 是否已存在，存在就跳过 | 冗余触发不会重复推送、重复提交 |
 
-三次触发里**任意一次成功就够**，成功后其余的会打印 `[skip] ... 今天已经跑过了` 安静退出。
+三次里**任意一次成功就够**，成功后其余的会打印 `[skip] ... 今天已经跑过了` 安静退出。
 
-> 手动触发（Run workflow）默认带 `FORCE=true`，会忽略这个守卫强制重跑，方便测试。
+> 手动触发（Run workflow）默认带 `FORCE=true`，忽略守卫强制重跑，方便测试。
+> 想确认某次运行是被什么触发的，看日志里「触发信息（诊断用）」那一步的 `event_name`。
 
-### 还嫌不稳？用外部定时器
+### ✅ 真正的时钟：外部定时器（推荐）
 
-如果某天要求"必须准点"（比如要抢时效性内容），可以挂一个外部定时器去打 `workflow_dispatch` API。
-`workflow_dispatch` 走的是实时事件通道，不经过那个会丢任务的批量 cron 调度器，秒级触发：
+因为上面的第二层原因，**cron 在当前不可依赖**。可靠做法是把"时钟"挪到 GitHub 之外——
+用外部定时器打 `workflow_dispatch` API。这条路**实测 3 秒内启动**：
 
 ```bash
 curl -X POST \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: Bearer <你的 token>" \
+  -H "Content-Type: application/json" \
   https://api.github.com/repos/E-guangxu/SL-Trendings/actions/workflows/daily-hot.yml/dispatches \
-  -d '{"ref":"main"}'
+  -d '{"ref":"main","inputs":{"force":"false"}}'
 ```
 
-免费方案：cron-job.org、Cloudflare Worker 的 cron trigger。本项目目前没接，靠上面三重防护。
-（顺带一提，`gh.mjs dispatch daily-hot.yml` 就是干这件事的。）
+> `force: false` 很关键：这样**外部触发和 cron 谁先跑通都行**，后到的那个会自动跳过，
+> 不会重复推送。
+
+**三种挂法**：
+
+| 方式 | 免开机 | 需要什么 |
+|---|---|---|
+| cron-job.org（免费）| ✅ | 注册账号，把上面的 URL + token 填进去 |
+| Cloudflare Worker cron（免费）| ✅ | Cloudflare 账号 |
+| 本机 Windows 计划任务 | ❌ 需开机 | 已配好：`~/.workbuddy/bin/trigger-daily-hot.cmd` |
+
+本机那个脚本已写好并实测通过（`node ~/.workbuddy/bin/trigger-daily-hot.mjs`，
+3 秒内启动运行，日志写到 `~/.workbuddy/logs/trigger-daily-hot.log`）。
+它**不需要代理、也不需要 WorkBuddy 在运行**——因为 GitHub API 可以直连。唯一前提是电脑开着。
+
+> **安全提示**：给外部服务的 token 建议用 **fine-grained token，只授权这一个仓库的
+> `Actions: read and write`**，而不是全权 token。这样即使泄露，最坏情况也只是有人能触发
+> 这个公开仓库的任务。
 
 ---
 
