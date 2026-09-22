@@ -44,8 +44,66 @@ PROXY = os.environ.get("SCRAPE_PROXY", "").strip()
 # adhoc = 临时查询，不受守卫约束，只写 data/adhoc/ 不覆盖当日文件，永远推送
 MODE = (os.environ.get("MODE", "").strip().lower() or "daily")
 TOPICS_ENV = os.environ.get("TOPICS", "").strip()
-# 话题模式下是否仍然附带全站榜（1/true 开启）。默认关，避免消息过长。
+# 话题模式下是否仍然附带全站榜（1/true 开启）。
+# 每日那次由 workflow 兜底设为 true —— 即「加话题」= 全站榜之外再追加，
+# 不是把全站榜换掉；手动触发时以勾选框为准。
 KEEP_GLOBAL = os.environ.get("KEEP_GLOBAL", "").strip().lower() in ("1", "true", "yes", "on")
+
+# 中文话题在 Reddit 这类英文源上几乎搜不到东西（实测「科技」近 24 小时 0 条），
+# 所以给常见话题配一个英文搜索词，**只用于 Reddit 段**；
+# 新闻（Google News 中文版）和 YouTube 仍用原词。
+# 想加词或覆盖：环境变量 TOPIC_ALIAS="科技=tech, 数码=gadgets"
+TOPIC_ALIASES = {
+    "科技": "technology",
+    "人工智能": "artificial intelligence",
+    "编程": "programming",
+    "游戏": "gaming",
+    "电竞": "esports",
+    "美股": "us stocks",
+    "港股": "hong kong stocks",
+    "A股": "china stocks",
+    "财经": "finance",
+    "加密货币": "crypto",
+    "比特币": "bitcoin",
+    "手机": "smartphone",
+    "数码": "gadgets",
+    "汽车": "cars",
+    "新能源": "electric vehicles",
+    "机器人": "robotics",
+    "航天": "space",
+    "军事": "military",
+    "影视": "movies",
+    "综艺": "tv shows",
+    "音乐": "music",
+    "体育": "sports",
+    "足球": "football",
+    "篮球": "nba",
+    "健身": "fitness",
+    "旅行": "travel",
+    "美食": "food",
+    "健康": "health",
+    "教育": "education",
+    "宠物": "pets",
+    "时尚": "fashion",
+}
+
+
+def _load_alias_overrides():
+    out = {}
+    for pair in os.environ.get("TOPIC_ALIAS", "").split(","):
+        if "=" in pair:
+            k, v = pair.split("=", 1)
+            if k.strip() and v.strip():
+                out[k.strip()] = v.strip()
+    return out
+
+
+ALIAS_OVERRIDES = _load_alias_overrides()
+
+
+def topic_query(topic):
+    """话题在英文源（Reddit）上搜索时用的词。"""
+    return ALIAS_OVERRIDES.get(topic) or TOPIC_ALIASES.get(topic, topic)
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 TOPICS_FILE = REPO_ROOT / "config" / "topics.txt"
@@ -173,18 +231,27 @@ def reddit_hot(sub, limit=10):
 
 
 def reddit_search(query, limit=TOPIC_REDDIT_LIMIT):
-    """按话题搜 Reddit。先按「近一天 + 热度」，没结果再退到「近一周 + 相关度」——
-    中文关键词在 hot/day 下经常一条都搜不到。"""
-    url = "https://www.reddit.com/search.rss?" + urllib.parse.urlencode(
-        {"q": query, "sort": "hot", "t": "day", "limit": limit}
-    )
-    items = reddit_entries(_reddit_fetch(url), limit)
+    """按话题搜 Reddit，先「近一天 + 票数最高(top)」，没结果退到「近一周 + top」。
+    实测（2026-09-22，话题 科技→technology）：
+      sort=top / t=day    → 6 条里 4 条来自 r/technology，是真实科技热点 ✅
+      sort=hot / t=day    → 全是小版块的梗图、子版块首页，基本不可用 ❌
+      sort=relevance/t=day→ 杂（IndianStreetBets、Helldivers 都混进来）❌
+    中文关键词在 day 窗口下经常一条都搜不到，所以调用方先用 topic_query() 换英文词。"""
+
+    def grab(sort, t):
+        n = max(limit * 2, 10)
+        url = "https://www.reddit.com/search.rss?" + urllib.parse.urlencode(
+            {"q": query, "sort": sort, "t": t, "limit": n}
+        )
+        items = reddit_entries(_reddit_fetch(url), n)
+        # search.rss 会把版块首页（/r/xxx/，不含 /comments/）也当成结果塞进来，
+        # 那不是帖子，滤掉。
+        return [it for it in items if "/comments/" in it[1]][:limit]
+
+    items = grab("top", "day")
     if not items:
         time.sleep(REDDIT_GAP)
-        url2 = "https://www.reddit.com/search.rss?" + urllib.parse.urlencode(
-            {"q": query, "sort": "relevance", "t": "week", "limit": limit}
-        )
-        items = reddit_entries(_reddit_fetch(url2), limit)
+        items = grab("top", "week")
     return items
 
 
@@ -416,9 +483,12 @@ def topic_sections(lines, topics):
         lines.append("")
 
         time.sleep(REDDIT_GAP)
-        lines.append("### Reddit 讨论（近 24 小时）")
+        rq = topic_query(topic)
+        lines.append(
+            "### Reddit 讨论（近 24 小时）" + ("" if rq == topic else "　搜索词：%s" % rq)
+        )
         try:
-            items = reddit_search(topic, TOPIC_REDDIT_LIMIT)
+            items = reddit_search(rq, TOPIC_REDDIT_LIMIT)
             if items:
                 for i, (t, link) in enumerate(items, 1):
                     lines.append("%d. [%s](%s)" % (i, t, link))
