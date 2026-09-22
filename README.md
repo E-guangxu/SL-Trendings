@@ -4,10 +4,14 @@
 
 **不需要你的电脑开机，也不需要任何代理** —— 任务在 GitHub 的服务器上跑，那台机器本身就在墙外。
 
-> **状态：已上线，微信通道已验证打通**
+> **状态：已上线，微信通道已验证打通；定时触发于 2026-09-22 修复**
 > 仓库 https://github.com/E-guangxu/SL-Trendings
 > 2026-09-21 验证：run #1 抓取成功（32 秒）；run #2 端到端成功（13 秒），
 > 日志中 `[notify] 微信推送 成功`，微信实际收到榜单。
+>
+> ⚠️ **2026-09-22 事故**：当天 08:00 没有推送。原因不是微信通道，而是**定时任务根本没被触发**——
+> 原 cron `0 0 * * *` 落在 UTC 整点，这是 GitHub Actions 全球最拥堵的时刻，
+> 官方明确说明此时任务会被延迟、负载过高时会被**直接丢弃**。修复见下节「定时为什么会漏跑」。
 
 ---
 
@@ -95,11 +99,71 @@ SendKey 的拿法：打开 https://sct.ftqq.com → 微信扫码登录 → 「Se
 
 ---
 
+## 定时为什么会漏跑（重要）
+
+GitHub Actions 的 `schedule` **不是精确调度器，是"尽力而为"**。官方原文：
+
+> The `schedule` event can be delayed during periods of high loads of GitHub Actions workflow runs.
+> High load times include the start of every hour. **If the load is sufficiently high enough,
+> some queued jobs may be dropped.**
+
+翻译过来就是：**整点最堵；堵到一定程度，排队的任务会被直接丢掉**，而且**不会补跑**。
+
+而 `0 0 * * *`（UTC 零点）恰好是全世界最多人用的时段——几乎所有人的"每日任务"都写在这个点上。
+
+### 本项目的三重防护
+
+```yaml
+schedule:
+  - cron: '7 0 * * *'    # 北京 08:07
+  - cron: '23 0 * * *'   # 北京 08:23（备用）
+  - cron: '41 0 * * *'   # 北京 08:41（备用）
+```
+
+| 防护 | 做法 | 解决什么 |
+|---|---|---|
+| 错峰 | 用 `:07` 而不是 `:00` | 避开最拥堵的分钟槽 |
+| 冗余 | 同一小时内排三次 | 前面被丢弃，后面自动补上 |
+| 不重复 | `hot.py` 里检查 `data/{今天}.md` 是否已存在，存在就跳过 | 冗余触发不会重复推送、重复提交 |
+
+三次触发里**任意一次成功就够**，成功后其余的会打印 `[skip] ... 今天已经跑过了` 安静退出。
+
+> 手动触发（Run workflow）默认带 `FORCE=true`，会忽略这个守卫强制重跑，方便测试。
+
+### 还嫌不稳？用外部定时器
+
+如果某天要求"必须准点"（比如要抢时效性内容），可以挂一个外部定时器去打 `workflow_dispatch` API。
+`workflow_dispatch` 走的是实时事件通道，不经过那个会丢任务的批量 cron 调度器，秒级触发：
+
+```bash
+curl -X POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "Authorization: Bearer <你的 token>" \
+  https://api.github.com/repos/E-guangxu/SL-Trendings/actions/workflows/daily-hot.yml/dispatches \
+  -d '{"ref":"main"}'
+```
+
+免费方案：cron-job.org、Cloudflare Worker 的 cron trigger。本项目目前没接，靠上面三重防护。
+（顺带一提，`gh.mjs dispatch daily-hot.yml` 就是干这件事的。）
+
+---
+
+## 失败会主动告诉你
+
+任务出错时会**主动推一条微信**，而不是让你自己发现今天没收到榜单：
+
+- `scripts/hot.py` 里：所有来源都抓失败时会 `exit(1)` 让任务变红，并先推一条告警
+- `daily-hot.yml` 里的 `失败时微信告警` 步骤：`if: failure()`，任何步骤出错都会推送告警（含运行链接）
+
+这样**"没收到消息"和"任务失败"是两件事**：前者要查推送，后者微信会直接告诉你。
+
+---
+
 ## 已知限制
 
 - **Reddit 限流**：默认只抓一个版块（`r/all` 本身已覆盖全站热门），避免 429
 - **YouTube 视频下载**：本方案只抓榜单标题和链接，不下载视频。真要在云端下载视频，yt-dlp 可能被 YouTube 的机器人检测拦下（需要 cookies 或住宅代理）；抓榜单/RSS 不受影响
-- **定时精度**：GitHub 的定时任务高峰期可能延迟几分钟到半小时，这不是故障
+- **定时精度**：GitHub 的定时任务高峰期可能延迟，极端情况下会被**直接丢弃**（详见上文「定时为什么会漏跑」）。已用错峰 + 三次冗余缓解，但做不到严格准点。需要准点就挂外部定时器
 - **仓库活跃度**：GitHub 会在仓库 60 天无提交后暂停定时任务。本方案每天都提交，所以不会触发
 
 ---
