@@ -32,6 +32,10 @@ SERVERCHAN_KEY = os.environ.get("SERVERCHAN_KEY", "").strip()
 # 单条消息正文上限（Server酱 Turbo 是 32KB，留点余量）
 MAX_PUSH_BYTES = 30000
 
+# 冗余触发的守卫：workflow 在同一小时内排了多个时间点互为备份（GitHub 的 cron
+# 在整点高负载时会被延迟甚至直接丢弃）。设 FORCE=1 忽略"今天已跑过"的检查强制重跑。
+FORCE = os.environ.get("FORCE", "").strip().lower() in ("1", "true", "yes", "on")
+
 # ---- 想追的 Reddit 版块 ----
 # 注意：Reddit 对未认证请求限流很紧（同一 IP 约每分钟 1 次）。
 # 每多写一个版块，就要在 build_report 里把间隔调大，否则会 429。
@@ -201,10 +205,28 @@ def notify_serverchan(title, body):
 
 
 def main():
-    report = build_report()
     data_dir = pathlib.Path("data")
-    data_dir.mkdir(exist_ok=True)
     today = datetime.date.today().isoformat()
+
+    # 守卫：同一天只真正执行一次。workflow 里排了多个时间点做冗余，
+    # 被丢弃的那次由下一次补上；补上的那次看到文件已存在就安静跳过。
+    if (data_dir / ("%s.md" % today)).exists() and not FORCE:
+        print("[skip] %s 今天已经跑过了，跳过（这是冗余触发的正常行为，不是错误）" % today)
+        return
+
+    report = build_report()
+
+    # 全军覆没要报错，不能静默变成"今天没热点"。
+    # 所有来源都失败时让 job 变红，触发 workflow 里的失败告警步骤。
+    n_items = len(re.findall(r"^\d+\. ", report, re.M))
+    if n_items == 0:
+        n_fail = report.count("(抓取失败")
+        msg = "所有来源都抓取失败（失败段数 %d）。请查看 Actions 日志。" % n_fail
+        print("[error] " + msg)
+        notify_serverchan("【抓取失败】每日热榜", msg)
+        sys.exit(1)
+
+    data_dir.mkdir(exist_ok=True)
     (data_dir / ("%s.md" % today)).write_text(report, encoding="utf-8")
     (data_dir / "latest.md").write_text(report, encoding="utf-8")
     sys.stdout.write(report + "\n")

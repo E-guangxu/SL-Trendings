@@ -2,9 +2,25 @@ name: daily-hot
 
 on:
   schedule:
-    # UTC 00:00 = 北京时间 08:00
-    - cron: '0 0 * * *'
+    # ⚠️ GitHub 的 cron 是「尽力而为」，不是精确调度：
+    #    官方文档明确说整点（:00）属高负载时段，任务会被延迟，
+    #    「如果负载足够高，部分排队任务会被直接丢弃」。
+    #    而 00:00 UTC 恰好是全世界最拥挤的时段。
+    # 因此这里做了两件事：
+    #    1) 避开 :00，用 07 / 23 / 41 这种错峰分钟
+    #    2) 同一小时内排三次互为备份；脚本里有「当天已跑过则跳过」的守卫，
+    #       所以补上的那次不会重复推送、重复提交
+    # UTC 00:07 = 北京 08:07
+    - cron: '*/5 * * * *'    # ← 临时：验证 schedule 链路真的会派发，验完删除
+    - cron: '7 0 * * *'
+    - cron: '23 0 * * *'
+    - cron: '41 0 * * *'
   workflow_dispatch:
+    inputs:
+      force:
+        description: '忽略「今天已跑过」检查，强制重跑'
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -23,6 +39,8 @@ jobs:
         env:
           # Server酱 SendKey，存在仓库 Secret 里；没配则自动跳过推送，不会报错
           SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
+          # 定时触发时为空（走守卫）；手动触发时默认 true，便于强制重跑
+          FORCE: ${{ github.event.inputs.force }}
         run: python scripts/hot.py
 
       - name: 提交结果
@@ -34,3 +52,14 @@ jobs:
             git commit -m "chore: 每日热榜 $(date -u +%F)"
           fi
           git push
+
+      # 让「静默失败」变成看得见的告警：任务出错时主动推一条微信，
+      # 而不是等你发现今天没收到榜单。
+      - name: 失败时微信告警
+        if: failure()
+        env:
+          SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
+        run: |
+          python scripts/alert.py \
+            "【任务失败】每日热榜" \
+            "触发方式: ${{ github.event_name }} / 运行 #${{ github.run_number }}（${{ github.run_id }}）。请查看 https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
