@@ -1,8 +1,22 @@
 #!/usr/bin/env python3
-"""每日热榜抓取：Reddit 热榜 + kworb YouTube 全球榜 + 指定 YouTube 频道最新
+"""每日热榜抓取。
+
+两种模式：
+  1) 全站榜（默认）：Reddit r/all + kworb YouTube 全球榜 + 关注频道更新
+  2) 话题模式：指定若干话题，每个话题抓「最新新闻 + Reddit 讨论 + YouTube 最新视频」
+
+话题从哪来（优先级从高到低）：
+  - 环境变量 TOPICS，逗号/空格/顿号分隔
+  - 仓库里的 config/topics.txt，一行一个（# 开头是注释）
+
+指定话题的三种用法：
+  - 想让每天的推送都跟你的话题走：改 config/topics.txt 并提交
+  - 临时看一次：手动触发 workflow，把话题填进 topics 输入框（mode 选 adhoc）
+  - 本机一条命令：node trigger-daily-hot.mjs --topics "AI 编程,游戏"
 
 设计用于 GitHub Actions（runner 本身在境外，不需要任何代理）。
 本地调试时设代理：set SCRAPE_PROXY=http://127.0.0.1:7890
+本地调试想跳过推送：不要设 SERVERCHAN_KEY 即可。
 
 只依赖 Python 标准库，无需 pip install。
 """
@@ -25,6 +39,17 @@ UA = (
 )
 PROXY = os.environ.get("SCRAPE_PROXY", "").strip()
 
+# ---- 模式与话题 ----
+# daily = 每天那次，受「今天已跑过」守卫约束，写 data/<date>.md 并更新 latest.md
+# adhoc = 临时查询，不受守卫约束，只写 data/adhoc/ 不覆盖当日文件，永远推送
+MODE = (os.environ.get("MODE", "").strip().lower() or "daily")
+TOPICS_ENV = os.environ.get("TOPICS", "").strip()
+# 话题模式下是否仍然附带全站榜（1/true 开启）。默认关，避免消息过长。
+KEEP_GLOBAL = os.environ.get("KEEP_GLOBAL", "").strip().lower() in ("1", "true", "yes", "on")
+
+REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
+TOPICS_FILE = REPO_ROOT / "config" / "topics.txt"
+
 # ---- 微信推送（Server酱）----
 # 在 GitHub 仓库 Settings → Secrets and variables → Actions 里配 SERVERCHAN_KEY。
 # 本地调试可以临时 set SERVERCHAN_KEY=xxx。留空则跳过推送。
@@ -36,9 +61,9 @@ MAX_PUSH_BYTES = 30000
 # 在整点高负载时会被延迟甚至直接丢弃）。设 FORCE=1 忽略"今天已跑过"的检查强制重跑。
 FORCE = os.environ.get("FORCE", "").strip().lower() in ("1", "true", "yes", "on")
 
-# ---- 想追的 Reddit 版块 ----
+# ---- 想追的 Reddit 版块（仅全站榜模式用）----
 # 注意：Reddit 对未认证请求限流很紧（同一 IP 约每分钟 1 次）。
-# 每多写一个版块，就要在 build_report 里把间隔调大，否则会 429。
+# 每多写一个版块，就要把间隔调大，否则会 429。
 # r/all 本身已覆盖全站热门，一般一个就够。
 SUBREDDITS = ["all"]
 
@@ -48,6 +73,28 @@ SUBREDDITS = ["all"]
 CHANNELS = {
     # "MrBeast": "UCX6OQ3DkcsbYNE6H8uQQuVA",
 }
+
+# 话题模式下每个话题取多少条
+TOPIC_NEWS_LIMIT = 6
+TOPIC_REDDIT_LIMIT = 6
+TOPIC_YT_LIMIT = 6
+# 同一个话题内、以及话题之间，给 Reddit 留的间隔（未认证请求限流很紧）
+REDDIT_GAP = 20
+# YouTube「最新视频」怎么取：sp 参数是 YouTube 的搜索筛选位。
+# 实测（2026-09-22 逐个对照）：
+#   CAI=            想按上传日期排序 → **被忽略**，中文关键词下返回一堆几年前的老教程
+#   EgIIAg==        今天     → 真的只有当天
+#   EgIIAw==        本周     → 真的只有一周内
+#   EgIIBA==        本月
+#   CAISBAgDEAE=    本周 + 按上传日期排序 → 最符合「最新」，首选
+# 所以按「时间窗从紧到松」依次试，哪一档拿到足够条数就用哪一档，
+# 而不是只用单一参数（之前的写法就是这么被老视频混进来的）。
+YT_SP_TIERS = [
+    ("CAISBAgDEAE=", 7),   # 本周 + 按日期排序
+    ("EgIIBA==", 30),      # 本月
+    ("", 30),              # 不设筛选，靠下面的年龄过滤兜底
+]
+YT_MIN_ITEMS = 3           # 某一档拿到这么多条就算够用
 
 
 def make_opener():
@@ -69,22 +116,31 @@ def fetch(url, timeout=40):
         return resp.read().decode("utf-8", "ignore")
 
 
-def reddit_hot(sub, limit=10, retries=3):
-    """Reddit 热榜。注意：.json 已被反爬，必须走 .rss。
-    连续请求会被限流（429），所以要退避重试。"""
-    xml = None
-    last_exc = None
-    for attempt in range(retries):
+def load_topics():
+    """话题来源：环境变量 TOPICS 优先，其次 config/topics.txt。"""
+    parts = []
+    if TOPICS_ENV:
+        parts = re.split(r"[,，、;；\s]+", TOPICS_ENV)
+    else:
         try:
-            xml = fetch("https://www.reddit.com/r/%s/hot/.rss" % sub)
-            break
-        except Exception as exc:
-            last_exc = exc
-            if attempt < retries - 1:
-                time.sleep(20 * (attempt + 1))
-    if xml is None:
-        raise last_exc
+            raw = TOPICS_FILE.read_text(encoding="utf-8")
+        except Exception:
+            return []
+        for line in raw.splitlines():
+            line = line.split("#")[0].strip()
+            if line:
+                parts.extend(re.split(r"[,，、;；]+", line))
+    seen, out = set(), []
+    for p in parts:
+        p = p.strip()
+        if p and p not in seen:
+            seen.add(p)
+            out.append(p)
+    return out
 
+
+def reddit_entries(xml, limit):
+    """Reddit 的 .rss 条目解析（热榜和搜索结果格式相同）。"""
     out = []
     for entry in re.findall(r"<entry>([\s\S]*?)</entry>", xml)[:limit]:
         t = re.search(r"<title>([\s\S]*?)</title>", entry)
@@ -92,6 +148,44 @@ def reddit_hot(sub, limit=10, retries=3):
         title = html.unescape(t.group(1).strip()) if t else "(无标题)"
         out.append((title, l.group(1) if l else ""))
     return out
+
+
+def _reddit_fetch(url, retries=3):
+    """Reddit 对未认证请求限流很紧，被抓到就退避重试。注意必须带浏览器 UA，
+    否则 403（实测：带 UA 200 / 不带 403）。"""
+    xml, last_exc = None, None
+    for attempt in range(retries):
+        try:
+            xml = fetch(url)
+            break
+        except Exception as exc:
+            last_exc = exc
+            if attempt < retries - 1:
+                time.sleep(20 * (attempt + 1))
+    if xml is None:
+        raise last_exc
+    return xml
+
+
+def reddit_hot(sub, limit=10):
+    """Reddit 版块热榜。注意：.json 已被反爬，必须走 .rss。"""
+    return reddit_entries(_reddit_fetch("https://www.reddit.com/r/%s/hot/.rss" % sub), limit)
+
+
+def reddit_search(query, limit=TOPIC_REDDIT_LIMIT):
+    """按话题搜 Reddit。先按「近一天 + 热度」，没结果再退到「近一周 + 相关度」——
+    中文关键词在 hot/day 下经常一条都搜不到。"""
+    url = "https://www.reddit.com/search.rss?" + urllib.parse.urlencode(
+        {"q": query, "sort": "hot", "t": "day", "limit": limit}
+    )
+    items = reddit_entries(_reddit_fetch(url), limit)
+    if not items:
+        time.sleep(REDDIT_GAP)
+        url2 = "https://www.reddit.com/search.rss?" + urllib.parse.urlencode(
+            {"q": query, "sort": "relevance", "t": "week", "limit": limit}
+        )
+        items = reddit_entries(_reddit_fetch(url2), limit)
+    return items
 
 
 def kworb_trending(limit=15):
@@ -129,10 +223,142 @@ def yt_channel_latest(channel_id, limit=5):
     return out
 
 
-def build_report():
-    today = datetime.date.today().isoformat()
-    lines = ["# 每日热榜 · %s" % today, ""]
+def gnews_topic(query, limit=TOPIC_NEWS_LIMIT):
+    """Google News RSS 搜索。无需 key、无需登录，是最稳的话题新闻源。
+    标题形如「标题 - 来源」，保持原样更有信息量。"""
+    url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
+        {"q": query, "hl": "zh-CN", "gl": "CN", "ceid": "CN:zh-Hans"}
+    )
+    xml = fetch(url)
+    out = []
+    for item in re.findall(r"<item>([\s\S]*?)</item>", xml)[:limit]:
+        t = re.search(r"<title>([\s\S]*?)</title>", item)
+        l = re.search(r"<link>([\s\S]*?)</link>", item)
+        d = re.search(r"<pubDate>([\s\S]*?)</pubDate>", item)
+        title = html.unescape(t.group(1).strip()) if t else "(无标题)"
+        pub = d.group(1).strip()[:16] if d else ""
+        out.append((title, l.group(1).strip() if l else "", pub))
+    return out
 
+
+# 发布时间文本 → 天数。YouTube 会按界面语言给「17 小時前」或「17 hours ago」，
+# 繁体/简体都可能出现，所以单位要覆盖全。
+_AGE_UNITS = [
+    ("秒", 1.0 / 86400), ("second", 1.0 / 86400),
+    ("分鐘", 1.0 / 1440), ("分钟", 1.0 / 1440), ("分", 1.0 / 1440), ("minute", 1.0 / 1440),
+    ("小時", 1.0 / 24), ("小时", 1.0 / 24), ("hour", 1.0 / 24),
+    ("天", 1.0), ("day", 1.0),
+    ("週", 7.0), ("周", 7.0), ("week", 7.0),
+    ("個月", 30.0), ("个月", 30.0), ("month", 30.0),
+    ("年", 365.0), ("year", 365.0),
+]
+
+
+def age_days(text):
+    """把「1 天前」「4 年前」解析成天数；解析不出来返回 None。"""
+    if not text:
+        return None
+    m = re.search(
+        r"(\d+)\s*(秒|分鐘|分钟|分|小時|小时|天|週|周|個月|个月|年|second|minute|hour|day|week|month|year)",
+        text,
+        re.I,
+    )
+    if not m:
+        return None
+    n = int(m.group(1))
+    u = m.group(2).lower()
+    for key, days in _AGE_UNITS:
+        if key in u:
+            return n * days
+    return None
+
+
+def _runs_text(node):
+    """ytInitialData 里的文本有两种形态：runs[{text}] 或 simpleText。"""
+    if not isinstance(node, dict):
+        return ""
+    if node.get("runs"):
+        return "".join(r.get("text", "") for r in node["runs"])
+    return node.get("simpleText", "") or ""
+
+
+def _yt_search_raw(query, sp, cap):
+    """抓一页搜索结果，返回 [(title, url, pub, views)]。官方没有话题 RSS，
+    只能解析搜索结果页里的 ytInitialData。"""
+    params = {"search_query": query}
+    if sp:
+        params["sp"] = sp
+    page = fetch("https://www.youtube.com/results?" + urllib.parse.urlencode(params))
+    m = re.search(r"var ytInitialData = (\{[\s\S]*?\});</script>", page)
+    if not m:
+        raise RuntimeError("结果页里找不到 ytInitialData（可能被换了模板或弹出同意页）")
+    data = json.loads(m.group(1))
+
+    raw = []
+
+    def walk(node):
+        if len(raw) >= cap:
+            return
+        if isinstance(node, dict):
+            vr = node.get("videoRenderer")
+            if isinstance(vr, dict):
+                vid = vr.get("videoId") or ""
+                title = _runs_text(vr.get("title"))
+                if vid and title:
+                    raw.append(
+                        (
+                            title,
+                            "https://youtu.be/" + vid,
+                            _runs_text(vr.get("publishedTimeText")),
+                            _runs_text(vr.get("viewCountText")),
+                        )
+                    )
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+
+    walk(data.get("contents", {}))
+    if not raw:
+        raise RuntimeError("ytInitialData 里没有 videoRenderer")
+    return raw
+
+
+def yt_search_recent(query, limit=TOPIC_YT_LIMIT):
+    """按话题找「最新视频」。
+
+    返回 (items, note)。items 每项 (title, url, pub, views)。
+    note 是人类可读的说明，写进报告里，让你知道这一段的时效范围。
+    发布时间解析不出数字的一律保留（宁多勿漏）。
+    """
+    cap = max(limit * 4, 20)
+    best = None       # 任何一档里筛出来的最好结果
+    last_raw = None   # 全都筛空时，退回到原始结果
+    last_err = None
+
+    for sp, max_age in YT_SP_TIERS:
+        try:
+            raw = _yt_search_raw(query, sp, cap)
+        except Exception as exc:
+            last_err = exc
+            continue
+        last_raw = raw
+        fresh = [it for it in raw if age_days(it[2]) is None or age_days(it[2]) <= max_age]
+        if len(fresh) >= YT_MIN_ITEMS:
+            return fresh[:limit], "近 %d 天内" % max_age
+        if best is None or len(fresh) > len(best[0]):
+            best = (fresh, max_age)
+
+    if best and best[0]:
+        return best[0][:limit], "近 %d 天内（该话题近期视频较少）" % best[1]
+    if last_raw:
+        return last_raw[:limit], "未找到近期视频，以下为相关度排序（可能较旧）"
+    raise last_err or RuntimeError("YouTube 搜索没拿到任何结果")
+
+
+def global_sections(lines):
+    """全站榜：Reddit r/all + YouTube 全球热门 + 关注频道。"""
     for idx, sub in enumerate(SUBREDDITS):
         if idx:
             time.sleep(60)  # Reddit 限流，版块之间必须留足间隔
@@ -168,6 +394,67 @@ def build_report():
                 lines.append("(抓取失败: %s)" % exc)
             lines.append("")
 
+
+def topic_sections(lines, topics):
+    """话题模式：每个话题 = 最新新闻 + Reddit 讨论 + YouTube 最新视频。"""
+    for idx, topic in enumerate(topics):
+        if idx:
+            time.sleep(REDDIT_GAP)
+        lines.append("## 话题：%s" % topic)
+        lines.append("")
+
+        lines.append("### 最新新闻")
+        try:
+            items = gnews_topic(topic, TOPIC_NEWS_LIMIT)
+            if items:
+                for i, (t, link, pub) in enumerate(items, 1):
+                    lines.append("%d. [%s](%s) · %s" % (i, t, link, pub))
+            else:
+                lines.append("(无数据)")
+        except Exception as exc:
+            lines.append("(抓取失败: %s)" % exc)
+        lines.append("")
+
+        time.sleep(REDDIT_GAP)
+        lines.append("### Reddit 讨论（近 24 小时）")
+        try:
+            items = reddit_search(topic, TOPIC_REDDIT_LIMIT)
+            if items:
+                for i, (t, link) in enumerate(items, 1):
+                    lines.append("%d. [%s](%s)" % (i, t, link))
+            else:
+                lines.append("(无数据)")
+        except Exception as exc:
+            lines.append("(抓取失败: %s)" % exc)
+        lines.append("")
+
+        time.sleep(5)
+        lines.append("### YouTube 最新视频")
+        try:
+            items, note = yt_search_recent(topic, TOPIC_YT_LIMIT)
+            for i, (t, link, pub, views) in enumerate(items, 1):
+                meta = " · ".join(x for x in (pub, views) if x)
+                lines.append("%d. [%s](%s)%s" % (i, t, link, (" · " + meta) if meta else ""))
+            if note:
+                lines.append("")
+                lines.append("(%s)" % note)
+        except Exception as exc:
+            lines.append("(抓取失败: %s)" % exc)
+        lines.append("")
+
+
+def build_report(topics):
+    today = datetime.date.today().isoformat()
+    lines = ["# 每日热榜 · %s" % today, ""]
+
+    if topics:
+        lines.append("> 话题：%s" % " / ".join(topics))
+        lines.append("")
+        topic_sections(lines, topics)
+        if not KEEP_GLOBAL:
+            return "\n".join(lines)
+
+    global_sections(lines)
     return "\n".join(lines)
 
 
@@ -204,17 +491,27 @@ def notify_serverchan(title, body):
         return False
 
 
+def slugify(text):
+    s = re.sub(r"[^\w\u4e00-\u9fff-]+", "-", text).strip("-")
+    return s[:40] or "topic"
+
+
 def main():
     data_dir = pathlib.Path("data")
     today = datetime.date.today().isoformat()
+    topics = load_topics()
+    adhoc = MODE == "adhoc"
+
+    print("[mode] %s | 话题 %s" % (MODE, ("= " + " / ".join(topics)) if topics else "= (无，走全站榜)"))
 
     # 守卫：同一天只真正执行一次。workflow 里排了多个时间点做冗余，
     # 被丢弃的那次由下一次补上；补上的那次看到文件已存在就安静跳过。
-    if (data_dir / ("%s.md" % today)).exists() and not FORCE:
+    # adhoc（临时查询）不走守卫，否则想看话题时会被"今天已经跑过"挡住。
+    if not adhoc and (data_dir / ("%s.md" % today)).exists() and not FORCE:
         print("[skip] %s 今天已经跑过了，跳过（这是冗余触发的正常行为，不是错误）" % today)
         return
 
-    report = build_report()
+    report = build_report(topics)
 
     # 全军覆没要报错，不能静默变成"今天没热点"。
     # 所有来源都失败时让 job 变红，触发 workflow 里的失败告警步骤。
@@ -226,11 +523,22 @@ def main():
         notify_serverchan("【抓取失败】每日热榜", msg)
         sys.exit(1)
 
-    data_dir.mkdir(exist_ok=True)
-    (data_dir / ("%s.md" % today)).write_text(report, encoding="utf-8")
-    (data_dir / "latest.md").write_text(report, encoding="utf-8")
+    if adhoc:
+        # 临时查询：单独归档，绝不写当日文件、也不覆盖 latest.md，
+        # 免得把"今天已经跑过"的守卫状态弄脏。
+        target = data_dir / "adhoc" / ("%s-%s.md" % (today, slugify("+".join(topics) or "global")))
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(report, encoding="utf-8")
+        title = "每日热榜 · %s · %s" % (today, " / ".join(topics) or "全站榜")
+        print("[adhoc] 写入 %s" % target)
+    else:
+        data_dir.mkdir(exist_ok=True)
+        (data_dir / ("%s.md" % today)).write_text(report, encoding="utf-8")
+        (data_dir / "latest.md").write_text(report, encoding="utf-8")
+        title = "每日热榜 · %s" % today
+
     sys.stdout.write(report + "\n")
-    notify_serverchan("每日热榜 · %s" % today, report)
+    notify_serverchan(title, report)
 
 
 if __name__ == "__main__":

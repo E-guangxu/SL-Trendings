@@ -24,6 +24,21 @@ on:
         description: '忽略「今天已跑过」检查，强制重跑'
         type: boolean
         default: true
+      topics:
+        description: '指定话题（逗号分隔，可多个）。留空 = 用仓库里的 config/topics.txt；那里也留空 = 全站榜'
+        type: string
+        default: ''
+      mode:
+        description: 'daily=每天那次（受守卫约束，写当日文件）；adhoc=临时查询（不受守卫，只推送+归档到 data/adhoc）'
+        type: choice
+        options:
+          - daily
+          - adhoc
+        default: daily
+      keep_global:
+        description: '话题模式下是否仍附带全站榜（Reddit r/all + YouTube 全球热门）'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -43,6 +58,8 @@ jobs:
           echo "event_name      = ${{ github.event_name }}"
           echo "event.schedule  = ${{ github.event.schedule }}"
           echo "inputs.force    = ${{ github.event.inputs.force }}"
+          echo "inputs.topics   = ${{ github.event.inputs.topics }}"
+          echo "inputs.mode     = ${{ github.event.inputs.mode }}"
           echo "run_number      = ${{ github.run_number }}"
           date -u '+现在(UTC)       = %F %T'
 
@@ -52,6 +69,11 @@ jobs:
           SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
           # 定时触发时为空（走守卫）；手动触发时默认 true，便于强制重跑
           FORCE: ${{ github.event.inputs.force }}
+          # 话题：手动触发填了就用填的，否则脚本去读 config/topics.txt
+          TOPICS: ${{ github.event.inputs.topics }}
+          # daily / adhoc（定时触发时为空 → 脚本按 daily 处理）
+          MODE: ${{ github.event.inputs.mode }}
+          KEEP_GLOBAL: ${{ github.event.inputs.keep_global }}
         run: python scripts/hot.py
 
       - name: 提交结果
