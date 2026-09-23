@@ -1,0 +1,23 @@
+name: schedule-probe
+
+# 用途：探测 GitHub 平台侧的 schedule 派发是否已恢复正常。
+# 背景：2026-09-22 实测 schedule 完全零派发（社区讨论 #207211），
+#       当时用最小工作流 */5 连续 35 分钟、7 个时间点，一次都没触发。
+# 这个工作流只打印时间，不抓任何数据、不推送、不提交，长期挂着无副作用。
+# 哪天 schedule 恢复，daily-hot.yml 里那三个 cron 就会自己生效。
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 记录本次派发
+        run: |
+          echo "event_name = ${{ github.event_name }}"
+          echo "event.schedule = ${{ github.event.schedule }}"
+          echo "run_number = ${{ github.run_number }}"
+          date -u '+UTC   = %F %T'
+          date -d '+8 hours' '+北京 = %F %T' 2>/dev/null || true
