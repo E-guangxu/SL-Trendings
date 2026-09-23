@@ -47,6 +47,16 @@ on:
 permissions:
   contents: write
 
+# ⚠️ 2026-09-23 新增：串行化，避免「多时钟同时开火」导致 git push 撞车。
+# 背景：当天 11:00 与 11:04 两次运行重叠，后一次在「提交结果」步骤
+# `git push` 被拒（remote 已被前一次推进）→ 运行 #15 记为 failure。
+# 现在 GitHub 原生 cron 恢复后可能在补发时成批派发，重叠概率更高，必须串行。
+# cancel-in-progress: false —— 排队而不是取消：每次运行都有意义（首个负责推送，
+# 其余命中「当天已推送」守卫后快速退出），取消反而可能打断正在推送的那次。
+concurrency:
+  group: daily-hot-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   fetch:
     runs-on: ubuntu-latest
@@ -95,7 +105,19 @@ jobs:
           if ! git diff --staged --quiet; then
             git commit -m "chore: 每日热榜 $(date -u +%F)"
           fi
-          git push
+          # 上面有 concurrency 串行化，理论上不会撞车；这里再兜一层：
+          # 推之前先合远端（--autostash 防止未提交内容挡住 rebase），
+          # 失败则重试 3 次，全部失败才算真失败（交给「失败时微信告警」）。
+          for i in 1 2 3; do
+            if git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && git push; then
+              echo "推送成功（第 $i 次尝试）"
+              exit 0
+            fi
+            echo "第 $i 次推送失败，2 秒后重试…"
+            sleep 2
+          done
+          echo "::error::推送连续失败 3 次"
+          exit 1
 
       # 让「静默失败」变成看得见的告警：任务出错时主动推一条微信，
       # 而不是等你发现今天没收到榜单。
