@@ -1,166 +1,166 @@
-# 每日热榜 · 2026-11-05
+# 每日热榜 · 2026-11-06
 
 > 话题：科技 / AI / 游戏 / 美股
 
 ## 中文圈热点
 
 ### 微博热搜
-1. [白小纯青稚 文盲吵架](https://s.weibo.com/weibo?q=%23%E7%99%BD%E5%B0%8F%E7%BA%AF%E9%9D%92%E7%A8%9A%20%E6%96%87%E7%9B%B2%E5%90%B5%E6%9E%B6%23) · 新 · 热 179万
-2. [女子用筋膜枪打肚子减赘肉查出卵巢癌](https://s.weibo.com/weibo?q=%23%E5%A5%B3%E5%AD%90%E7%94%A8%E7%AD%8B%E8%86%9C%E6%9E%AA%E6%89%93%E8%82%9A%E5%AD%90%E5%87%8F%E8%B5%98%E8%82%89%E6%9F%A5%E5%87%BA%E5%8D%B5%E5%B7%A2%E7%99%8C%23) · 热 · 热 139万
-3. [第九届进博会亮点扎堆](https://s.weibo.com/weibo?q=%23%E7%AC%AC%E4%B9%9D%E5%B1%8A%E8%BF%9B%E5%8D%9A%E4%BC%9A%E4%BA%AE%E7%82%B9%E6%89%8E%E5%A0%86%23) · 热 95万
-4. [刘宇宁京东超市过关斩价](https://s.weibo.com/weibo?q=%23%E5%88%98%E5%AE%87%E5%AE%81%E4%BA%AC%E4%B8%9C%E8%B6%85%E5%B8%82%E8%BF%87%E5%85%B3%E6%96%A9%E4%BB%B7%23) · 火热 · 热 95万
-5. [文班亚马52分24板8帽](https://s.weibo.com/weibo?q=%23%E6%96%87%E7%8F%AD%E4%BA%9A%E9%A9%AC52%E5%88%8624%E6%9D%BF8%E5%B8%BD%23) · 新 · 热 95万
-6. [38岁男子被骗到缅甸因太老卖不掉](https://s.weibo.com/weibo?q=%2338%E5%B2%81%E7%94%B7%E5%AD%90%E8%A2%AB%E9%AA%97%E5%88%B0%E7%BC%85%E7%94%B8%E5%9B%A0%E5%A4%AA%E8%80%81%E5%8D%96%E4%B8%8D%E6%8E%89%23) · 新 · 热 63万
-7. [王子璇说不想跟文吉儿做朋友了](https://s.weibo.com/weibo?q=%23%E7%8E%8B%E5%AD%90%E7%92%87%E8%AF%B4%E4%B8%8D%E6%83%B3%E8%B7%9F%E6%96%87%E5%90%89%E5%84%BF%E5%81%9A%E6%9C%8B%E5%8F%8B%E4%BA%86%23) · 沸 · 热 60万
-8. [芒果今年已爆六部综艺](https://s.weibo.com/weibo?q=%23%E8%8A%92%E6%9E%9C%E4%BB%8A%E5%B9%B4%E5%B7%B2%E7%88%86%E5%85%AD%E9%83%A8%E7%BB%BC%E8%89%BA%23) · 热 51万
-9. [陕西重大刑案伤者中包括民警](https://s.weibo.com/weibo?q=%23%E9%99%95%E8%A5%BF%E9%87%8D%E5%A4%A7%E5%88%91%E6%A1%88%E4%BC%A4%E8%80%85%E4%B8%AD%E5%8C%85%E6%8B%AC%E6%B0%91%E8%AD%A6%23) · 热 51万
-10. [女厕偷拍者有女性甚至夫妻](https://s.weibo.com/weibo?q=%23%E5%A5%B3%E5%8E%95%E5%81%B7%E6%8B%8D%E8%80%85%E6%9C%89%E5%A5%B3%E6%80%A7%E7%94%9A%E8%87%B3%E5%A4%AB%E5%A6%BB%23) · 新 · 热 49万
+1. [青稚崩溃](https://s.weibo.com/weibo?q=%23%E9%9D%92%E7%A8%9A%E5%B4%A9%E6%BA%83%23) · 新 · 热 160万
+2. [不调休是把选择权还给老百姓](https://s.weibo.com/weibo?q=%23%E4%B8%8D%E8%B0%83%E4%BC%91%E6%98%AF%E6%8A%8A%E9%80%89%E6%8B%A9%E6%9D%83%E8%BF%98%E7%BB%99%E8%80%81%E7%99%BE%E5%A7%93%23) · 新 · 热 108万
+3. [中国是超级卖家也是超级买家](https://s.weibo.com/weibo?q=%23%E4%B8%AD%E5%9B%BD%E6%98%AF%E8%B6%85%E7%BA%A7%E5%8D%96%E5%AE%B6%E4%B9%9F%E6%98%AF%E8%B6%85%E7%BA%A7%E4%B9%B0%E5%AE%B6%23) · 热 95万
+4. [第二代海豹07首搭百万级悬架](https://s.weibo.com/weibo?q=%23%E7%AC%AC%E4%BA%8C%E4%BB%A3%E6%B5%B7%E8%B1%B907%E9%A6%96%E6%90%AD%E7%99%BE%E4%B8%87%E7%BA%A7%E6%82%AC%E6%9E%B6%23) · 大卖 · 热 95万
+5. [白小纯因为青稚抑郁](https://s.weibo.com/weibo?q=%23%E7%99%BD%E5%B0%8F%E7%BA%AF%E5%9B%A0%E4%B8%BA%E9%9D%92%E7%A8%9A%E6%8A%91%E9%83%81%23) · 新 · 热 89万
+6. [终于知道厉娜为什么觉得许飞不真实了](https://s.weibo.com/weibo?q=%23%E7%BB%88%E4%BA%8E%E7%9F%A5%E9%81%93%E5%8E%89%E5%A8%9C%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A7%89%E5%BE%97%E8%AE%B8%E9%A3%9E%E4%B8%8D%E7%9C%9F%E5%AE%9E%E4%BA%86%23) · 新 · 热 75万
+7. [袁成杰说会努力还债](https://s.weibo.com/weibo?q=%23%E8%A2%81%E6%88%90%E6%9D%B0%E8%AF%B4%E4%BC%9A%E5%8A%AA%E5%8A%9B%E8%BF%98%E5%80%BA%23) · 热 52万
+8. [27款领克08全系大电池15.98万起](https://s.weibo.com/weibo?q=%2327%E6%AC%BE%E9%A2%86%E5%85%8B08%E5%85%A8%E7%B3%BB%E5%A4%A7%E7%94%B5%E6%B1%A015.98%E4%B8%87%E8%B5%B7%23) · 焕新 · 热 51万
+9. [贷款买房故事竟是编的](https://s.weibo.com/weibo?q=%23%E8%B4%B7%E6%AC%BE%E4%B9%B0%E6%88%BF%E6%95%85%E4%BA%8B%E7%AB%9F%E6%98%AF%E7%BC%96%E7%9A%84%23) · 热 51万
+10. [白小纯爆料青稚队友私下找自己吐槽青稚](https://s.weibo.com/weibo?q=%23%E7%99%BD%E5%B0%8F%E7%BA%AF%E7%88%86%E6%96%99%E9%9D%92%E7%A8%9A%E9%98%9F%E5%8F%8B%E7%A7%81%E4%B8%8B%E6%89%BE%E8%87%AA%E5%B7%B1%E5%90%90%E6%A7%BD%E9%9D%92%E7%A8%9A%23) · 新 · 热 49万
 
 ### 抖音热榜
-1. [GEN战胜LYON挺进半决赛](https://www.douyin.com/search/GEN%E6%88%98%E8%83%9CLYON%E6%8C%BA%E8%BF%9B%E5%8D%8A%E5%86%B3%E8%B5%9B) · 热度 1217万
-2. [原来深秋是咕嘟的](https://www.douyin.com/search/%E5%8E%9F%E6%9D%A5%E6%B7%B1%E7%A7%8B%E6%98%AF%E5%92%95%E5%98%9F%E7%9A%84) · 热度 1162万
-3. [读懂31省份三季报三大看点](https://www.douyin.com/search/%E8%AF%BB%E6%87%8231%E7%9C%81%E4%BB%BD%E4%B8%89%E5%AD%A3%E6%8A%A5%E4%B8%89%E5%A4%A7%E7%9C%8B%E7%82%B9) · 热度 1111万
-4. [马兴瑞被提起公诉](https://www.douyin.com/search/%E9%A9%AC%E5%85%B4%E7%91%9E%E8%A2%AB%E6%8F%90%E8%B5%B7%E5%85%AC%E8%AF%89) · 热度 1104万
-5. [马刺险胜独行侠](https://www.douyin.com/search/%E9%A9%AC%E5%88%BA%E9%99%A9%E8%83%9C%E7%8B%AC%E8%A1%8C%E4%BE%A0) · 热度 1048万
-6. [你怎么舍得让有趣的知识流走](https://www.douyin.com/search/%E4%BD%A0%E6%80%8E%E4%B9%88%E8%88%8D%E5%BE%97%E8%AE%A9%E6%9C%89%E8%B6%A3%E7%9A%84%E7%9F%A5%E8%AF%86%E6%B5%81%E8%B5%B0) · 热度 1046万
-7. [森林狼力克火箭](https://www.douyin.com/search/%E6%A3%AE%E6%9E%97%E7%8B%BC%E5%8A%9B%E5%85%8B%E7%81%AB%E7%AE%AD) · 热度 933万
-8. [76人战胜活塞迎五连胜](https://www.douyin.com/search/76%E4%BA%BA%E6%88%98%E8%83%9C%E6%B4%BB%E5%A1%9E%E8%BF%8E%E4%BA%94%E8%BF%9E%E8%83%9C) · 热度 928万
-9. [一道热乎菜开启各地冬天](https://www.douyin.com/search/%E4%B8%80%E9%81%93%E7%83%AD%E4%B9%8E%E8%8F%9C%E5%BC%80%E5%90%AF%E5%90%84%E5%9C%B0%E5%86%AC%E5%A4%A9) · 热度 922万
-10. [男生秋冬简约穿搭攻略](https://www.douyin.com/search/%E7%94%B7%E7%94%9F%E7%A7%8B%E5%86%AC%E7%AE%80%E7%BA%A6%E7%A9%BF%E6%90%AD%E6%94%BB%E7%95%A5) · 热度 921万
+1. [BLG战胜DK晋级半决赛](https://www.douyin.com/search/BLG%E6%88%98%E8%83%9CDK%E6%99%8B%E7%BA%A7%E5%8D%8A%E5%86%B3%E8%B5%9B) · 热度 1143万
+2. [降温了羽绒服先穿为敬](https://www.douyin.com/search/%E9%99%8D%E6%B8%A9%E4%BA%86%E7%BE%BD%E7%BB%92%E6%9C%8D%E5%85%88%E7%A9%BF%E4%B8%BA%E6%95%AC) · 热度 1089万
+3. [进博会里的十五五脚步](https://www.douyin.com/search/%E8%BF%9B%E5%8D%9A%E4%BC%9A%E9%87%8C%E7%9A%84%E5%8D%81%E4%BA%94%E4%BA%94%E8%84%9A%E6%AD%A5) · 热度 1084万
+4. [东风61已列装火箭军常态参训](https://www.douyin.com/search/%E4%B8%9C%E9%A3%8E61%E5%B7%B2%E5%88%97%E8%A3%85%E7%81%AB%E7%AE%AD%E5%86%9B%E5%B8%B8%E6%80%81%E5%8F%82%E8%AE%AD) · 热度 1081万
+5. [你怎么舍得让有趣的知识流走](https://www.douyin.com/search/%E4%BD%A0%E6%80%8E%E4%B9%88%E8%88%8D%E5%BE%97%E8%AE%A9%E6%9C%89%E8%B6%A3%E7%9A%84%E7%9F%A5%E8%AF%86%E6%B5%81%E8%B5%B0) · 热度 1022万
+6. [路漫漫终有归处](https://www.douyin.com/search/%E8%B7%AF%E6%BC%AB%E6%BC%AB%E7%BB%88%E6%9C%89%E5%BD%92%E5%A4%84) · 热度 1012万
+7. [日本考虑紧急情况下运进核武器](https://www.douyin.com/search/%E6%97%A5%E6%9C%AC%E8%80%83%E8%99%91%E7%B4%A7%E6%80%A5%E6%83%85%E5%86%B5%E4%B8%8B%E8%BF%90%E8%BF%9B%E6%A0%B8%E6%AD%A6%E5%99%A8) · 热度 870万
+8. [库里升至历史得分榜第17位](https://www.douyin.com/search/%E5%BA%93%E9%87%8C%E5%8D%87%E8%87%B3%E5%8E%86%E5%8F%B2%E5%BE%97%E5%88%86%E6%A6%9C%E7%AC%AC17%E4%BD%8D) · 热度 842万
+9. [足协通报批评云南玉昆足球俱乐部](https://www.douyin.com/search/%E8%B6%B3%E5%8D%8F%E9%80%9A%E6%8A%A5%E6%89%B9%E8%AF%84%E4%BA%91%E5%8D%97%E7%8E%89%E6%98%86%E8%B6%B3%E7%90%83%E4%BF%B1%E4%B9%90%E9%83%A8) · 热度 833万
+10. [江苏多地高中推迟到校时间](https://www.douyin.com/search/%E6%B1%9F%E8%8B%8F%E5%A4%9A%E5%9C%B0%E9%AB%98%E4%B8%AD%E6%8E%A8%E8%BF%9F%E5%88%B0%E6%A0%A1%E6%97%B6%E9%97%B4) · 热度 811万
 
 ### B站全站排行
-1. [大家好，这里是 DeepSeek Harness，正式入驻 B 站！](https://www.bilibili.com/video/BV1i24P6rEmt) · DeepSeekHarness · 播放 365万
-2. [《崩坏：星穹铁道》即兴巡演PV——「当阿哈来敲门」](https://www.bilibili.com/video/BV1XJ4g6WEyL) · 崩坏星穹铁道 · 播放 311万
-3. [《原神》角色预告-「米提亚：井井有条」](https://www.bilibili.com/video/BV19b4A6PECX) · 原神 · 播放 182万
-4. [网络热传生物鉴定 第65期](https://www.bilibili.com/video/BV18wxY63Erp) · 无穷小亮的科普日常 · 播放 343万
-5. [【只对你有感觉】|“【恋爱の小曲】”](https://www.bilibili.com/video/BV1w5xh6sEEz) · 蛋某人音乐 · 播放 552万
-6. [一条没下巴的鱼杀穿奥陶纪？](https://www.bilibili.com/video/BV1Xx4c6tEKM) · 我们都是社畜 · 播放 352万
-7. [【全网最全】DeepSeek Harness超详细教程！50分钟吃透DSH，让SuperAgent给你干活！](https://www.bilibili.com/video/BV1REx46NEc4) · Git源宝 · 播放 180万
-8. [痛失爱女十周年！](https://www.bilibili.com/video/BV1K64A6oEeA) · 江歌妈妈 · 播放 61万
-9. [【2026全球总决赛】11月4日 TES vs IG](https://www.bilibili.com/video/BV1XwxU6xEnL) · 哔哩哔哩英雄联盟赛事 · 播放 859万
-10. [开破车挑战纽北！证明中国人比德国人更会玩车](https://www.bilibili.com/video/BV1HH4u6PEsa) · 极速拍档 · 播放 119万
+1. [《崩坏：星穹铁道》即兴巡演PV——「当阿哈来敲门」](https://www.bilibili.com/video/BV1XJ4g6WEyL) · 崩坏星穹铁道 · 播放 365万
+2. [大家好，这里是 DeepSeek Harness，正式入驻 B 站！](https://www.bilibili.com/video/BV1i24P6rEmt) · DeepSeekHarness · 播放 407万
+3. [网络热传生物鉴定 第65期](https://www.bilibili.com/video/BV18wxY63Erp) · 无穷小亮的科普日常 · 播放 394万
+4. [【只对你有感觉】|“【恋爱の小曲】”](https://www.bilibili.com/video/BV1w5xh6sEEz) · 蛋某人音乐 · 播放 785万
+5. [《崩坏：因缘精灵》幸福PV：缘汽一下](https://www.bilibili.com/video/BV1nm4g6NE71) · 崩坏因缘精灵 · 播放 449万
+6. [《这是我儿子？》](https://www.bilibili.com/video/BV1PF4g6ME26) · 张小伙玩配音 · 播放 510万
+7. [《原神》角色预告-「米提亚：井井有条」](https://www.bilibili.com/video/BV19b4A6PECX) · 原神 · 播放 192万
+8. [只有站对角度，才能看见消失的孩子！](https://www.bilibili.com/video/BV1B54G6vEfm) · 艺术有毒 · 播放 464万
+9. [乖乖待在我身边学微积分不好吗？](https://www.bilibili.com/video/BV1vW4G6bEuf) · 社恐内向昭爷爷 · 播放 137万
+10. [开破车挑战纽北！证明中国人比德国人更会玩车](https://www.bilibili.com/video/BV1HH4u6PEsa) · 极速拍档 · 播放 141万
 
 ### 今日头条热榜
-1. [马兴瑞被提起公诉](https://www.toutiao.com/trending/7704501062417268787/) · 热度 3453万
-2. [黄之锋再获刑10年](https://www.toutiao.com/trending/7703889425092116534/) · 热度 3124万
-3. [历史昭示未来 奋斗成就伟业](https://www.toutiao.com/article/7704463532959498787) · 热度 2827万
-4. [厕所偷拍者不乏高知人群、公司高管](https://www.toutiao.com/trending/7704484797367845414/) · 热度 2558万
-5. [文班13秒3次封盖](https://www.toutiao.com/trending/7704250537968959507/) · 热度 2315万
-6. [印度官员放话自己研发盾构机](https://www.toutiao.com/trending/7703888460650922003/) · 热度 2094万
-7. [张朝阳：算法推荐容易让人越看越窄](https://www.toutiao.com/trending/7703449594369347135/) · 热度 1895万
-8. [马刺险胜独行侠 文班52分](https://www.toutiao.com/trending/7704555835405372991/) · 热度 1715万
-9. [国内多个品牌金饰报价超1200元/克](https://www.toutiao.com/trending/7704389077314896435/) · 热度 1552万
-10. [耐克为什么卖不动了](https://www.toutiao.com/trending/7704473850020367926/) · 热度 1404万
+1. [南京零元面馆爆火](https://www.toutiao.com/trending/7703756521339093019/) · 热度 1258万
+2. [黄仁勋的神话被谁撕碎了](https://www.toutiao.com/trending/7704897192376405546/) · 热度 1138万
+3. [在第九届进博会和未来相遇](https://www.toutiao.com/article/7704711727283257907) · 热度 1030万
+4. [“女老虎”余艳红主动投案被查](https://www.toutiao.com/trending/7704541934211104831/) · 热度 932万
+5. [黄仁勋个人财富跌出世界前十](https://www.toutiao.com/trending/7704878098243764278/) · 热度 843万
+6. [独生子女不一定能继承父母全部遗产](https://www.toutiao.com/trending/7704091975108018195/) · 热度 763万
+7. [AI时代为什么开始招聘文科生](https://www.toutiao.com/trending/7704851281227121202/) · 热度 690万
+8. [李斌再度警示车重问题](https://www.toutiao.com/trending/7704530713500352566/) · 热度 625万
+9. [王毅：中央和国家机关要走好第一方阵](https://www.toutiao.com/trending/7704625745540218930/) · 热度 565万
+10. [广西人吃席撑大伞上菜动作行云流水](https://www.toutiao.com/trending/7704519690261430314/) · 热度 511万
 
 ## 话题：科技
 
 ### 最新新闻
-1. [Hypers大涨、Neocloud暴跌：民主党横扫国会，美股科技板块上演大轮动 - 华尔街见闻](https://news.google.com/rss/articles/CBMiU0FVX3lxTFBfdlRrdFo2b1JBTkNRek5NR2QyQTFoemZCLTgzYzhwbEVNOHZLbWtQTURIOUoxT1pfNXg2b24weVhzRUlocnhMeThGNmVJazQyMF9B?oc=5) · Thu, 05 Nov 2026
-2. [《科技青年》第二季丨城市的韧性 - 新华网](https://news.google.com/rss/articles/CBMigwFBVV95cUxPbXF5Zi0waXUzN2x1dDc0ZndSZi1ySW43Nm5uZDJHMzd2b0pySFpfRnNmUnZtMW10WnMteUEtUWZYRXoyTWQ3MFZxX3NfcGE0OUlJVDJrYUM0ZGQxSlNZajRTNzIyNUtLNm4zaVc0OVg4TjhXaHdhbno4S2VXLUMzZzNoRQ?oc=5) · Thu, 05 Nov 2026
-3. [“蓝色浪潮”下美科技巨头股价狂飙 华尔街：凸显自由现金流重要性 - 财联社](https://news.google.com/rss/articles/CBMiSEFVX3lxTE5ySDJYcl9zRE1NSm44QnhQck1tZUVKUEZEbHd3V3RDRl8xTDNQaEVTdzRsNGlzLWxTT2Vrdy1YMzN3OGdJWTh4Qw?oc=5) · Thu, 05 Nov 2026
-4. [苏州科技大学特聘教授陈建平逝世，终年63岁 - 科学网—新闻](https://news.google.com/rss/articles/CBMiZkFVX3lxTE1Pc1U3ekRBLXdfV2VodlVGek9SRk9oT1UtMVN5aGxMUEZJX1d4U0VrTkVtVzRVWVdDOVY3Wl81YnNBSHZyWDhkNWw5SS1UcEdhOHVjS2ktSDR3M0FNMHM4MmpuRDJtUQ?oc=5) · Wed, 04 Nov 2026
-5. [武汉明峰智人科技研究院创始人张小健 - 凤凰网](https://news.google.com/rss/articles/CBMiT0FVX3lxTE9Tb1JZbmhRdHJ5eHMydnFGa01ES0dVNVVrUHV2UGZBYXFkbjhsNUsyby1acHdDMFdrd0RfN0kzRVp2S3BZbnM1Q3hQVWFXcEU?oc=5) · Thu, 05 Nov 2026
-6. [荷兰安世半导体起诉闻泰科技及其创始人 要求赔偿损失 - RFI](https://news.google.com/rss/articles/CBMigANBVV95cUxPWWJDV0psVXNwMU80dWRWSWR0Rm41Y0N1dkhTZm5vTGVDTFhLMW96Zmw0NHh0RWZYQUNYNTBxUkp2VW5lZWl6S3pwRzlIbFQzSEpZeV9kMm5sTk8xUjU3TS0wdm9wZVA0Y1VNeGVDdUZyTEJvOS1fTG1MN1poNTAzRFpZTUV2WlRRcHdaemlmWE55NWI3c250eC02Z1pGeWIwb05wWERoNmZESHVHQk5Dc3RKcDc1ZUtzYnNtNGFrcndqSTlrOElDT0tUbTZPcHVaWEtKM0t2U0tRTVFCSHdxVTNOdTBwRGs5c3NqS0Q3ZFhEWW5WWFRsUllKTFJCQW14alJ6SnVFMWJacXg5ekFvNHYtUDRaeHloNlRGeXppZ1QwRFVnWDk1Nmd0Y2ZYZ1VkQzdwa1JMV01KYTNwczVSWko4UEo5eVZjalNUQm9ETlhQTXVpVlQ5ZklFc0dFWmpTbWpnZjZaT1RYLUVDSmJaWG9UMjhLSWhaemFkZ2swRmI?oc=5) · Wed, 04 Nov 2026
+1. [嘉银科技开展用户教育活动，严定贵推动嘉银科技人工智能落地 - 手机新浪网](https://news.google.com/rss/articles/CBMifkFVX3lxTE5aY0cxWHYxcTlMYjlLUGlNYnZub1I0WWVMN3BUNGlabE5wZV8zb19NclpuVzJET2JuWkszNDdUS3lQMUlOMXFUai1fbjlYVTJaNFJiSmM4U2tMTlZ1eFhMel82SUs2TGZJaGl0dXlXZFQtV05VRHgyWTlZNGQtdw?oc=5) · Fri, 06 Nov 2026
+2. [“易中天”等一批科技龙头午间集体发声 - 东方财富](https://news.google.com/rss/articles/CBMiYEFVX3lxTE0wd1JQNEg1NFJ6U2Mxdmh6aHFaTjVPYmdQZnEyQTdMV0VRQnpGLUJBakFzOVotSlNRSWkxVU81NWFVaVRJdE5wNzMzU0hFV1E0R3RPRFoxd0FBX2dMM2ZDQQ?oc=5) · Fri, 06 Nov 2026
+3. [美国期中选举后，AI放缓忧虑重创全球大型科技股，韩国股市熔断 - BBC](https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9Xb2tQQ0JsTGt0YndEUGdFSmlBNU1oaGpRRlJZWGN2YUhVQU12ZE93TGZXS3FrN3ZtSkZWM29fN1BGSmpqQk5kWXZINnd5Q1U3UnZuUFlQMV9TMVcyZlQ4NTZsSTNDbVXSAWxBVV95cUxNZjBoU1dIek0wLTc3NmVXUkE0aHI5Q1VWVF9LTkMxZ1pwdkhScWYxX3c0YlJleV8wWWZuRHRYbHRQZVdGdHBXZ1hLNTlneGpWbHdXbW1VckR5MHNiRnBkcEEzemhNSVpiUmJ2R2U?oc=5) · Fri, 06 Nov 2026
+4. [美股科技多头“大逃杀”！“抛售催生更多抛售”，毫无买盘入场迹象 - 华尔街见闻](https://news.google.com/rss/articles/CBMiU0FVX3lxTE1URGtlNkZ6ZHpSbF9hUGRBTG9kTGlDb3k0QldiTlJQYXpnUjgxeHVhQXh0T2F1Zl84ekZwRDc3aS1TT2thUWQ4cUZFR0tOQ0RSXzVV?oc=5) · Thu, 05 Nov 2026
+5. [美股全线暴跌：科技股成重灾区，芯片与AI投资受挫 - 中华网](https://news.google.com/rss/articles/CBMicEFVX3lxTE51cHVSOEJSYkJwQ3dwSTAxM1U5Ykh5Ymo0SlBob2hQX0RTdDEzbHljUTVkYnR6QzN5OURWSzUwaU1lbVBsMHRRTHlTWTE3Zm5uWEhhMVRRT2V4VjFXSEFOT1ZvdUp4ak5hSVhtWHJuSFo?oc=5) · Fri, 06 Nov 2026
+6. [从屏幕到空间，影目科技抢占下一代终端定义权 - 新浪网](https://news.google.com/rss/articles/CBMickFVX3lxTE5US1JTaUhVanR6QlZ3UzdvX3QwamZFVFJlUjNaUjY1cXhCVDhsa3B4dFZqOGNxMzh4X2FvaHNCVXY2Q19VVXQ4aURfNnVpQ2VlOTAzZGNCRHozVHI1UmJpb0R5WERQbmRJSG1zbzRrNW4xdw?oc=5) · Fri, 06 Nov 2026
 
 ### Reddit 讨论（近 24 小时）　搜索词：subreddit:technology
-1. [Texas just went blue, and the tech bros are sad](https://www.reddit.com/r/technology/comments/1xnrp17/texas_just_went_blue_and_the_tech_bros_are_sad/)
-2. [10 States With Data Centers on the Ballot All Voted to Ban Them](https://www.reddit.com/r/technology/comments/1xnrvcr/10_states_with_data_centers_on_the_ballot_all/)
-3. [Midterm Takeaways: Tech billionaires suffer horrible night as Democrats drub Republicans](https://www.reddit.com/r/technology/comments/1xnjbg9/midterm_takeaways_tech_billionaires_suffer/)
-4. [YouTuber discovers aircraft noise trick that can geolocate your videos to within 100m — 'Doppler effect' pinpoints locations from just 60 seconds of audio](https://www.reddit.com/r/technology/comments/1xnzmmf/youtuber_discovers_aircraft_noise_trick_that_can/)
-5. [Ted Cruz aims to stack FCC with Republicans before Democrats take Senate control](https://www.reddit.com/r/technology/comments/1xnxmbt/ted_cruz_aims_to_stack_fcc_with_republicans/)
-6. [Sam Altman Pulls Spectacular 180 After Unpopular Comments About RAM: 'It Is F**king Annoying'](https://www.reddit.com/r/technology/comments/1xnt2ht/sam_altman_pulls_spectacular_180_after_unpopular/)
+1. [Mark Cuban says Facebook knowingly runs AI deepfake scam ads as Meta docs reveal $16 billion in fraud-linked revenue](https://www.reddit.com/r/technology/comments/1xoqri7/mark_cuban_says_facebook_knowingly_runs_ai/)
+2. [Tesla and SpaceX lose over $420 billion in combined market cap in the two days after midterms](https://www.reddit.com/r/technology/comments/1xow42o/tesla_and_spacex_lose_over_420_billion_in/)
+3. [Tech is about to get hammered in Congress / Democrats have promised to drag CEOs to testify under oath and investigate corporate influence.](https://www.reddit.com/r/technology/comments/1xokqlr/tech_is_about_to_get_hammered_in_congress/)
+4. [Meta warns that election backlash against data centers could make AI expansion harder](https://www.reddit.com/r/technology/comments/1xorh8s/meta_warns_that_election_backlash_against_data/)
+5. [Republicans Learn X Is the Echo Chamber](https://www.reddit.com/r/technology/comments/1xopyuw/republicans_learn_x_is_the_echo_chamber/)
+6. ['The office increasingly fails to deliver this benefit': Most in-office workers now describe their desk jobs as ‘remote' despite bosses promising to boost in-person teams](https://www.reddit.com/r/technology/comments/1xohgv3/the_office_increasingly_fails_to_deliver_this/)
 
 ### YouTube 最新视频
-1. [[Selection] AI Tech Giants Crumble! Google Loses $500 Billion Overnight, Amazon Cash Flow Bleeds,...](https://youtu.be/VpH6ZiqgIVA) · 3d ago · 72,720 views
-2. [AI tech giants are collapsing too！](https://youtu.be/SeAfls0YwPc) · 5d ago · 664,987 views
-3. [【FSM Global特約：收市有偈】AI科技股全線大反彈🔥！恒指午後急升🚀！上證全日高位收市⬆️ 阿里、騰訊點穴？｜黃灝然 Tony｜AASTOCKS｜2026-11-4](https://youtu.be/SurFjwHmVUU) · Streamed 21h ago · 12,503 views
-4. [美國科技股大跌，是過度恐慌還是熊市前兆？6個問題看懂AI燒錢、融資與獲利風險 #AI股 #美股風險 #中期選舉](https://youtu.be/4C1hnZDPbsY) · 1d ago · 46,679 views
-5. [Trump Abandoned by Allies: 75% of Voters Turn on GOP, Tech Giants Pivot to Democrats, "MAGA Empir...](https://youtu.be/u2md7vh54xI) · 18h ago · 14,070 views
-6. [美選後台股沒止跌！科技權值股慘兮兮　傳產、生醫出頭天｜#鏡新聞](https://youtu.be/Ar2NBcifBvw) · 1h ago · 1,513 views
+1. [美國科技股大跌，是過度恐慌還是熊市前兆？6個問題看懂AI燒錢、融資與獲利風險 #AI股 #美股風險 #中期選舉](https://youtu.be/4C1hnZDPbsY) · 2d ago · 51,037 views
+2. [Tech Stocks Under Pressure: Taiwan Stocks Plunge Over 1,000 Points, Falling Below 42K](https://youtu.be/Ob4VkA736vc) · 1d ago · 18,998 views
+3. [美股大跌 AI科技股遇重挫；高盛股票交易台电话被打爆；美股大抛售 马斯克损失近千亿；谷歌加入科技企业裁员大潮；国税局上调遗产税赠与税免税额《财经焦点》11/05](https://youtu.be/hhqAzgXkZKc) · Streamed 7h ago · 37,281 views
+4. [[Selection] AI Tech Giants Crumble! Google Loses $500 Billion Overnight, Amazon Cash Flow Bleeds,...](https://youtu.be/VpH6ZiqgIVA) · 4d ago · 72,799 views
+5. [AI tech giants are collapsing too！](https://youtu.be/SeAfls0YwPc) · 6d ago · 667,623 views
+6. [Republicans Swept Out! Will Tech Stocks Continue Their Slide? The Real Risk of the Midterms Isn't...](https://youtu.be/i-6x6nP2H9s) · 1d ago · 5,756 views
 
 (近 7 天内)
 
 ## 话题：AI
 
 ### 最新新闻
-1. [《嫁金钗》忘删AI水印背后的真问题是什么 - 新浪财经_金融信息服务商](https://news.google.com/rss/articles/CBMiiwFBVV95cUxNbldSNFI1NTlVd3FBODQzdkZuRERNLVp3UC1hMHBsY1VzMEJtUnNfQ2FYQ1R2TXVTenFFYTdjYTRSQ1p6VEY2cDR0NUQzZDBxdHNTVDcwblRobG5MQ0JLSXVEVDhMcVdVNzAyMmVBV1Z6UzFOQWdCclpmZkJKX05SYmdYNHZEQlJ1bkZJ?oc=5) · Thu, 05 Nov 2026
-2. [美企“狂烧Token”时代落幕？苹果据悉削减内部AI使用预算 - 手机新浪网](https://news.google.com/rss/articles/CBMifkFVX3lxTFBmVEl2eGZXQUhmMEZ1bXpRNWJ2ZVgwOEdMMEpzUmVSTVVjSlFLRDhDMWEzWF9HcnFfREJJZnhtY21zbDkwaFJ0ckQzN3ZGVnNIMUkzNi1JV2dyQ3JMMXh3bnZidzhJeHpGdjhOZkU1VE1CZDhQOGxobDNaMzI3UQ?oc=5) · Thu, 05 Nov 2026
-3. [AI交易松动，中国资产迎来机会！摩根大通也看好A股：还有10%-15%反弹空间 - 华尔街见闻](https://news.google.com/rss/articles/CBMiU0FVX3lxTFBUWGliYndjOThfLXdFc2NUNWFER0ZXQjZLeTRHZTZOUXJfTkd6TnhZSFhZQWt3MFRIMUVtMnJuZHRLVmZscE5faGRreDg0OVNNT1BB?oc=5) · Thu, 05 Nov 2026
-4. [赢商者说 | AI时代，律师如何构建“不可替代”的职业能力？ - 新华网](https://news.google.com/rss/articles/CBMifEFVX3lxTE9yMnI1ekJOU2lZaW8yQTloM1A1QjliYTZPdUlFV3l0bDBPdENmeHdQYk5FR1h3eHVEUDM1dGJLZEV6TkZyblduVUFvZkdRX0VVMzZHOXZvRUdXUjVYakJ1UUZyMmFFZUJGZUxWNk9meVd1Z0Q1M2JnVTNJYVM?oc=5) · Thu, 05 Nov 2026
-5. [警报拉响！苹果自曝AI智能体威胁业务 - 驱动之家](https://news.google.com/rss/articles/CBMiWEFVX3lxTE1keS1ZY0pKLUk1UWQxM1BZd2xMUXB1NzhDQXZSYms5M3c0Qy1WcGJmMzlxcTFOOXpEOFVmV1RsRWQwMHljbjRBeWhPamxqR2E1WFplOFNsT3U?oc=5) · Thu, 05 Nov 2026
-6. [实战派AI咨询团队背景 - 凤凰网](https://news.google.com/rss/articles/CBMiT0FVX3lxTE55NEFLVzNqTmlIeVV0YzlvZnpITGI5aURKa2JiNm9sdU81cGpRaFFReHdzS1pkR0VPNHdPS2FzRHd0Ymw3dUp2N094Y1h2bXc?oc=5) · Thu, 05 Nov 2026
+1. [AI探店视频兴起！盘和林：AI能降低引流成本，但不能虚假宣传误导观众 - 手机新浪网](https://news.google.com/rss/articles/CBMif0FVX3lxTFBRU2FVY2ViajdqSDU4LXVCdFJSc0RaYlJqSDRlZXhlaGVmN2pldDlDaUdQaFRIMlM3T0g5RkZnTDdweWpja2FKSGptZ041ZEI4bXFtTGQ1eEExajJ6TUZjX005RVFOMVBaZ0ZLbVNpVnJEeXN1ZHllNVZRVzItclU?oc=5) · Fri, 06 Nov 2026
+2. [AI全栈出海张弛有度 - 中华网财经](https://news.google.com/rss/articles/CBMic0FVX3lxTE9samlib0ktZzlwU2ZQQUprVzJKTkNiRjJycUt2NHNsaGFLMUp6djNjekNHc1FtTHh3dFNENFh6REswbnU0VzJ3dDZkQXp0WUpFTURLcl92RWZoM2RaT2lqZkF4SThHWktrNUE1cTJ6ZHl3cGc?oc=5) · Fri, 06 Nov 2026
+3. [AI交易大撤退、美股创纪录“血洗”2.8万亿！纳指跌近6%、芯片指数狂泻超10%，数据中心产业链跳水 - 华尔街见闻](https://news.google.com/rss/articles/CBMiU0FVX3lxTFBBLWtxdEZ5WGhSQU9iUEl5NExON29rVUprTDdKNHNYMjhNVF9mcHBWbGVOaXI5MmxOT25qdkJGVUxzVkMtcDJwTldxWUdZY3ZiTlN3?oc=5) · Thu, 05 Nov 2026
+4. [美股AI板块遭抛售：纳斯达克100指数跌6.4%，市值蒸发2.5万亿美元 - 凤凰网](https://news.google.com/rss/articles/CBMiUkFVX3lxTE82MkNDLWdDcG5PelhiWGRwWDNHcDJWWDIxTFN6anFjU1F0ZEhMc2hSdUhWZUpvY3pWcFV2Z3ZveEtnenBndnlDdDlLbDl4U1poSlE?oc=5) · Fri, 06 Nov 2026
+5. [美股收盘：AI监管担忧引爆历史性抛售！纳指暴跌5.5% 七巨头市值蒸发1万亿美元 - 财联社](https://news.google.com/rss/articles/CBMiSEFVX3lxTFB2SFdLRDdEa0pzR1M3UkhBYVlYaXh4cjlHd2JUVnpRNnlOXzZMdWxyeFVFejN4OWFXLVM3UXFIcXVyR2otVWdLaA?oc=5) · Thu, 05 Nov 2026
+6. [分析｜AI话题卷入美中选论战 数据中心争议打破蓝红分野 - Caixin Global](https://news.google.com/rss/articles/CBMiakFVX3lxTE90X1l6TDNBbmN6X1M1ajN4VS04NHJmakQ5NzB0M1l3Y3dlY1lJUzRpdXZ2eEFwNk9qLTQzRm9MWVpLdHdpRUtUYXZHLUxnc1U4amxRTlNaeWxDamdnUk4wX0prQW9jNFQtX1E?oc=5) · Fri, 06 Nov 2026
 
 ### Reddit 讨论（近 24 小时）　搜索词：subreddit:artificial
-1. [Apple Watch now listens to in-person conversations & lets you rewind them](https://www.reddit.com/r/artificial/comments/1xntvml/apple_watch_now_listens_to_inperson_conversations/)
-2. [Anthropic’s FlashProve could prove an AI provider used the model you paid for without exposing its weights](https://www.reddit.com/r/artificial/comments/1xnrvak/anthropics_flashprove_could_prove_an_ai_provider/)
-3. [Apple put a warning about rogue AI agents in its 10-K. That’s a legal filing, not a blog post.](https://www.reddit.com/r/artificial/comments/1xnudhs/apple_put_a_warning_about_rogue_ai_agents_in_its/)
-4. [Hy4 adds vision and computer use. How reliable will it be on long tasks?](https://www.reddit.com/r/artificial/comments/1xnn1xm/hy4_adds_vision_and_computer_use_how_reliable/)
-5. [ai has been stuck in software. what would ai native hardware actually need to be?](https://www.reddit.com/r/artificial/comments/1xnvouu/ai_has_been_stuck_in_software_what_would_ai/)
-6. [Tencent Hy4 full benchmarks](https://www.reddit.com/r/artificial/comments/1xnhotx/tencent_hy4_full_benchmarks/)
+1. [Hideo Kojima says AI lacks what makes the creative process fun, despite its efficiency. “It’s not a form of creation I find particularly interesting” - AUTOMATON WEST](https://www.reddit.com/r/artificial/comments/1xor677/hideo_kojima_says_ai_lacks_what_makes_the/)
+2. [Apple is cutting employee AI spending budgets even as it pushes workers to use the technology more. Engineers have seen daily limits cut from $300 to $200, with further reductions to $100 planned. Other teams could see limits fall to $25.](https://www.reddit.com/r/artificial/comments/1xocwcy/apple_is_cutting_employee_ai_spending_budgets/)
+3. [Microsoft files patent for AI that can alter what people say during live broadcasts](https://www.reddit.com/r/artificial/comments/1xp3pww/microsoft_files_patent_for_ai_that_can_alter_what/)
+4. [Palantir Made $2.3 Billion Last Quarter and Calls Itself Antiwar](https://www.reddit.com/r/artificial/comments/1xozbic/palantir_made_23_billion_last_quarter_and_calls/)
+5. [Investigating vault particles with Claude](https://www.reddit.com/r/artificial/comments/1xor7bc/investigating_vault_particles_with_claude/)
+6. [Where Did the People in Between Go?](https://www.reddit.com/r/artificial/comments/1xog015/where_did_the_people_in_between_go/)
 
 ### YouTube 最新视频
-1. [Anthropic's New Opus 6 Ignites a Terrifying AI Theory](https://youtu.be/Jj_i9SzKhug) · 1d ago · 34,715 views
-2. [MIT looked at what AI actually killed and holy sh*t...](https://youtu.be/W8Dl-TS9H2c) · 1d ago · 865,536 views
-3. [AI Just Exploded: Anthropic Hacked, $6 Billion Stolen, OpenAI’s Secret Model...](https://youtu.be/pm7qRMBwPw4) · 6h ago · 30,937 views
-4. [DeepMind CEO: The World Is Not Ready for What's Coming](https://youtu.be/4P4fZJM1bfg) · 3d ago · 103,916 views
-5. [AI Panic Spreads as The Money Runs Out](https://youtu.be/yhPhRxxuCRQ) · 3d ago · 187,818 views
-6. [Blackstone Just Exposed the AI Bubble's Big Lie](https://youtu.be/KWgAO7CEy-A) · 4d ago · 148,202 views
+1. [Stock market meltdown over A.I. fears](https://youtu.be/R1vmfCfNXb8) · 6h ago · 18,048 views
+2. [The First Known Case of AI Agents Teaming Up Against Humans | Joe Rogan](https://youtu.be/K5Jf3aqWH_E) · 6d ago · 38,287 views
+3. [Roman Yampolskiy Loses It With AI Expert](https://youtu.be/EUMMxVRbI6A) · 11h ago · 25,110 views
+4. [AI BOOM ENDING?! Calls to PAUSE AI, GPT-6.2 Astra & Sol LEAKED, Fable 5.5 & Gemini 4! AI NEWS](https://youtu.be/LHxOG65r12w) · 21h ago · 62,357 views
+5. [DeepMind CEO: The World Is Not Ready for What's Coming](https://youtu.be/4P4fZJM1bfg) · 4d ago · 107,470 views
+6. [Dems take aim at AI giants and big tech after midterm wins](https://youtu.be/10NNhjP4SN4) · 9h ago · 79,778 views
 
 (近 7 天内)
 
 ## 话题：游戏
 
 ### 最新新闻
-1. [Claude 开始拒绝抄游戏，但可能已经太晚了 - 爱范儿](https://news.google.com/rss/articles/CBMiQ0FVX3lxTE9mMHI3ZnoyMWV4Ykx5NGpBZUpIM3pLRm84OWliUVhOWk5ud3dWSUk3c1QxSjVIZGdfME5tN0pEWUFUUGM?oc=5) · Wed, 04 Nov 2026
-2. [游戏手机拍照横评：iQOO 16、荣耀 WIN2、ROG 游戏手机9三款谁更能边玩边拍？+FAQ - 新浪网](https://news.google.com/rss/articles/CBMiX0FVX3lxTFBYWC1fdDJ5WTJqT0tuWUNrQTNqakF5Uml6dXU4WlJzLWR1NEF1bkl6R0xBWWVvYmNodTMzWFhWRXNqU0VzdEpoYVFpblhZMXlaczdzdlNzaHotaWFBWjhn?oc=5) · Thu, 05 Nov 2026
-3. [仅限RTX 5090！NVIDIA App暗藏新功能：游戏可独占95%显卡资源 - 驱动之家](https://news.google.com/rss/articles/CBMiWEFVX3lxTE8xT3R1Y3BQMmZwQ1cyeWhLX1F4WUtpSzFST0NtUlFraUVHdTVQbzRuekZsNGpUZFhDNVZCR01Ua182WldLdjhGdEdUYWFkRmh0bnNKVHpOLXI?oc=5) · Thu, 05 Nov 2026
-4. [30次出价！一晶核游戏账号起拍价3.5万元，被人6.2万元拍走 - 凤凰网](https://news.google.com/rss/articles/CBMiSEFVX3lxTE5jNkVzMGMtYXNPN3RJZUM4dFhnYUZRUmxhcE8wb2JjcE5ldC01VnpIa2Nla0o0aDJ1WU5temhpNDYxOTVsREtQbw?oc=5) · Thu, 05 Nov 2026
-5. [迈向通用游戏智能，清华、米哈游开源GameScaling系列模型 - 手机新浪网](https://news.google.com/rss/articles/CBMickFVX3lxTE5XMGk5cVlFXzZKOGRKM1lES0t2RnNrMVdfYm9Cem42V3plTFdDTllXUFV0ZHoyeTVLX2xRQXpBcncxeVUzTXFUYkFQcGptbkFtTDB0WXh2MWNobjJ4dEZ0eXRKZWFoU0hTQXZTNnc0TWdjQQ?oc=5) · Thu, 05 Nov 2026
-6. [父亲离世近20万游戏账号被改绑 继承难题凸显 - 中华网](https://news.google.com/rss/articles/CBMicEFVX3lxTE52UG4xOU5WVW1ralNUX0VHYlR3Nnp1c2puU2lrNDFpSW5pNlFweGFyUFh3Z2FKWFhYdF9hcHQzQ0ZxRDB3X0RWdXlxLVQ0V09GckNpbGhVTGU1ZGdSRF9vcENCb3dlc1pyUGhOMDcyTXk?oc=5) · Thu, 05 Nov 2026
+1. [六千预算游戏主力机横评：iQOO 16、红魔11 Pro+、一加15、荣耀WIN系列怎么选 - 新浪网](https://news.google.com/rss/articles/CBMiX0FVX3lxTE1iZUNJcndpdmxnRkk0SkIzMXZRSHNqZjYyV2JmRnhaR1JPV3hZRGhtNU9oSm9VNHExZHFOUWpYd1pZZVR2akJ1S1hEWG1neXhEeDlrbnh6bmExaDFEZVZz?oc=5) · Fri, 06 Nov 2026
+2. [拍照好看的游戏手机有哪些？四款旗舰横评，iQOO 16把电竞与影像同时拉满 - 新浪网](https://news.google.com/rss/articles/CBMiX0FVX3lxTE1yWFlsMjZ2S0U3eEtySjhnTW84a2dlUkdFZEtMMW1UeE9VYmc1Ry1kZndkbkc5dmphMDFpNGh4QmRUeFF2Ym9iWVBjOHlfYjAtNEwySzZhOEJRaFVzU3VB?oc=5) · Fri, 06 Nov 2026
+3. [四款设计感游戏手机外观横评：iQOO 16 用「明日舷窗」把科幻戴在手上 - 新浪网](https://news.google.com/rss/articles/CBMiX0FVX3lxTE5JLUVqWVpVVDAwbWxqcFRMZ3pEejQ2WWhHTEFSR2V6Rmk3ejA0TlBlOWo3VDhHSElxRlhwMlczTE5tbVk0WUNQSmFXTWVFdzloT0NNQjVjNlhIZkJFT1Jn?oc=5) · Fri, 06 Nov 2026
+4. [儿子去世留下87个账号 游戏公司拒绝母亲继承 法院判了 - 驱动之家](https://news.google.com/rss/articles/CBMiWEFVX3lxTE1xaXlSSWEzYkxRc1NWbkJDZ255N3VTOS16RHlPcXhTX092RFlmbmJETWdNUlVMQXRwbDVHa1RYU3VKb0NmTE0tYUhqeGdkQ2wtVGx6MHdIUTM?oc=5) · Thu, 05 Nov 2026
+5. [红海中厮杀，手机厂想抢更多游戏用户 - 观察者网](https://news.google.com/rss/articles/CBMiZEFVX3lxTFB5bmxSUXNVb29NaXpTTkVfR1pLSDhKRTBNeU91TGlOZ21LYzNhZ0FIVG1DRlhQRGUyb01GT1Jmd3dPakMzQURPRXpiV1BYdkdmSEdLYWU2VmxTQ21HcE5OZ0Y1U0g?oc=5) · Thu, 05 Nov 2026
+6. [6999元，红魔游戏平板5 Pro 16GB+1TB版本11月9日开售 - 凤凰网科技](https://news.google.com/rss/articles/CBMiTEFVX3lxTE1ibEQxaXZuanlEYXhRYUpfZTl1aXBVanRFb1VMRUUwcW1iZXBBZEdDQzZHM0doM3RwaUFoSDJUaGx4alVfd05aVHhBRzk?oc=5) · Fri, 06 Nov 2026
 
 ### Reddit 讨论（近 24 小时）　搜索词：subreddit:gaming
-1. [See you in a few days world ✌🏼](https://www.reddit.com/r/gaming/comments/1xnwz4z/see_you_in_a_few_days_world/)
-2. [God of War Laufey has officially been delayed 3 months](https://www.reddit.com/r/gaming/comments/1xnts5i/god_of_war_laufey_has_officially_been_delayed_3/)
-3. ['The Legend of Zelda: Ocarina of Time' - Review Thread](https://www.reddit.com/r/gaming/comments/1xnoqw1/the_legend_of_zelda_ocarina_of_time_review_thread/)
-4. [Ocarina of Time Midnight Release!](https://www.reddit.com/r/gaming/comments/1xoaeiy/ocarina_of_time_midnight_release/)
-5. [World of Warcraft Forever Has Finally Landed, And it Seems Like a Smooth Launch: Live Blog](https://www.reddit.com/r/gaming/comments/1xoajnm/world_of_warcraft_forever_has_finally_landed_and/)
-6. [Bringing Jin Sakai back to life for Ghost of Yōtei: Most Wanted](https://www.reddit.com/r/gaming/comments/1xnqnwd/bringing_jin_sakai_back_to_life_for_ghost_of/)
+1. [The original Ocarina of Time was therapeutic as the first game I played after becoming paralyzed as a teenager.](https://www.reddit.com/r/gaming/comments/1xos6po/the_original_ocarina_of_time_was_therapeutic_as/)
+2. [PlayStation Fans Begin Building “Competent Sony Executive” Emulator](https://www.reddit.com/r/gaming/comments/1xon8o2/playstation_fans_begin_building_competent_sony/)
+3. [Nintendo President Furukawa says they are not considering another Switch 2 price increase as "They are in position to be able to secure a sufficient memory quantities."](https://www.reddit.com/r/gaming/comments/1xoknh2/nintendo_president_furukawa_says_they_are_not/)
+4. [Nintendo Switch 2 has sold 26.35M units, Nintendo Switch has sold 157.2M units as of September 2026](https://www.reddit.com/r/gaming/comments/1xoccm2/nintendo_switch_2_has_sold_2635m_units_nintendo/)
+5. [Stellar Blade - Live Action Launch Trailer -](https://www.reddit.com/r/gaming/comments/1xonbzy/stellar_blade_live_action_launch_trailer/)
+6. [I was 16 when OoT was released.](https://www.reddit.com/r/gaming/comments/1xojd8k/i_was_16_when_oot_was_released/)
 
 ### YouTube 最新视频
-1. [Multiple overseas gaming media outlets gave it perfect scores! The domestically produced AAA game...](https://youtu.be/Lyq-BmPr5og) · 19h ago · 34,303 views
-2. [中國武俠遊戲三天爆賣400萬份？IGN中國竟開嗆西方遊戲被政治正確綁架？甄子丹參與演出的【影之刃零 Phantom Blade Zero】的事件](https://youtu.be/nP3YiOYM3eg) · 1d ago · 262,721 views
-3. [从国产游戏火爆，看西方中心主义](https://youtu.be/uLMH1RnGt6E) · 1d ago · 49,282 views
-4. [世嘉MD游戏《勇士们》，AI时代，全都可以移植](https://youtu.be/MJ5gKU61rM0) · 1d ago · 8,451 views
-5. ["Horror Game: My Halloween Girlfriend Is an S-Rank Ghost"  #minidrama #shortdrama Rants & Reviews](https://youtu.be/8r9zHMlgWSM) · 3d ago · 24,425 views
-6. [世嘉MD游戏《成龙踢馆》，难度也移植了](https://youtu.be/2eWkYx-4uyY) · 20h ago · 7,814 views
+1. [Multiple overseas gaming media outlets gave it perfect scores! The domestically produced AAA game...](https://youtu.be/Lyq-BmPr5og) · 1d ago · 40,950 views
+2. [街机游戏《空战双鹰》，左右互搏，当代周伯通](https://youtu.be/1MftcFR0QEo) · 22h ago · 6,379 views
+3. [从国产游戏火爆，看西方中心主义](https://youtu.be/uLMH1RnGt6E) · 2d ago · 52,115 views
+4. [🏁 Fastest Running GAME Characters Ever! 🎮💨 3D Comparison](https://youtu.be/D1W1WZ0skMc) · 6d ago · 614,229 views
+5. [世嘉MD游戏《成龙踢馆》，难度也移植了](https://youtu.be/2eWkYx-4uyY) · 1d ago · 10,190 views
+6. [PS5已无所不能了，PS5玩NS SWITCH游戏的模拟器详细的使用教程来了，小白也会](https://youtu.be/_xb67UoIdSw) · 21h ago · 11,877 views
 
 (近 7 天内)
 
 ## 话题：美股
 
 ### 最新新闻
-1. [综述｜美中期选举选情致美股金价大涨油价重挫 - 新华网](https://news.google.com/rss/articles/CBMif0FVX3lxTFA4S2tPbDZzb21EaXhMN3p0WFhOeU1feUFBbHhuaUZLSzBLdEw3TWxoUzlLdUFiTDR3TkFPWXhLTmRhWjdxV0gwQm83a1hzZC01cnB4cHJHUE9sbzN6UWtiUnJqYU13ZFp0X0tKZ1JZSEdteU1nRjFncFpLd2R4Sk0?oc=5) · Thu, 05 Nov 2026
-2. [11月5日收盘：美股收高 道指涨1500点 AI概念股逆势下挫 油价跌逾8% - 新浪财经](https://news.google.com/rss/articles/CBMihwFBVV95cUxOb085U3IydjIybTBaUTRFQTVWWktuSGMxWkhKck5ZcVFEUVBReW9vYS1jSzFxNFp1ekI1bFJQeVVJYm5GTlVXWlUydzEyNWNPQXVfU3c2b0sxcTh0dTIteE1JSVc1YjZGaUd6QndSb3pjcFBET0E3NHZsaEFnRWpsU0I5RjRDa1E?oc=5) · Wed, 04 Nov 2026
-3. [纳斯达克交易时段将覆盖A股 - 手机新浪网](https://news.google.com/rss/articles/CBMiggFBVV95cUxNTHYxRm1Mdm1OV1Q0UENVLUdHM25kbm9NSGJSSGIxaU9BQ2R0bUpLQ19UQTVIQkJpek01UFh0dkVZZ0RtY0FnVl9zVHBFeDRQRnV0cFctQUVrZGRZTHlNLUpTcnJTRXdXM3B5TUt2WW16TnBwOEJ6LTczRTU0TENyNHlR?oc=5) · Thu, 05 Nov 2026
-4. [美股收盘：政治不确定性消退叠加油价暴跌 道指大涨逾1500点 AI数据中心股遭重挫 - 财联社](https://news.google.com/rss/articles/CBMiSEFVX3lxTE10TkRtQUZjdm9pV0hFRVljQ2dxbEJjd1FjX0ZOYjdkYlhRY0cwVWl5SDNtSFcyWGRaUEhpUkNaYXdtTzBYNjRIUg?oc=5) · Wed, 04 Nov 2026
-5. [moomoo 美股前瞻：周四展望 - Moomoo](https://news.google.com/rss/articles/CBMiowFBVV95cUxNdXNYR004dkZFY3NDSG1jUldtbm50dXBTNnFUMTRKcjA3MExJU2ViVFpYOERpV04yQzkyb2IwNWxCMDZ0V1kyajhrSVpERnJjTnpqY1hIbmliUUJ0RXVoSlh3NVVfVTk4NEZiLWxIeHR2WllCcWxISzlYdFJSUEZPbWhVRC1xc016NG1XQUVuZ0xHSXptVmh1WXZtajRQcExkMWZ3?oc=5) · Thu, 05 Nov 2026
-6. [Hypers大涨、Neocloud暴跌：民主党横扫国会，美股科技板块上演大轮动 - 华尔街见闻](https://news.google.com/rss/articles/CBMiU0FVX3lxTFBfdlRrdFo2b1JBTkNRek5NR2QyQTFoemZCLTgzYzhwbEVNOHZLbWtQTURIOUoxT1pfNXg2b24weVhzRUlocnhMeThGNmVJazQyMF9B?oc=5) · Thu, 05 Nov 2026
+1. [纳指股灾！美股“无处可逃” - 华尔街见闻](https://news.google.com/rss/articles/CBMiU0FVX3lxTE93R0NOV2RGU2lVSzdWUDVSOHNBelJKdEIwQklKRmlOMC15LW5iYlNtSlpxMFM1N3FXLTFOVTNZZlNZUkdSbjVpM0FvUFVsUGduQlY4?oc=5) · Fri, 06 Nov 2026
+2. [美股科技股回调 中际旭创、新易盛回应：经营正常 订单与交付节奏未变 - 东方财富](https://news.google.com/rss/articles/CBMiYEFVX3lxTE8wMUJDckZXVEtEYUo5ck1maC1HY0g3ZWJIZm9wZjdFTE16X01ULWNTVHBHOWJoSXhhMF9TMFFfVHZCZ3NSQWtSaEVwWUFIalN5QmZBNzIyV0lFYmVEdy04bA?oc=5) · Fri, 06 Nov 2026
+3. [美股风向突变！纳指暴跌逾4% AI概念股再遭抛售 - 财联社](https://news.google.com/rss/articles/CBMiSEFVX3lxTE1ydEIwYzJOb3BqdU5ENS1UbklpUU1WY3dFXzB3UGVhZExTeXY1Z0Q5MzBfcW1aa2hIcl9RRndjTHJPZ2VTV3R5RA?oc=5) · Thu, 05 Nov 2026
+4. [美科技股历史性暴跌！纳指陷入回调 以史为鉴：接下来何去何从？ - 东方财富](https://news.google.com/rss/articles/CBMiYEFVX3lxTE9wN3A0MjFzMmJlenlMWHlORnhKMWdyRk1UZW15OWFSZUZPSDRVTEV3bGZZUlpKanNUcVppOEYzVHZnRHc5VmF6WlpEUURsZjYxZDgzcXdWNXFZOHllQ19hUg?oc=5) · Fri, 06 Nov 2026
+5. [美国中期选举民主党大胜后美股暴跌 纳指跌5.52% 特朗普归咎民主党 - 凤凰网](https://news.google.com/rss/articles/CBMiUkFVX3lxTE9UYVBGcEVVLVNZQ2NNYzY3dmE4bWcxNTRXRmlHZmJrYmVLUUlCbTBaTHpQdG1HSVJKeEI4RTBMSHpkc3dfOU9PbnNxc195SDAyOUE?oc=5) · Thu, 05 Nov 2026
+6. [美国民主党欲推“超级AI”禁令美股三大股指均遭重挫纳斯达克100指数成分股市值缩水2.3万亿美元 - 中国金融信息网](https://news.google.com/rss/articles/CBMiakFVX3lxTE85d3JzTGVSZGlHVGxDQnRxNjVZT0JzTnhMVThIWWNZTjIxaU1ZSmlhZ2xMQ3IyMWl2WHJZYnoxYTY4TFlLaGoyejFjYzFwZ0phelRJWnpwU1RnQ0hYWk14RjNKZnZzaWMwSkE?oc=5) · Fri, 06 Nov 2026
 
 ### Reddit 讨论（近 24 小时）　搜索词：subreddit:stocks
-1. [Dow Surges Over 1,000 Points in Broad Market Rebound](https://www.reddit.com/r/stocks/comments/1xnq2z6/dow_surges_over_1000_points_in_broad_market/)
-2. [Stocks UP pre-market after Democrats sweep Congress in repudiation of Trump](https://www.reddit.com/r/stocks/comments/1xnjlxz/stocks_up_premarket_after_democrats_sweep/)
-3. [Dow soars 1,500 points for best day since April 2025 on clear-cut Democratic win, falling oil.](https://www.reddit.com/r/stocks/comments/1xo0cat/dow_soars_1500_points_for_best_day_since_april/)
-4. [AMD just guided to more revenue next quarter than Intel. Ten years ago Intel was 12x its size](https://www.reddit.com/r/stocks/comments/1xno993/amd_just_guided_to_more_revenue_next_quarter_than/)
-5. [Nvidia makes about 25x AMD's profit but is only worth about 6x as much](https://www.reddit.com/r/stocks/comments/1xnjbib/nvidia_makes_about_25x_amds_profit_but_is_only/)
-6. [Wall Street just added $750 BILLION to Big Tech while dumping the companies building its AI future](https://www.reddit.com/r/stocks/comments/1xnzvtl/wall_street_just_added_750_billion_to_big_tech/)
+1. [AI selloff escalates: Nasdaq 100 plummets 5.7%, Nasdaq tumbles 5%, S&P 500 falls 3.5%, and the Dow reverses earlier gains](https://www.reddit.com/r/stocks/comments/1xom4pn/ai_selloff_escalates_nasdaq_100_plummets_57/)
+2. [Anybody buying the dip](https://www.reddit.com/r/stocks/comments/1xolp0d/anybody_buying_the_dip/)
+3. [Everyone is talking about AI, but EVERYTHING is over the cliff today. What's going on?](https://www.reddit.com/r/stocks/comments/1xomj2e/everyone_is_talking_about_ai_but_everything_is/)
+4. [Dear Reddit - The stock market isn't broken](https://www.reddit.com/r/stocks/comments/1xorznf/dear_reddit_the_stock_market_isnt_broken/)
+5. [Anthropic may need to delay its IPO, major investors speculate. Valuation drops closer to the one trillion mark.](https://www.reddit.com/r/stocks/comments/1xoxm76/anthropic_may_need_to_delay_its_ipo_major/)
+6. [Chip stocks get slaughtered as Wall Street heads for its worst post-midterm day since 1896](https://www.reddit.com/r/stocks/comments/1xoo6ex/chip_stocks_get_slaughtered_as_wall_street_heads/)
 
 ### YouTube 最新视频
-1. [美股 半导体打爆，还能玩吗？AMZN、MSFT为何大涨？NVDA、TSM、GOOG、ISRG持仓计划！](https://youtu.be/JpvxhfYocfo) · 3h ago · 26,579 views
-2. [牛市狂奔？？？NaNa说美股(2026.11.04)](https://youtu.be/mbGJZQC07xM) · 6h ago · 70,716 views
-3. [中期选举尘埃落定！美股分化严重，何去何从](https://youtu.be/w8GM1mghKJc) · 6h ago · 82,780 views
-4. [美股：24小时精彩反转。【2026-11-04】](https://youtu.be/RJWmotsUotU) · 6h ago · 52,795 views
-5. [美股大涨！半导体大跌，能抄底吗？哪里抄？SOXX, TSLA, SPCX分析.](https://youtu.be/vYCKaazSRwo) · 6h ago · 5,677 views
-6. [持续4年的AI基建行情正式结束？美股先崩后涨华尔街在买啥？11月中下旬将有持续性反弹？AMD NVDA QCOM AAPL INTC SPCX！11042026 #美股 #股票 #美股分析 #投資](https://youtu.be/x0UciOjkKl8) · 5h ago · 4,904 views
+1. [Margin call 电话都打爆了 ！NaNa说美股(2026.11.05)](https://youtu.be/vNW3y89XeuE) · 6h ago · 89,683 views
+2. [美股崩盘背后，民主党限制AI，反而会让牛市活得更久！#qqq #spy #spx](https://youtu.be/1Suq6B5p_u8) · 4h ago · 7,125 views
+3. [美股 异常资金推动滚雪球下跌！好消息，坏消息！计划内建仓一只股票！SOXX、QQQ、SPY、TSM、APP！](https://youtu.be/m3lFPFAq0_g) · 4h ago · 57,479 views
+4. [美股暴跌，为什么和怎么办。【2026-11-05】](https://youtu.be/fW22d3wxPrc) · 5h ago · 51,981 views
+5. [美股为什么崩了？](https://youtu.be/Cz8g5HqT-VM) · 6h ago · 74,592 views
+6. [美股史诗级崩盘...！到底发生什么了...？！完犊子了...？](https://youtu.be/6aS5bk-lPfM) · 5h ago · 7,498 views
 
 (近 7 天内)
 
@@ -168,18 +168,18 @@
 (抓取失败: HTTP Error 403: Blocked)
 
 ## YouTube 全球热门
-1. [Eagles - Hotel California (Lyrics)](https://youtu.be/8Ea83jemnXI)
-2. [Atrapado por ENFERMERAS MUTANTES en Minecraft!](https://youtu.be/jaAHFpC1EPI)
-3. [الرجل العنكبوت انقاذ باتمان Spider-Man Rescue batman vs iron man vs venom funny Game GTA 5 superhero](https://youtu.be/5Mx9fukS6bs)
-4. [AVENGERS 5: DOOMSDAY Official “Gambit Meets Herbie" Promo Clip (2026)](https://youtu.be/K5BlylIjjCY)
-5. [10,000 Player Minecraft War: Nether VS Overworld](https://youtu.be/bHxLy6Qza3M)
-6. [Improv Tour Trailer: "When Aha Comes Knocking" | Honkai: Star Rail](https://youtu.be/Asggb78zcYA)
-7. [Gus's Origin Story! (Brawl Stars Animation)](https://youtu.be/t6ySEQzL1yE)
-8. [Avengers: Doomsday | In Theaters December 18](https://youtu.be/UfNu7pcR0e8)
-9. [Character Trailer - "Mitya: Everything's in Order" | Genshin Impact #Mitya #GenshinSnezhnaya](https://youtu.be/9OHKzmmq2e8)
-10. [Lo del TOKEN PIRATA es SALVAJE (0.001%)](https://youtu.be/mQ4tEB2UUfw)
-11. [Conseguimos CUERPOS REALISTAS en Minecraft!](https://youtu.be/ETShzAcYXCo)
-12. [Angry Birds 3 | Tráiler Oficial 2 (DOBLADO) | Enero 2027](https://youtu.be/SvoQBgpQJV4)
-13. [24 HORAS en un MUNDO VIOLETA en Brookhaven Roblox con Mermelada y Mandarina](https://youtu.be/r8Yj41xv5KA)
-14. [NUNCA NADES EN ESTA PISCINA | Pool Loops](https://youtu.be/8-1PT2vJ4xE)
-15. [Bacon Turned Into Buddy in Steal an Egg!](https://youtu.be/revXNVxngjs)
+1. [GODZILLA MINUS ZERO | Official Trailer 3 - NOW PLAYING](https://youtu.be/Pu0pH5BuCPM)
+2. [JISOO - ‘ADDICTED’ DANCE PERFORMANCE VIDEO](https://youtu.be/dND8ysuZqlA)
+3. [Stellar Blade - Live Action Launch Trailer - Nintendo Switch 2](https://youtu.be/trMkpK0EwSo)
+4. [Olivia Rodrigo - take me home (4 christmas) (Official Music Video)](https://youtu.be/uXymCnWk9LI)
+5. [BTS WORLD TOUR 'ARIRANG' LIVE VIEWING FROM KAOHSIUNG & JAKARTA - Official Trailer](https://youtu.be/xzTFYPnoum8)
+6. [Escondí el CUERPO de MI AMIGO en Minecraft!](https://youtu.be/0Ncq_-V7UeU)
+7. [10,000 Player Minecraft War: Nether VS Overworld](https://youtu.be/bHxLy6Qza3M)
+8. [LAJA x ANUEL AA - TUSSI (Video Oficial)](https://youtu.be/T0rVuheJOp8)
+9. [Avengers: Doomsday | In Theaters December 18](https://youtu.be/UfNu7pcR0e8)
+10. [Dragon Ball Super: Beerus | TRÁILER EN ESPAÑOL](https://youtu.be/W-4klThpoco)
+11. [The Legend of Zelda: Ocarina of Time – Launch Trailer – Nintendo Switch 2](https://youtu.be/T4Eh0M-Sh_g)
+12. [REVIVÍ MI INFANCIA | Zelda Ocarina of Time REMAKE](https://youtu.be/D8uGXMzsuuw)
+13. [Gus's Origin Story! (Brawl Stars Animation)](https://youtu.be/t6ySEQzL1yE)
+14. [Godzilla vs. Ghidorah - GODZILLA MINUS ZERO Official Final Trailer (2026)](https://youtu.be/E-Q2tEgJ1ZI)
+15. [Sobreviví a BLUTI FRUTI en Minecraft](https://youtu.be/fRjm-6grF8k)
