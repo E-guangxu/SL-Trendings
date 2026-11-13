@@ -132,6 +132,33 @@ MAX_PUSH_BYTES = 30000
 # 在整点高负载时会被延迟甚至直接丢弃）。设 FORCE=1 忽略"今天已跑过"的检查强制重跑。
 FORCE = os.environ.get("FORCE", "").strip().lower() in ("1", "true", "yes", "on")
 
+# ---- 高频模式（每 10 分钟一档，2026-11-13 新增）----
+# 与 daily 的三点区别：
+#   1) 不走「当天已跑过」守卫 —— 每档都要真跑
+#   2) 推送压成「速报体」（单条装得下）。全量报告约 33KB 会被拆成两条，
+#      一天 144 档 × 2 条 = 288 条，纯属浪费额度
+#   3) 只写 data/frequent.md 一份覆盖文件，不写按日文件、不动 latest.md，
+#      免得把 daily 的守卫状态弄脏
+FREQUENT = MODE == "frequent"
+
+# 静默时段：默认北京 8 点到 23 点。凌晨每 10 分钟一条微信没人受得了。
+# 格式 "8-23"；想全天就把 ACTIVE_HOURS 设成 "0-24"。
+ACTIVE_HOURS_RAW = os.environ.get("ACTIVE_HOURS", "").strip() or "8-23"
+
+
+def bj_now():
+    """runner 上系统时区是 UTC，所有对用户可见的时间都换算成北京时间。"""
+    return datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)
+
+
+def in_active_hours():
+    try:
+        a, b = [int(x) for x in ACTIVE_HOURS_RAW.split("-")]
+    except Exception:
+        a, b = 8, 23
+    h = bj_now().hour
+    return a <= h < b
+
 # ---- 想追的 Reddit 版块（仅全站榜模式用）----
 # 注意：Reddit 对未认证请求限流很紧（同一 IP 约每分钟 1 次）。
 # 每多写一个版块，就要把间隔调大，否则会 429。
@@ -788,6 +815,21 @@ def split_report(body, limit):
     return chunks
 
 
+def compact_report(body, keep=4):
+    """把完整报告压成「速报体」：每个清单只留前 keep 条。
+
+    只是**展示层**裁剪 —— 数据仍然是全量抓的，只是不全推。
+    目的：让一条消息装得下。否则全量 33KB 每档拆成两条，一天 288 条，
+    既浪费额度又把手机刷屏。"""
+    out = []
+    for line in body.split("\n"):
+        m = re.match(r"^(\d+)\. ", line)
+        if m and int(m.group(1)) > keep:
+            continue
+        out.append(line)
+    return "\n".join(out)
+
+
 def _push_once(title, body):
     url = "https://sctapi.ftqq.com/%s.send" % SERVERCHAN_KEY
     payload = urllib.parse.urlencode({"title": title, "desp": body}).encode("utf-8")
@@ -843,20 +885,33 @@ def slugify(text):
 
 def main():
     data_dir = pathlib.Path("data")
-    today = datetime.date.today().isoformat()
+    today = bj_now().date().isoformat()
     topics = load_topics()
     adhoc = MODE == "adhoc"
 
     print("[mode] %s | 话题 %s" % (MODE, ("= " + " / ".join(topics)) if topics else "= (无，走全站榜)"))
 
+    # 高频档：先看静默时段。放在最前面，省得凌晨白抓一遍白占 runner。
+    if FREQUENT and not in_active_hours():
+        print("[skip] 不在 ACTIVE_HOURS=%s 的有效时段内，跳过" % ACTIVE_HOURS_RAW)
+        return
+
     # 守卫：同一天只真正执行一次。workflow 里排了多个时间点做冗余，
     # 被丢弃的那次由下一次补上；补上的那次看到文件已存在就安静跳过。
-    # adhoc（临时查询）不走守卫，否则想看话题时会被"今天已经跑过"挡住。
-    if not adhoc and (data_dir / ("%s.md" % today)).exists() and not FORCE:
+    # adhoc（临时查询）和 frequent（每 10 分钟）都不走守卫。
+    if not adhoc and not FREQUENT and (data_dir / ("%s.md" % today)).exists() and not FORCE:
         print("[skip] %s 今天已经跑过了，跳过（这是冗余触发的正常行为，不是错误）" % today)
         return
 
     report = build_report(topics)
+
+    if FREQUENT:
+        # 速报体：每段只留前 4 条，标题换掉，免得和当天完整版混淆
+        stamp = bj_now().strftime("%m-%d %H:%M")
+        report = compact_report(report)
+        report = re.sub(
+            r"^# 每日热榜 · \S+", "# 热点速报 · %s" % stamp, report, count=1, flags=re.M
+        )
 
     # 全军覆没要报错，不能静默变成"今天没热点"。
     # 所有来源都失败时让 job 变红，触发 workflow 里的失败告警步骤。
@@ -865,10 +920,20 @@ def main():
         n_fail = report.count("(抓取失败")
         msg = "所有来源都抓取失败（失败段数 %d）。请查看 Actions 日志。" % n_fail
         print("[error] " + msg)
+        if FREQUENT:
+            # 高频档静默失败即可：一天 144 次里偶发一次抓空很正常，
+            # 每次都告警会把微信刷爆，也把 job 刷红。等下一档自然会恢复。
+            return
         notify_serverchan("【抓取失败】每日热榜", msg)
         sys.exit(1)
 
-    if adhoc:
+    if FREQUENT:
+        # 只留一份覆盖文件，不写按日文件、不动 latest.md
+        data_dir.mkdir(exist_ok=True)
+        (data_dir / "frequent.md").write_text(report, encoding="utf-8")
+        title = "热点速报 · %s" % bj_now().strftime("%m-%d %H:%M")
+        print("[frequent] 写入 data/frequent.md（速报体 %d 条）" % n_items)
+    elif adhoc:
         # 临时查询：单独归档，绝不写当日文件、也不覆盖 latest.md，
         # 免得把"今天已经跑过"的守卫状态弄脏。
         target = data_dir / "adhoc" / ("%s-%s.md" % (today, slugify("+".join(topics) or "global")))

@@ -18,6 +18,11 @@ on:
     - cron: '7 0 * * *'
     - cron: '23 0 * * *'
     - cron: '41 0 * * *'
+    # 高频档（2026-11-13 新增）：每 10 分钟一档。
+    # 实测 GitHub 对 */10 基本不派发（一天只零星几次），所以这行是「写了不亏」，
+    # 真正常驻的高频时钟是本机计划任务 + cron-job.org（见 README）。
+    # 靠 github.event.schedule 区分：命中 */10 走 frequent，其余走 daily。
+    - cron: '*/10 * * * *'
   workflow_dispatch:
     inputs:
       force:
@@ -29,11 +34,12 @@ on:
         type: string
         default: ''
       mode:
-        description: 'daily=每天那次（受守卫约束，写当日文件）；adhoc=临时查询（不受守卫，只推送+归档到 data/adhoc）'
+        description: 'daily=每天那次（受守卫，写当日文件）；adhoc=临时查询；frequent=每10分钟速报（不受守卫，只推速报体）'
         type: choice
         options:
           - daily
           - adhoc
+          - frequent
         default: daily
       keep_global:
         description: '话题模式下是否仍附带全站榜（Reddit r/all + YouTube 全球热门）。每日那次默认就是「全站榜 + 话题」'
@@ -78,6 +84,21 @@ jobs:
           echo "inputs.cn_hot   = ${{ github.event.inputs.cn_hot }}"
           echo "run_number      = ${{ github.run_number }}"
           date -u '+现在(UTC)       = %F %T'
+          TZ=Asia/Shanghai date '+现在(北京)     = %F %T'
+
+      # 定时触发时 inputs 全为空，靠 schedule 字符串区分是「每日」还是「高频」。
+      # 结果写进 $GITHUB_ENV，后续步骤直接用（也决定了要不要提交、要不要告警）。
+      - name: 决定本轮模式
+        run: |
+          M="${{ github.event.inputs.mode }}"
+          if [ -z "$M" ]; then
+            case "${{ github.event.schedule }}" in
+              *'*/10'*) M=frequent ;;
+              *)        M=daily ;;
+            esac
+          fi
+          echo "MODE=$M" >> "$GITHUB_ENV"
+          echo "本轮模式 = $M"
 
       - name: 抓取热榜
         env:
@@ -87,17 +108,19 @@ jobs:
           FORCE: ${{ github.event.inputs.force }}
           # 话题：手动触发填了就用填的，否则脚本去读 config/topics.txt
           TOPICS: ${{ github.event.inputs.topics }}
-          # daily / adhoc（定时触发时为空 → 脚本按 daily 处理）
-          MODE: ${{ github.event.inputs.mode }}
+          # MODE 由上一步算好写进 GITHUB_ENV，这里不覆盖
           # 「添加话题」而不是「换成话题」：话题模式下仍附带全站榜。
           # 定时触发时 inputs 为空 → 兜底 'true'，所以每日 = 全站榜 + 话题；
           # 手动触发时以勾选框为准（取消勾选才变 false）。
           KEEP_GLOBAL: ${{ github.event.inputs.keep_global || 'true' }}
           # 中文圈热点（微博/抖音/B站/头条）：每日那次默认开，手动触发可关。
           CN_HOT: ${{ github.event.inputs.cn_hot || 'true' }}
+          # 高频档的静默时段（北京时区）：8 点到 23 点。想全天就改成 "0-24"
+          ACTIVE_HOURS: '8-23'
         run: python scripts/hot.py
 
       - name: 提交结果
+        if: env.MODE != 'frequent'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -121,8 +144,9 @@ jobs:
 
       # 让「静默失败」变成看得见的告警：任务出错时主动推一条微信，
       # 而不是等你发现今天没收到榜单。
+      # 高频档不告警：一天 144 次里偶发一两次抓空太正常，每次都推会把微信刷爆。
       - name: 失败时微信告警
-        if: failure()
+        if: failure() && env.MODE != 'frequent'
         env:
           SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
         run: |
