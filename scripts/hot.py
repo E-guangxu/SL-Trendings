@@ -944,13 +944,98 @@ def _md_inline(text):
     return s
 
 
-def render_board(report, stamp, interval=60):
+# ---- 看板：新增内容高亮 ----
+# 每轮抓完和上一轮对比，这一轮才出现的条目在看板上高亮。
+# 状态文件放在 board.html 旁边（board.html.state.json），不入库。
+BOARD_STATE_PATH = os.environ.get("BOARD_STATE", "").strip()
+
+
+def board_state_file(board_path):
+    if BOARD_STATE_PATH:
+        return pathlib.Path(BOARD_STATE_PATH)
+    return pathlib.Path(str(board_path) + ".state.json")
+
+
+def _item_title(line):
+    """从 `1. [标题](链接) · 元信息` 里抠出标题本身，用来做跨轮对比。"""
+    m = re.match(r"^\d+\.\s+\[([^\]]+)\]", line)
+    if m:
+        return m.group(1).strip()
+    m = re.match(r"^\d+\.\s+(.*)$", line)
+    if m:
+        return re.sub(r"\s+·\s+.*$", "", m.group(1)).strip()
+    return ""
+
+
+def scan_items(report):
+    """扫描报告里的条目，返回 (行号->(段名, 标题), {段名: [标题...]})。
+
+    段名用「二级 > 三级」做键，这样不同话题下同名的「最新新闻」不会互相串。"""
+    h2 = h3 = ""
+    rows, sections = {}, {}
+    for idx, line in enumerate(report.split("\n")):
+        m2 = re.match(r"^##\s+(.*)", line)
+        if m2:
+            h2, h3 = m2.group(1).strip(), ""
+            continue
+        m3 = re.match(r"^###\s+(.*)", line)
+        if m3:
+            h3 = m3.group(1).strip()
+            continue
+        if re.match(r"^\d+\.\s+", line):
+            title = _item_title(line)
+            if not title:
+                continue
+            key = "%s > %s" % (h2, h3) if h3 else h2
+            rows[idx] = (key, title)
+            sections.setdefault(key, []).append(title)
+    return rows, sections
+
+
+def diff_board_state(report, state_path):
+    """和上一轮的状态比，找出本轮才出现的条目。
+
+    返回 (新增行号集合, 新增条数, 是否有基线, 本轮 sections)。
+    某个段落第一次出现时没有基线 —— 那种情况不标（否则第一次跑就满屏 NEW）。"""
+    rows, sections = scan_items(report)
+    prev = {}
+    try:
+        prev = json.loads(state_path.read_text(encoding="utf-8")).get("sections") or {}
+    except Exception:
+        prev = {}
+
+    new_idx = set()
+    for idx, (key, title) in rows.items():
+        base = prev.get(key)
+        if base is None:
+            continue
+        if title not in base:
+            new_idx.add(idx)
+    return new_idx, len(new_idx), bool(prev), sections
+
+
+def save_board_state(state_path, stamp, sections):
+    try:
+        state_path.parent.mkdir(parents=True, exist_ok=True)
+        state_path.write_text(
+            json.dumps({"updated": stamp, "sections": sections},
+                       ensure_ascii=False, indent=1),
+            encoding="utf-8",
+        )
+    except Exception as exc:
+        print("[warn] 写状态文件失败（下一轮会把全部条目当新增）: %s" % exc)
+
+
+def render_board(report, stamp, interval=60, new_idx=None, new_count=0, has_baseline=True):
     """把 Markdown 报告渲染成一个自包含的 HTML 看板。
 
     不用第三方库：报告结构是固定的（#/##/###/引用/有序列表），正则够用。
     页面自己每 interval 秒整页 reload —— 计划任务每 10 分钟覆盖文件，
-    所以最坏情况下内容最多晚 60 秒才显示出来。"""
+    所以最坏情况下内容最多晚 60 秒才显示出来。
+
+    new_idx 是「本轮新增」的行号集合，命中的 li 会加 .is-new 高亮。"""
     body, in_list = [], False
+    new_idx = new_idx or set()
 
     def close_list():
         nonlocal in_list
@@ -958,7 +1043,7 @@ def render_board(report, stamp, interval=60):
             body.append("</ol>")
             in_list = False
 
-    for raw in report.split("\n"):
+    for ln, raw in enumerate(report.split("\n")):
         line = raw.rstrip()
         if not line.strip():
             close_list()
@@ -988,11 +1073,19 @@ def render_board(report, stamp, interval=60):
             if not in_list:
                 body.append("<ol>")
                 in_list = True
-            body.append("<li>%s</li>" % _md_inline(m.group(1)))
+            cls = ' class="is-new"' if ln in new_idx else ""
+            body.append("<li%s>%s</li>" % (cls, _md_inline(m.group(1))))
             continue
         close_list()
         body.append("<p>%s</p>" % _md_inline(line))
     close_list()
+
+    if not has_baseline:
+        chip = '<span class="chip chip-base">首轮建立基线，下一轮起标记新增</span>'
+    elif new_count:
+        chip = '<span class="chip chip-new">本轮新增 %d 条（黄色高亮）</span>' % new_count
+    else:
+        chip = '<span class="chip">本轮无新增</span>'
 
     return """<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
@@ -1027,6 +1120,23 @@ def render_board(report, stamp, interval=60):
   ol { margin: 6px 0 14px; padding-left: 24px; }
   li { margin: 4px 0; }
   li::marker { color: #8c959f; font-variant-numeric: tabular-nums; }
+  /* 本轮新增：黄色底 + 左侧金色竖条 + NEW 角标 */
+  li.is-new {
+    background: linear-gradient(90deg, #fff8c5 0%%, rgba(255,248,197,0) 74%%);
+    border-left: 3px solid #d4a72c; border-radius: 3px;
+    margin-left: -8px; padding: 2px 10px 2px 9px;
+  }
+  li.is-new::marker { color: #9a6700; font-weight: 700; }
+  li.is-new::after {
+    content: "NEW"; margin-left: 8px; padding: 0 5px;
+    font-size: 10px; font-weight: 700; letter-spacing: .6px;
+    color: #7d4e00; background: #ffd33d; border-radius: 3px;
+    vertical-align: 1px;
+  }
+  .chip { padding: 2px 9px; border-radius: 999px;
+          border: 1px solid #e6e8eb; background: #f6f8fa; color: #57606a; }
+  .chip-new { background: #fff8c5; border-color: #e9c352; color: #7d4e00; font-weight: 600; }
+  .chip-base { background: #eef4ff; border-color: #c7d8f7; color: #0a4ea8; }
   a { color: #0969da; text-decoration: none; }
   a:hover { text-decoration: underline; }
   main > p { color: #57606a; }
@@ -1037,6 +1147,7 @@ def render_board(report, stamp, interval=60):
   <span>更新于 <b>%(stamp)s</b></span>
   <span>·</span>
   <span>每 10 分钟重抓，页面 <b id="cd">%(iv)d</b> 秒后自动刷新</span>
+  %(chip)s
 </div>
 %(body)s
 </main>
@@ -1047,7 +1158,7 @@ def render_board(report, stamp, interval=60):
     document.getElementById('cd').textContent = left;
   }, 1000);
 </script>
-</body></html>""" % {"iv": interval, "stamp": stamp, "body": "\n".join(body)}
+</body></html>""" % {"iv": interval, "stamp": stamp, "body": "\n".join(body), "chip": chip}
 
 
 def _push_once(title, body):
@@ -1157,9 +1268,16 @@ def main():
         target = pathlib.Path(BOARD_PATH)
         target.parent.mkdir(parents=True, exist_ok=True)
         stamp = bj_now().strftime("%m-%d %H:%M:%S")
-        target.write_text(render_board(report, stamp), encoding="utf-8")
-        print("[board] 已更新 %s（%d 条，%d 字节）"
-              % (target, n_items, len(report.encode("utf-8"))))
+        state_file = board_state_file(target)
+        new_idx, n_new, has_base, sections = diff_board_state(report, state_file)
+        target.write_text(
+            render_board(report, stamp, new_idx=new_idx,
+                         new_count=n_new, has_baseline=has_base),
+            encoding="utf-8",
+        )
+        save_board_state(state_file, stamp, sections)
+        print("[board] 已更新 %s（%d 条，新增 %d 条，%d 字节）"
+              % (target, n_items, n_new, len(report.encode("utf-8"))))
         return
 
     if FREQUENT:
