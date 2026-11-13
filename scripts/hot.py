@@ -39,6 +39,11 @@ UA = (
 )
 PROXY = os.environ.get("SCRAPE_PROXY", "").strip()
 
+# 单次请求超时 / 重试次数。云端 runner 直连、抖动少，用默认 40s×3 稳；
+# 本地每 10 分钟跑一次时要压在 2~3 分钟内完成，所以看板那条链路会调小（见 hot-board.cmd）。
+FETCH_TIMEOUT = int(os.environ.get("FETCH_TIMEOUT", "").strip() or "40")
+FETCH_RETRIES = int(os.environ.get("FETCH_RETRIES", "").strip() or "3")
+
 # ---- 模式与话题 ----
 # daily = 每天那次，受「今天已跑过」守卫约束，写 data/<date>.md 并更新 latest.md
 # adhoc = 临时查询，不受守卫约束，只写 data/adhoc/ 不覆盖当日文件，永远推送
@@ -128,9 +133,21 @@ SERVERCHAN_KEY = os.environ.get("SERVERCHAN_KEY", "").strip()
 # 单条消息正文上限（Server酱 Turbo 是 32KB，留点余量）
 MAX_PUSH_BYTES = 30000
 
+# ---- 本地看板（2026-11-13 新增）----
+# 设了 BOARD_PATH 就不再推送微信，改成把报告渲染成一个自动刷新的 HTML 页面。
+# 用途：人守在电脑前时看热点 —— 没有条数额度、不会被 32KB 截断、能点链接。
+# 由计划任务每 10 分钟重跑一次覆盖它，页面自己每 60 秒 reload。
+BOARD_PATH = os.environ.get("BOARD_PATH", "").strip()
+
 # 冗余触发的守卫：workflow 在同一小时内排了多个时间点互为备份（GitHub 的 cron
 # 在整点高负载时会被延迟甚至直接丢弃）。设 FORCE=1 忽略"今天已跑过"的检查强制重跑。
 FORCE = os.environ.get("FORCE", "").strip().lower() in ("1", "true", "yes", "on")
+
+# 本地跑的时候，Clash 的出口 IP 被 Reddit 硬限流（实测每条都是 429，
+# 换 old.reddit 也是 302 跳走），重试只会浪费 20s+40s 的退避。
+# 所以给一个开关：SKIP_REDDIT=1 时整段跳过，报告里写明原因。
+# 云端 runner（美国 IP）不需要这个开关。
+SKIP_REDDIT = os.environ.get("SKIP_REDDIT", "").strip().lower() in ("1", "true", "yes", "on")
 
 # ---- 高频模式（每 10 分钟一档，2026-11-13 新增）----
 # 与 daily 的三点区别：
@@ -151,6 +168,15 @@ def bj_now():
     return datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(hours=8)
 
 
+_T0 = time.time()
+
+
+def plog(msg):
+    """带累计耗时的进度行。高频档每 10 分钟一轮，
+    没有进度打印的话「卡在哪儿」只能靠猜 —— 这一步是给排查用的。"""
+    print("[%6.1fs] %s" % (time.time() - _T0, msg), flush=True)
+
+
 def in_active_hours():
     try:
         a, b = [int(x) for x in ACTIVE_HOURS_RAW.split("-")]
@@ -163,7 +189,7 @@ def in_active_hours():
 # 注意：Reddit 对未认证请求限流很紧（同一 IP 约每分钟 1 次）。
 # 每多写一个版块，就要把间隔调大，否则会 429。
 # r/all 本身已覆盖全站热门，一般一个就够。
-SUBREDDITS = ["all"]
+SUBREDDITS = [] if SKIP_REDDIT else ["all"]
 
 # ---- 想追的 YouTube 频道：填 channel_id（形如 UCxxxxxxxxxxxxxxxxxxxxxx）----
 # 获取办法：打开频道的"关于"页 → 分享 → 复制频道 ID；
@@ -177,7 +203,7 @@ TOPIC_NEWS_LIMIT = 6
 TOPIC_REDDIT_LIMIT = 6
 TOPIC_YT_LIMIT = 6
 # 同一个话题内、以及话题之间，给 Reddit 留的间隔（未认证请求限流很紧）
-REDDIT_GAP = 20
+REDDIT_GAP = int(os.environ.get("REDDIT_GAP", "").strip() or "20")
 # YouTube「最新视频」怎么取：sp 参数是 YouTube 的搜索筛选位。
 # 实测（2026-09-22 逐个对照）：
 #   CAI=            想按上传日期排序 → **被忽略**，中文关键词下返回一堆几年前的老教程
@@ -206,15 +232,25 @@ def make_opener():
 
 
 OPENER = make_opener()
+# 直连兜底：本地跑的时候代理（Clash）可能没开，此时国内四榜本来能直连，
+# 不该因为代理挂着就整页抓空。云端 runner 上 PROXY 为空，这两个是同一个，不会多打一次。
+OPENER_DIRECT = urllib.request.build_opener()
 
 
-def fetch(url, timeout=40):
+def fetch(url, timeout=FETCH_TIMEOUT):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    with OPENER.open(req, timeout=timeout) as resp:
-        return resp.read().decode("utf-8", "ignore")
+    try:
+        with OPENER.open(req, timeout=timeout) as resp:
+            return resp.read().decode("utf-8", "ignore")
+    except Exception:
+        if OPENER is OPENER_DIRECT:
+            raise
+        req2 = urllib.request.Request(url, headers={"User-Agent": UA})
+        with OPENER_DIRECT.open(req2, timeout=timeout) as resp:
+            return resp.read().decode("utf-8", "ignore")
 
 
-def fetch_retry(url, retries=3, backoff=4, timeout=40):
+def fetch_retry(url, retries=FETCH_RETRIES, backoff=4, timeout=FETCH_TIMEOUT):
     """带重试的 fetch。Google News 会偶发 SSL 中断
     （实测 `[SSL: UNEXPECTED_EOF_WHILE_READING]`），重试基本就好，
     别让一次抖动把整段新闻变成「抓取失败」。"""
@@ -702,14 +738,17 @@ def cn_sections(lines):
     lines.append("")
     for src in CN_SOURCES:
         lines.append("### %s" % src["label"])
+        n = 0
         try:
             for i, (t, link, meta) in enumerate(_cn_items(src, CN_HOT_LIMIT), 1):
+                n = i
                 if link:
                     lines.append("%d. [%s](%s)%s" % (i, t, link, (" · " + meta) if meta else ""))
                 else:
                     lines.append("%d. %s%s" % (i, t, (" · " + meta) if meta else ""))
         except Exception as exc:
             lines.append("(抓取失败: %s)" % exc)
+        plog("中文圈 · %s：%s" % (src["label"], ("%d 条" % n) if n else "失败"))
         lines.append("")
 
 
@@ -718,6 +757,7 @@ def topic_sections(lines, topics):
     for idx, topic in enumerate(topics):
         if idx:
             time.sleep(REDDIT_GAP)
+        plog("开始话题 %s…" % topic)
         lines.append("## 话题：%s" % topic)
         lines.append("")
 
@@ -733,12 +773,15 @@ def topic_sections(lines, topics):
             lines.append("(抓取失败: %s)" % exc)
         lines.append("")
 
-        time.sleep(REDDIT_GAP)
+        if not SKIP_REDDIT:
+            time.sleep(REDDIT_GAP)
         rq = topic_query(topic)
         lines.append(
             "### Reddit 讨论（近 24 小时）" + ("" if rq == topic else "　搜索词：%s" % rq)
         )
         try:
+            if SKIP_REDDIT:
+                raise RuntimeError("已跳过：本地出口被 Reddit 限流 429，云端版照常抓")
             items = reddit_search(rq, TOPIC_REDDIT_LIMIT)
             if items:
                 for i, (t, link) in enumerate(items, 1):
@@ -762,6 +805,7 @@ def topic_sections(lines, topics):
         except Exception as exc:
             lines.append("(抓取失败: %s)" % exc)
         lines.append("")
+        plog("话题 %s 完成" % topic)
 
 
 def build_report(topics):
@@ -828,6 +872,124 @@ def compact_report(body, keep=4):
             continue
         out.append(line)
     return "\n".join(out)
+
+
+def _md_inline(text):
+    s = html.escape(text, quote=False)
+    s = re.sub(
+        r"\[([^\]]+)\]\((https?://[^)\s]+)\)",
+        lambda m: '<a href="%s" target="_blank" rel="noopener">%s</a>'
+        % (m.group(2), m.group(1)),
+        s,
+    )
+    s = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", s)
+    return s
+
+
+def render_board(report, stamp, interval=60):
+    """把 Markdown 报告渲染成一个自包含的 HTML 看板。
+
+    不用第三方库：报告结构是固定的（#/##/###/引用/有序列表），正则够用。
+    页面自己每 interval 秒整页 reload —— 计划任务每 10 分钟覆盖文件，
+    所以最坏情况下内容最多晚 60 秒才显示出来。"""
+    body, in_list = [], False
+
+    def close_list():
+        nonlocal in_list
+        if in_list:
+            body.append("</ol>")
+            in_list = False
+
+    for raw in report.split("\n"):
+        line = raw.rstrip()
+        if not line.strip():
+            close_list()
+            continue
+        m = re.match(r"^###\s+(.*)", line)
+        if m:
+            close_list()
+            body.append("<h3>%s</h3>" % _md_inline(m.group(1)))
+            continue
+        m = re.match(r"^##\s+(.*)", line)
+        if m:
+            close_list()
+            body.append("<h2>%s</h2>" % _md_inline(m.group(1)))
+            continue
+        m = re.match(r"^#\s+(.*)", line)
+        if m:
+            close_list()
+            body.append("<h1>%s</h1>" % _md_inline(m.group(1)))
+            continue
+        m = re.match(r"^>\s*(.*)", line)
+        if m:
+            close_list()
+            body.append('<p class="note">%s</p>' % _md_inline(m.group(1)))
+            continue
+        m = re.match(r"^\d+\.\s+(.*)", line)
+        if m:
+            if not in_list:
+                body.append("<ol>")
+                in_list = True
+            body.append("<li>%s</li>" % _md_inline(m.group(1)))
+            continue
+        close_list()
+        body.append("<p>%s</p>" % _md_inline(line))
+    close_list()
+
+    return """<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta http-equiv="refresh" content="%(iv)d">
+<title>热点看板 · %(stamp)s</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 28px 20px 80px;
+    background: #f7f8fa; color: #1f2328;
+    font: 15px/1.7 -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  }
+  main { max-width: 1080px; margin: 0 auto; }
+  .topbar {
+    position: sticky; top: 0; z-index: 9;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    margin: -28px -20px 22px; padding: 12px 20px;
+    background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e6e8eb;
+    font-size: 13px; color: #57606a;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%%; background: #1a7f37;
+         box-shadow: 0 0 0 3px #dafbe1; }
+  .topbar b { color: #1f2328; font-weight: 600; }
+  h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: .3px; }
+  h2 { font-size: 17px; margin: 30px 0 10px; padding-left: 10px;
+       border-left: 3px solid #0969da; }
+  h3 { font-size: 14px; margin: 18px 0 6px; color: #424a53;
+       font-weight: 600; letter-spacing: .2px; }
+  .note { margin: 6px 0 0; color: #57606a; font-size: 13px; }
+  ol { margin: 6px 0 14px; padding-left: 24px; }
+  li { margin: 4px 0; }
+  li::marker { color: #8c959f; font-variant-numeric: tabular-nums; }
+  a { color: #0969da; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  main > p { color: #57606a; }
+</style></head>
+<body><main>
+<div class="topbar">
+  <span class="dot"></span>
+  <span>更新于 <b>%(stamp)s</b></span>
+  <span>·</span>
+  <span>每 10 分钟重抓，页面 <b id="cd">%(iv)d</b> 秒后自动刷新</span>
+</div>
+%(body)s
+</main>
+<script>
+  var left = %(iv)d;
+  setInterval(function () {
+    left = left > 0 ? left - 1 : %(iv)d;
+    document.getElementById('cd').textContent = left;
+  }, 1000);
+</script>
+</body></html>""" % {"iv": interval, "stamp": stamp, "body": "\n".join(body)}
 
 
 def _push_once(title, body):
@@ -927,6 +1089,17 @@ def main():
         notify_serverchan("【抓取失败】每日热榜", msg)
         sys.exit(1)
 
+    # 看板模式：只写 HTML，不推送、不提交、不写 data/。
+    # 放在守卫之后、归档之前 —— 它就是「本地一直看着」这条用法的主路径。
+    if BOARD_PATH:
+        target = pathlib.Path(BOARD_PATH)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        stamp = bj_now().strftime("%m-%d %H:%M:%S")
+        target.write_text(render_board(report, stamp), encoding="utf-8")
+        print("[board] 已更新 %s（%d 条，%d 字节）"
+              % (target, n_items, len(report.encode("utf-8"))))
+        return
+
     if FREQUENT:
         # 只留一份覆盖文件，不写按日文件、不动 latest.md
         data_dir.mkdir(exist_ok=True)
@@ -948,6 +1121,13 @@ def main():
         title = "每日热榜 · %s" % today
 
     sys.stdout.write(report + "\n")
+
+    # 高频档不推送：它的消费方是本地看板（BOARD_PATH）或 data/frequent.md。
+    # 一天 144 条推微信既费额度又刷屏，2026-11-13 起改成「抓取归抓取、推送归每日那次」。
+    if FREQUENT:
+        print("[frequent] 高频档只抓不发（看板/文件即为产出）")
+        return
+
     notify_serverchan(title, report)
 
 

@@ -1,2 +1,6 @@
 run.log
 __pycache__/
+
+# 本地看板的产物：每次运行覆盖，不进版本库
+board.html
+logs/
