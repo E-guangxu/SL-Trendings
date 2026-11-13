@@ -265,8 +265,35 @@ def fetch_retry(url, retries=FETCH_RETRIES, backoff=4, timeout=FETCH_TIMEOUT):
     raise last
 
 
-def load_topics():
-    """话题来源：环境变量 TOPICS 优先，其次 config/topics.txt。"""
+# ---- 话题档位：主 / 辅 ----
+# topics.txt 里可以给话题标档位：`AI@主`、`科技@辅`。
+#   主 = 排在版面最前（在「中文圈热点」之前），且每个来源多取一些
+#   辅 = 排在后面做补充，条数减半
+# 不标注 = 老行为（各 6 条），位置跟以前的顺序一致。
+# 为什么要分档：光改顺序不够 —— 4 个话题各 6 条时，AI 只占四分之一版面，
+# 说是「为主」但看起来不为主。档位把顺序和篇幅一起改了。
+TIER_ORDER = {"主": 0, "辅": 1, "": 2}
+TIER_LIMITS = {
+    "主": {"news": 8, "reddit": 6, "yt": 8},
+    "辅": {"news": 4, "reddit": 3, "yt": 4},
+    "": {"news": TOPIC_NEWS_LIMIT, "reddit": TOPIC_REDDIT_LIMIT, "yt": TOPIC_YT_LIMIT},
+}
+
+
+def _parse_topic_token(token):
+    """把 `AI@主` / `科技:辅` / `游戏` 拆成 (名称, 档位)。"""
+    t = token.strip()
+    m = re.match(r"^(.*?)\s*[@:：]\s*(主|辅|primary|secondary)$", t, re.I)
+    if not m:
+        return t, ""
+    tier = {"primary": "主", "secondary": "辅"}.get(m.group(2).lower(), m.group(2))
+    return m.group(1).strip(), tier
+
+
+def load_topic_specs():
+    """话题来源：环境变量 TOPICS 优先，其次 config/topics.txt。
+
+    返回 [{"name": "AI", "tier": "主"}, ...]，主档排前面，同档内保持原顺序。"""
     parts = []
     if TOPICS_ENV:
         parts = re.split(r"[,，、;；\s]+", TOPICS_ENV)
@@ -281,11 +308,17 @@ def load_topics():
                 parts.extend(re.split(r"[,，、;；]+", line))
     seen, out = set(), []
     for p in parts:
-        p = p.strip()
-        if p and p not in seen:
-            seen.add(p)
-            out.append(p)
+        name, tier = _parse_topic_token(p)
+        if name and name not in seen:
+            seen.add(name)
+            out.append({"name": name, "tier": tier})
+    out.sort(key=lambda s: TIER_ORDER.get(s["tier"], 2))
     return out
+
+
+def load_topics():
+    """只要名字的老接口（从 specs 派生，保持向后兼容）。"""
+    return [s["name"] for s in load_topic_specs()]
 
 
 def reddit_entries(xml, limit):
@@ -752,18 +785,22 @@ def cn_sections(lines):
         lines.append("")
 
 
-def topic_sections(lines, topics):
-    """话题模式：每个话题 = 最新新闻 + Reddit 讨论 + YouTube 最新视频。"""
-    for idx, topic in enumerate(topics):
+def topic_sections(lines, specs):
+    """话题段落：每个话题 = 最新新闻 + Reddit 讨论 + YouTube 最新视频。
+
+    specs 是 load_topic_specs() 的返回（带档位）；主档每段多取几条。"""
+    for idx, spec in enumerate(specs):
+        topic, tier = spec["name"], spec["tier"]
+        lim = TIER_LIMITS.get(tier, TIER_LIMITS[""])
         if idx:
             time.sleep(REDDIT_GAP)
-        plog("开始话题 %s…" % topic)
-        lines.append("## 话题：%s" % topic)
+        plog("开始话题 %s（%s）…" % (topic, tier or "常"))
+        lines.append("## 话题：%s%s" % (topic, ("（%s）" % tier) if tier else ""))
         lines.append("")
 
         lines.append("### 最新新闻")
         try:
-            items = gnews_topic(topic, TOPIC_NEWS_LIMIT)
+            items = gnews_topic(topic, lim["news"])
             if items:
                 for i, (t, link, pub) in enumerate(items, 1):
                     lines.append("%d. [%s](%s) · %s" % (i, t, link, pub))
@@ -782,7 +819,7 @@ def topic_sections(lines, topics):
         try:
             if SKIP_REDDIT:
                 raise RuntimeError("已跳过：本地出口被 Reddit 限流 429，云端版照常抓")
-            items = reddit_search(rq, TOPIC_REDDIT_LIMIT)
+            items = reddit_search(rq, lim["reddit"])
             if items:
                 for i, (t, link) in enumerate(items, 1):
                     lines.append("%d. [%s](%s)" % (i, t, link))
@@ -795,7 +832,7 @@ def topic_sections(lines, topics):
         time.sleep(5)
         lines.append("### YouTube 最新视频")
         try:
-            items, note = yt_search_recent(topic, TOPIC_YT_LIMIT)
+            items, note = yt_search_recent(topic, lim["yt"])
             for i, (t, link, pub, views) in enumerate(items, 1):
                 meta = " · ".join(x for x in (pub, views) if x)
                 lines.append("%d. [%s](%s)%s" % (i, t, link, (" · " + meta) if meta else ""))
@@ -808,23 +845,35 @@ def topic_sections(lines, topics):
         plog("话题 %s 完成" % topic)
 
 
-def build_report(topics):
+def build_report(specs):
     today = datetime.date.today().isoformat()
     lines = ["# 每日热榜 · %s" % today, ""]
 
-    if topics:
-        lines.append("> 话题：%s" % " / ".join(topics))
+    if specs:
+        label = " / ".join(
+            ("%s（%s）" % (s["name"], s["tier"])) if s["tier"] else s["name"] for s in specs
+        )
+        lines.append("> 关注范围：%s" % label)
         lines.append("")
 
-    # 中文圈热点放最前：国内榜单是每天第一眼要看的东西。
+    primary = [s for s in specs if s["tier"] == "主"]
+    others = [s for s in specs if s["tier"] != "主"]
+
+    # 主话题顶到最前面：一眼先看到 AI，而不是先划过大盘榜单才找到。
+    if primary:
+        topic_sections(lines, primary)
+
+    # 中文圈热点：国内榜单是每天第二眼要看的东西。
     # 临时查询（adhoc + 指定话题）时不带 —— 那次的目的就是看这个话题，别塞一堆大盘进来。
-    if CN_HOT and not (MODE == "adhoc" and topics):
+    if CN_HOT and not (MODE == "adhoc" and specs):
         cn_sections(lines)
 
-    if topics:
-        topic_sections(lines, topics)
-        if not KEEP_GLOBAL:
-            return "\n".join(lines)
+    # 辅话题跟在中文圈后面，只做补充。
+    if others:
+        topic_sections(lines, others)
+
+    if specs and not KEEP_GLOBAL:
+        return "\n".join(lines)
 
     global_sections(lines)
     return "\n".join(lines)
@@ -859,16 +908,25 @@ def split_report(body, limit):
     return chunks
 
 
-def compact_report(body, keep=4):
+def compact_report(body, keep=4, keep_main=None):
     """把完整报告压成「速报体」：每个清单只留前 keep 条。
 
     只是**展示层**裁剪 —— 数据仍然是全量抓的，只是不全推。
     目的：让一条消息装得下。否则全量 33KB 每档拆成两条，一天 288 条，
-    既浪费额度又把手机刷屏。"""
-    out = []
+    既浪费额度又把手机刷屏。
+
+    keep_main：主话题段（`## 话题：AI（主）`）单独放宽。
+    既然 AI 是「为主」，就不能和配角的段落一样只留 4 条。"""
+    keep_main = keep if keep_main is None else keep_main
+    out, cur = [], keep
     for line in body.split("\n"):
+        m = re.match(r"^##\s+(.*)", line)
+        if m:
+            cur = keep_main if "（主）" in m.group(1) else keep
+            out.append(line)
+            continue
         m = re.match(r"^(\d+)\. ", line)
-        if m and int(m.group(1)) > keep:
+        if m and int(m.group(1)) > cur:
             continue
         out.append(line)
     return "\n".join(out)
@@ -1048,10 +1106,14 @@ def slugify(text):
 def main():
     data_dir = pathlib.Path("data")
     today = bj_now().date().isoformat()
-    topics = load_topics()
+    specs = load_topic_specs()
+    topics = [s["name"] for s in specs]
     adhoc = MODE == "adhoc"
 
-    print("[mode] %s | 话题 %s" % (MODE, ("= " + " / ".join(topics)) if topics else "= (无，走全站榜)"))
+    scope = " / ".join(
+        ("%s（%s）" % (s["name"], s["tier"])) if s["tier"] else s["name"] for s in specs
+    )
+    print("[mode] %s | 话题 %s" % (MODE, ("= " + scope) if specs else "= (无，走全站榜)"))
 
     # 高频档：先看静默时段。放在最前面，省得凌晨白抓一遍白占 runner。
     if FREQUENT and not in_active_hours():
@@ -1065,12 +1127,12 @@ def main():
         print("[skip] %s 今天已经跑过了，跳过（这是冗余触发的正常行为，不是错误）" % today)
         return
 
-    report = build_report(topics)
+    report = build_report(specs)
 
     if FREQUENT:
-        # 速报体：每段只留前 4 条，标题换掉，免得和当天完整版混淆
+        # 速报体：普通段留 4 条，主话题段留 6 条（AI 要压得住版面）
         stamp = bj_now().strftime("%m-%d %H:%M")
-        report = compact_report(report)
+        report = compact_report(report, keep=4, keep_main=6)
         report = re.sub(
             r"^# 每日热榜 · \S+", "# 热点速报 · %s" % stamp, report, count=1, flags=re.M
         )
