@@ -27,6 +27,7 @@ import html
 import json
 import sys
 import time
+import socket
 import datetime
 import pathlib
 import urllib.request
@@ -38,6 +39,26 @@ UA = (
     "(KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
 )
 PROXY = os.environ.get("SCRAPE_PROXY", "").strip()
+
+
+def _port_open(host, port, timeout=0.4):
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except Exception:
+        return False
+
+
+# 启动时先探一下代理端口。Clash 没开时的老行为是：海外源「连代理失败 → 退回直连 →
+# 被墙 → 20s 超时 ×2 重试」，一个 URL 就能耗掉 40s，一轮 200s 以上甚至拖过 10 分钟窗口。
+# 探到端口不通就别再试海外源，直接跳过并在报告里写明。
+PROXY_DEAD = False
+if PROXY:
+    _hp = PROXY.split("//")[-1]
+    _ph, _, _pp = _hp.partition(":")
+    PROXY_DEAD = not _port_open(_ph or "127.0.0.1", int(_pp or "80"))
+    if PROXY_DEAD:
+        print("[warn] 代理 %s 连不上：海外源（Google News / YouTube）本轮跳过，国内榜走直连" % _hp)
 
 # 单次请求超时 / 重试次数。云端 runner 直连、抖动少，用默认 40s×3 稳；
 # 本地每 10 分钟跑一次时要压在 2~3 分钟内完成，所以看板那条链路会调小（见 hot-board.cmd）。
@@ -234,20 +255,34 @@ def make_opener():
 OPENER = make_opener()
 # 直连兜底：本地跑的时候代理（Clash）可能没开，此时国内四榜本来能直连，
 # 不该因为代理挂着就整页抓空。云端 runner 上 PROXY 为空，这两个是同一个，不会多打一次。
-OPENER_DIRECT = urllib.request.build_opener()
+#
+# 注意 ProxyHandler({}) 这个空表**不能省**：build_opener() 不带参数时会读
+# HTTP_PROXY / HTTPS_PROXY 环境变量，而宿主进程（WorkBuddy）恰好把这两个变量
+# 指向它自己的内部代理端口。那个端口会随会话变化、随时失效，于是"直连兜底"
+# 实际是去连另一个死代理 —— 表现为国内四个榜单全挂、单轮跑 200~300 秒。
+OPENER_DIRECT = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+
+def open_bytes(req, timeout=FETCH_TIMEOUT):
+    """先走代理（配了的话），失败退回直连；代理已探到没开就直接直连。
+
+    所有出网请求都该走这里 —— 国内四个榜单原本只走代理、没有兜底，
+    Clash 一关就整片「抓取失败 / 403」，明明直连是通的。"""
+    if OPENER is OPENER_DIRECT or PROXY_DEAD:
+        with OPENER_DIRECT.open(req, timeout=timeout) as resp:
+            return resp.read()
+    try:
+        with OPENER.open(req, timeout=timeout) as resp:
+            return resp.read()
+    except Exception:
+        req2 = urllib.request.Request(req.full_url, headers=dict(req.header_items()))
+        with OPENER_DIRECT.open(req2, timeout=timeout) as resp:
+            return resp.read()
 
 
 def fetch(url, timeout=FETCH_TIMEOUT):
     req = urllib.request.Request(url, headers={"User-Agent": UA})
-    try:
-        with OPENER.open(req, timeout=timeout) as resp:
-            return resp.read().decode("utf-8", "ignore")
-    except Exception:
-        if OPENER is OPENER_DIRECT:
-            raise
-        req2 = urllib.request.Request(url, headers={"User-Agent": UA})
-        with OPENER_DIRECT.open(req2, timeout=timeout) as resp:
-            return resp.read().decode("utf-8", "ignore")
+    return open_bytes(req, timeout).decode("utf-8", "ignore")
 
 
 def fetch_retry(url, retries=FETCH_RETRIES, backoff=4, timeout=FETCH_TIMEOUT):
@@ -570,12 +605,15 @@ def global_sections(lines):
         lines.append("")
 
     lines.append("## YouTube 全球热门")
-    try:
-        items = kworb_trending(15)
-        for i, (t, link) in enumerate(items, 1):
-            lines.append("%d. [%s](%s)" % (i, t, link))
-    except Exception as exc:
-        lines.append("(抓取失败: %s)" % exc)
+    if PROXY_DEAD:
+        lines.append("(代理未开，海外源已跳过)")
+    else:
+        try:
+            items = kworb_trending(15)
+            for i, (t, link) in enumerate(items, 1):
+                lines.append("%d. [%s](%s)" % (i, t, link))
+        except Exception as exc:
+            lines.append("(抓取失败: %s)" % exc)
     lines.append("")
 
     if CHANNELS:
@@ -719,7 +757,15 @@ def _bili_cookie():
             "https://www.bilibili.com/",
             headers={"User-Agent": UA, "Accept": "text/html,*/*"},
         )
-        with OPENER.open(req, timeout=20) as resp:
+        # 这里要读响应头里的 Set-Cookie，所以不能直接用 open_bytes
+        if PROXY_DEAD or OPENER is OPENER_DIRECT:
+            resp = OPENER_DIRECT.open(req, timeout=20)
+        else:
+            try:
+                resp = OPENER.open(req, timeout=20)
+            except Exception:
+                resp = OPENER_DIRECT.open(req, timeout=20)
+        with resp:
             jar = "; ".join(
                 c.split(";")[0].strip() for c in (resp.headers.get_all("Set-Cookie") or [])
             )
@@ -738,8 +784,7 @@ def _cn_json(url, referer, cookie=None):
     if cookie:
         headers["Cookie"] = cookie
     req = urllib.request.Request(url, headers=headers)
-    with OPENER.open(req, timeout=30) as resp:
-        return json.loads(resp.read().decode("utf-8", "ignore"))
+    return json.loads(open_bytes(req, timeout=30).decode("utf-8", "ignore"))
 
 
 def _cn_items(src, limit, retries=2):
@@ -799,15 +844,18 @@ def topic_sections(lines, specs):
         lines.append("")
 
         lines.append("### 最新新闻")
-        try:
-            items = gnews_topic(topic, lim["news"])
-            if items:
-                for i, (t, link, pub) in enumerate(items, 1):
-                    lines.append("%d. [%s](%s) · %s" % (i, t, link, pub))
-            else:
-                lines.append("(无数据)")
-        except Exception as exc:
-            lines.append("(抓取失败: %s)" % exc)
+        if PROXY_DEAD:
+            lines.append("(代理未开，海外源已跳过)")
+        else:
+            try:
+                items = gnews_topic(topic, lim["news"])
+                if items:
+                    for i, (t, link, pub) in enumerate(items, 1):
+                        lines.append("%d. [%s](%s) · %s" % (i, t, link, pub))
+                else:
+                    lines.append("(无数据)")
+            except Exception as exc:
+                lines.append("(抓取失败: %s)" % exc)
         lines.append("")
 
         if not SKIP_REDDIT:
@@ -831,16 +879,19 @@ def topic_sections(lines, specs):
 
         time.sleep(5)
         lines.append("### YouTube 最新视频")
-        try:
-            items, note = yt_search_recent(topic, lim["yt"])
-            for i, (t, link, pub, views) in enumerate(items, 1):
-                meta = " · ".join(x for x in (pub, views) if x)
-                lines.append("%d. [%s](%s)%s" % (i, t, link, (" · " + meta) if meta else ""))
-            if note:
-                lines.append("")
-                lines.append("(%s)" % note)
-        except Exception as exc:
-            lines.append("(抓取失败: %s)" % exc)
+        if PROXY_DEAD:
+            lines.append("(代理未开，海外源已跳过)")
+        else:
+            try:
+                items, note = yt_search_recent(topic, lim["yt"])
+                for i, (t, link, pub, views) in enumerate(items, 1):
+                    meta = " · ".join(x for x in (pub, views) if x)
+                    lines.append("%d. [%s](%s)%s" % (i, t, link, (" · " + meta) if meta else ""))
+                if note:
+                    lines.append("")
+                    lines.append("(%s)" % note)
+            except Exception as exc:
+                lines.append("(抓取失败: %s)" % exc)
         lines.append("")
         plog("话题 %s 完成" % topic)
 
