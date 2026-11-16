@@ -18,11 +18,11 @@ on:
     - cron: '7 0 * * *'
     - cron: '23 0 * * *'
     - cron: '41 0 * * *'
-    # 高频档（2026-11-13 新增）：每 10 分钟一档。
+    # 高频档（2026-11-13 新增，2026-11-16 由 10 分钟改为 30 分钟）。
     # 实测 GitHub 对 */10 基本不派发（一天只零星几次），所以这行是「写了不亏」，
     # 真正常驻的高频时钟是本机计划任务 + cron-job.org（见 README）。
-    # 靠 github.event.schedule 区分：命中 */10 走 frequent，其余走 daily。
-    - cron: '*/10 * * * *'
+    # 靠 github.event.schedule 区分：命中 */30 走 frequent，其余走 daily。
+    - cron: '*/30 * * * *'
   workflow_dispatch:
     inputs:
       force:
@@ -93,7 +93,7 @@ jobs:
           M="${{ github.event.inputs.mode }}"
           if [ -z "$M" ]; then
             case "${{ github.event.schedule }}" in
-              *'*/10'*) M=frequent ;;
+              *'*/30'*) M=frequent ;;
               *)        M=daily ;;
             esac
           fi

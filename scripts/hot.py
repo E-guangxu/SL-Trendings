@@ -157,8 +157,12 @@ MAX_PUSH_BYTES = 30000
 # ---- 本地看板（2026-11-13 新增）----
 # 设了 BOARD_PATH 就不再推送微信，改成把报告渲染成一个自动刷新的 HTML 页面。
 # 用途：人守在电脑前时看热点 —— 没有条数额度、不会被 32KB 截断、能点链接。
-# 由计划任务每 10 分钟重跑一次覆盖它，页面自己每 60 秒 reload。
+# 由计划任务每 30 分钟重跑一次覆盖它，页面自己定时 reload。
+# BOARD_EVERY_MIN 只影响页面上那行说明文字（抓取节奏由计划任务决定，代码改不了它），
+# 改计划任务间隔时顺手把它一起改，免得页面上的字骗人。
 BOARD_PATH = os.environ.get("BOARD_PATH", "").strip()
+BOARD_EVERY_MIN = int(os.environ.get("BOARD_EVERY_MIN", "").strip() or "30")
+BOARD_RELOAD_SEC = int(os.environ.get("BOARD_RELOAD_SEC", "").strip() or "300")
 
 # 冗余触发的守卫：workflow 在同一小时内排了多个时间点互为备份（GitHub 的 cron
 # 在整点高负载时会被延迟甚至直接丢弃）。设 FORCE=1 忽略"今天已跑过"的检查强制重跑。
@@ -1077,14 +1081,16 @@ def save_board_state(state_path, stamp, sections):
         print("[warn] 写状态文件失败（下一轮会把全部条目当新增）: %s" % exc)
 
 
-def render_board(report, stamp, interval=60, new_idx=None, new_count=0, has_baseline=True):
+def render_board(report, stamp, interval=None, new_idx=None, new_count=0, has_baseline=True):
     """把 Markdown 报告渲染成一个自包含的 HTML 看板。
 
     不用第三方库：报告结构是固定的（#/##/###/引用/有序列表），正则够用。
-    页面自己每 interval 秒整页 reload —— 计划任务每 10 分钟覆盖文件，
-    所以最坏情况下内容最多晚 60 秒才显示出来。
+    页面自己每 interval 秒整页 reload —— 计划任务每 30 分钟覆盖文件，
+    所以最坏情况下内容最多晚 interval 秒才显示出来。
 
     new_idx 是「本轮新增」的行号集合，命中的 li 会加 .is-new 高亮。"""
+    if interval is None:
+        interval = BOARD_RELOAD_SEC
     body, in_list = [], False
     new_idx = new_idx or set()
 
@@ -1197,7 +1203,7 @@ def render_board(report, stamp, interval=60, new_idx=None, new_count=0, has_base
   <span class="dot"></span>
   <span>更新于 <b>%(stamp)s</b></span>
   <span>·</span>
-  <span>每 10 分钟重抓，页面 <b id="cd">%(iv)d</b> 秒后自动刷新</span>
+  <span>每 %(every)d 分钟重抓，页面 <b id="cd">%(iv)d</b> 秒后自动刷新</span>
   %(chip)s
 </div>
 %(body)s
@@ -1209,7 +1215,8 @@ def render_board(report, stamp, interval=60, new_idx=None, new_count=0, has_base
     document.getElementById('cd').textContent = left;
   }, 1000);
 </script>
-</body></html>""" % {"iv": interval, "stamp": stamp, "body": "\n".join(body), "chip": chip}
+</body></html>""" % {"iv": interval, "stamp": stamp, "body": "\n".join(body), "chip": chip,
+       "every": BOARD_EVERY_MIN}
 
 
 def _push_once(title, body):
