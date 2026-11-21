@@ -2028,11 +2028,11 @@ def render_board(report, stamp, interval=None, new_idx=None, new_count=0, has_ba
   var btn = document.getElementById('rf');
   var tip = document.getElementById('rf-tip');
 
-  // 按钮要打本地服务。页面由服务提供时同源；用 file:// 双击打开时打 8765。
-  // 线上（github.io）没有服务，隐藏按钮而不是让它点了报错。
+  // 按钮要打本地服务。页面由服务提供（同端口）时用相对路径；用 file:// 双击
+  // 打开、或在别的端口预览时，指向 8765。线上（github.io）没有服务，隐藏按钮。
   var host = location.hostname;
   var isLocal = host === '127.0.0.1' || host === 'localhost';
-  var API = isLocal ? '' : 'http://127.0.0.1:8765';
+  var API = (isLocal && location.port === '8765') ? '' : 'http://127.0.0.1:8765';
   if (!isLocal && location.protocol !== 'file:') {
     btn.style.display = 'none';
   }
