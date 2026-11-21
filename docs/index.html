@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
-<meta http-equiv="refresh" content="600">
-<title>热点看板 · 11-21 16:12:11</title>
+<title>热点看板 · 11-21 16:30:20</title>
 <style>
   :root { color-scheme: light; }
   * { box-sizing: border-box; }
@@ -48,6 +47,15 @@
           border: 1px solid #e6e8eb; background: #f6f8fa; color: #57606a; }
   .chip-new { background: #fff8c5; border-color: #e9c352; color: #7d4e00; font-weight: 600; }
   .chip-base { background: #eef4ff; border-color: #c7d8f7; color: #0a4ea8; }
+  .btn {
+    margin-left: auto; padding: 4px 14px; border-radius: 6px;
+    border: 1px solid #d0d7de; background: #fff; color: #1f2328;
+    font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer;
+  }
+  .btn:hover { background: #f3f4f6; border-color: #afb8c1; }
+  .btn:disabled { opacity: .5; cursor: progress; }
+  #rf-tip { color: #57606a; }
+  #rf-tip.err { color: #cf222e; }
   a { color: #0969da; text-decoration: none; }
   a:hover { text-decoration: underline; }
   main > p { color: #57606a; }
@@ -55,38 +63,40 @@
 <body><main>
 <div class="topbar">
   <span class="dot"></span>
-  <span>更新于 <b>11-21 16:12:11</b></span>
+  <span>更新于 <b>11-21 16:30:20</b></span>
   <span>·</span>
-  <span>每日 08:00 更新，页面 <b id="cd">600</b> 秒后自动刷新</span>
-  <span class="chip">本轮无新增</span>
+  <span>每日 08:00 自动更新（每小时整点抓一次 GitHub），页面 <b id="cd">600</b> 秒后自动刷新</span>
+  <span class="chip chip-new">本轮新增 5 条（黄色高亮）</span>
+  <button id="rf" class="btn" type="button">立即抓取</button>
+  <span id="rf-tip"></span>
 </div>
 <h1>AI · 科技前沿 · 2026-11-21</h1>
 <p class="note">范围：AI（主） / 科技（辅）｜只收 AI / 科技，无关话题已滤除；各段按热度涨速排序。</p>
 <h2>Hacker News（海外科技圈 · 按 分/小时）</h2>
 <ol>
-<li>[Levent Alpöge claims proof of the Generalized Riemann Hypothesis [pdf]](https://alpo.ge/remark.pdf) · 143分/h · 2556 分 · 18h · 1768 评论</li>
-<li><a href="https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/" target="_blank" rel="noopener">Hurried Announcement: Alessandro Masullo GRH</a> · 141分/h · 1928 分 · 14h · 889 评论</li>
-<li><a href="https://thinkingmachines.ai/news/inkling-2-mini/" target="_blank" rel="noopener">Inkling 2 Mini</a> · 76分/h · 916 分 · 12h · 172 评论</li>
-<li><a href="https://manidoraisamy.com/developer-to-architect.html" target="_blank" rel="noopener">We promoted developers into architects without informing them</a> · 28分/h · 396 分 · 14h · 228 评论</li>
-<li><a href="https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/" target="_blank" rel="noopener">Unforced Navier-Stokes Singularity and the Generalized Riemann Hypothesis</a> · 28分/h · 416 分 · 15h · 171 评论</li>
-<li><a href="https://arxiv.org/abs/2611.21885" target="_blank" rel="noopener">Language Models Can Rewrite Their Own Weights</a> · 25分/h · 392 分 · 16h · 117 评论</li>
-<li><a href="https://scottaaronson.blog/?p=10344" target="_blank" rel="noopener">The stochastic parrots have apparently proved the Riemann Hypothesis</a> · 22分/h · 272 分 · 12h · 246 评论</li>
-<li><a href="https://github.com/tristanbuckmaster/navier-stokes/" target="_blank" rel="noopener">Finite-time blow-up for the Navier–Stokes equations</a> · 17分/h · 279 分 · 17h · 88 评论</li>
-<li><a href="https://www.masteringemacs.org/article/announcing-dreamcoder" target="_blank" rel="noopener">DreamCoder: Coding harness and IDE from the author of Mastering Emacs</a> · 16分/h · 191 分 · 12h · 52 评论</li>
-<li><a href="https://www.theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off" target="_blank" rel="noopener">Nasdaq erases all 2026 gains as AI sell-off dampens Anthropic’s second day</a> · 15分/h · 273 分 · 19h · 538 评论</li>
-<li><a href="http://ricapar.net/ClawDOS/" target="_blank" rel="noopener">ClawDOS – An AI coding agent for DOS</a> · 13分/h · 34 分 · 3h · 6 评论</li>
-<li><a href="https://slopstrap.mikelacher.com/" target="_blank" rel="noopener">Slopstrap – Make your site look hastily vibecoded</a> · 13分/h · 210 分 · 17h · 36 评论</li>
+<li>[Levent Alpöge claims proof of the Generalized Riemann Hypothesis [pdf]](https://alpo.ge/remark.pdf) · 141分/h · 2569 分 · 18h · 1777 评论</li>
+<li><a href="https://math216.wordpress.com/2026/11/20/hurried-announcement-alessandro-masullo-grh/" target="_blank" rel="noopener">Hurried Announcement: Alessandro Masullo GRH</a> · 140分/h · 1946 分 · 14h · 894 评论</li>
+<li><a href="https://thinkingmachines.ai/news/inkling-2-mini/" target="_blank" rel="noopener">Inkling 2 Mini</a> · 75分/h · 922 分 · 12h · 172 评论</li>
+<li><a href="https://manidoraisamy.com/developer-to-architect.html" target="_blank" rel="noopener">We promoted developers into architects without informing them</a> · 28分/h · 403 分 · 14h · 229 评论</li>
+<li><a href="https://terrytao.wordpress.com/2026/11/20/unforced-euler-singularity-unforced-navier-stokes-singularity-and-the-generalized-riemann-hypothesis/" target="_blank" rel="noopener">Unforced Navier-Stokes Singularity and the Generalized Riemann Hypothesis</a> · 28分/h · 422 分 · 15h · 171 评论</li>
+<li><a href="https://arxiv.org/abs/2611.21885" target="_blank" rel="noopener">Language Models Can Rewrite Their Own Weights</a> · 25分/h · 394 分 · 16h · 117 评论</li>
+<li><a href="https://scottaaronson.blog/?p=10344" target="_blank" rel="noopener">The stochastic parrots have apparently proved the Riemann Hypothesis</a> · 22分/h · 274 分 · 12h · 246 评论</li>
+<li><a href="https://github.com/tristanbuckmaster/navier-stokes/" target="_blank" rel="noopener">Finite-time blow-up for the Navier–Stokes equations</a> · 16分/h · 279 分 · 17h · 88 评论</li>
+<li><a href="https://www.masteringemacs.org/article/announcing-dreamcoder" target="_blank" rel="noopener">DreamCoder: Coding harness and IDE from the author of Mastering Emacs</a> · 16分/h · 195 分 · 12h · 52 评论</li>
+<li><a href="https://www.theguardian.com/business/2026/nov/20/global-stock-markets-slump-anthropic-ipo-ai-sell-off" target="_blank" rel="noopener">Nasdaq erases all 2026 gains as AI sell-off dampens Anthropic’s second day</a> · 15分/h · 276 分 · 19h · 546 评论</li>
+<li><a href="http://ricapar.net/ClawDOS/" target="_blank" rel="noopener">ClawDOS – An AI coding agent for DOS</a> · 14分/h · 40 分 · 3h · 9 评论</li>
+<li><a href="https://slopstrap.mikelacher.com/" target="_blank" rel="noopener">Slopstrap – Make your site look hastily vibecoded</a> · 13分/h · 217 分 · 17h · 37 评论</li>
 </ol>
 <h2>GitHub 热榜（近 7 天新项目 · 按 ★/天）</h2>
 <ol>
-<li><a href="https://github.com/erkamyaman/rust-anything" target="_blank" rel="noopener">erkamyaman/rust-anything</a> · Rewrite your whole app in Rust, one piece at a time, checked… · 6892★ · 1426★/天 · 5天 · Rust</li>
-<li><a href="https://github.com/krisgfx9/Wireless-Device-Battery-Monitor" target="_blank" rel="noopener">krisgfx9/Wireless-Device-Battery-Monitor</a> · Show the battery level of wireless mice, headsets, keyboards… · 5471★ · 1208★/天 · 5天 · C++</li>
-<li><a href="https://github.com/bookwjitchieni1986/blender-ai-mcp-addon" target="_blank" rel="noopener">bookwjitchieni1986/blender-ai-mcp-addon</a> · AI assistant and MCP server for Blender: visual chat, scene… · 1877★ · 1086★/天 · 41h</li>
-<li><a href="https://github.com/iamajmeena/neonclipping" target="_blank" rel="noopener">iamajmeena/neonclipping</a> · Paste a link, get captioned 9:16 clips in ~2 min. Free, loca… · 1396★ · 725★/天 · 46h · Python</li>
-<li><a href="https://github.com/sybil-solutions/inference-optimisation-skill" target="_blank" rel="noopener">sybil-solutions/inference-optimisation-skill</a> · Agent skill for hill-climbing local LLM serving speed (decod… · 1385★ · 303★/天 · 5天 · Python</li>
-<li><a href="https://github.com/nataphong-lab/Open-Source-Face-Recognition-Ultimate" target="_blank" rel="noopener">nataphong-lab/Open-Source-Face-Recognition-Ultimate</a> · Face Recognition, Face Liveness Detection, Face Anti-Spoofin… · 514★ · 271★/天 · 46h · Python</li>
-<li><a href="https://github.com/joshpuckett/allo" target="_blank" rel="noopener">joshpuckett/allo</a> · Allo is your friendly neighborhood typeface, free and open s… · 1266★ · 226★/天 · 6天 · Python</li>
-<li><a href="https://github.com/Lemxy/WinRust" target="_blank" rel="noopener">Lemxy/WinRust</a> · Windows shell replacement in Rust: taskbar, file manager, NT… · 809★ · 216★/天 · 4天 · Rust</li>
+<li><a href="https://github.com/erkamyaman/rust-anything" target="_blank" rel="noopener">erkamyaman/rust-anything</a> · Rewrite your whole app in Rust, one piece at a time, checked… · 6905★ · 1425★/天 · 5天 · Rust</li>
+<li><a href="https://github.com/krisgfx9/Wireless-Device-Battery-Monitor" target="_blank" rel="noopener">krisgfx9/Wireless-Device-Battery-Monitor</a> · Show the battery level of wireless mice, headsets, keyboards… · 5479★ · 1206★/天 · 5天 · C++</li>
+<li><a href="https://github.com/bookwjitchieni1986/blender-ai-mcp-addon" target="_blank" rel="noopener">bookwjitchieni1986/blender-ai-mcp-addon</a> · AI assistant and MCP server for Blender: visual chat, scene… · 1880★ · 1080★/天 · 42h</li>
+<li><a href="https://github.com/iamajmeena/neonclipping" target="_blank" rel="noopener">iamajmeena/neonclipping</a> · Paste a link, get captioned 9:16 clips in ~2 min. Free, loca… · 1407★ · 726★/天 · 46h · Python</li>
+<li><a href="https://github.com/sybil-solutions/inference-optimisation-skill" target="_blank" rel="noopener">sybil-solutions/inference-optimisation-skill</a> · Agent skill for hill-climbing local LLM serving speed (decod… · 1389★ · 304★/天 · 5天 · Python</li>
+<li><a href="https://github.com/nataphong-lab/Open-Source-Face-Recognition-Ultimate" target="_blank" rel="noopener">nataphong-lab/Open-Source-Face-Recognition-Ultimate</a> · Face Recognition, Face Liveness Detection, Face Anti-Spoofin… · 514★ · 269★/天 · 46h · Python</li>
+<li><a href="https://github.com/joshpuckett/allo" target="_blank" rel="noopener">joshpuckett/allo</a> · Allo is your friendly neighborhood typeface, free and open s… · 1268★ · 226★/天 · 6天 · Python</li>
+<li><a href="https://github.com/Lemxy/WinRust" target="_blank" rel="noopener">Lemxy/WinRust</a> · Windows shell replacement in Rust: taskbar, file manager, NT… · 813★ · 217★/天 · 4天 · Rust</li>
 </ol>
 <h2>实验室动态（近 72 小时）</h2>
 <ol>
@@ -101,36 +111,80 @@
 </ol>
 <h2>前沿资讯（近 24 小时）</h2>
 <ol>
-<li><a href="https://news.google.com/rss/articles/CBMiakFVX3lxTFA1ZWFzdE82dDBHNUJtbDFMVjB2SlZzXzF1bm56VGJkNlMteHV2OGs2dUFZSDNmblVPcGl3LWRiczV3eENCUjZzR2djaHJoaDFZaEZsWXkzR0NWSFdNSDVnS3JRa2Mtb081a3c?oc=5" target="_blank" rel="noopener">南水北调“天河”大模型完成升级</a> · 2 家转载 · 15 分钟前 · 大河财立方</li>
+<li><a href="https://news.google.com/rss/articles/CBMiVEFVX3lxTE42NUlVUm91MURoaFdMQTRlMTVHQ0dUZXlKMTJEb3pqdXpnYVFGRG1WcEtzRk1oRURwejZraGVHNGc1WjVEWG4tTmpfZ3VQSEN0aDZJaw?oc=5" target="_blank" rel="noopener">南水北调“天河”大模型完成升级</a> · 2 家转载 · 25 分钟前 · 第一财经</li>
 <li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTFBqYlNrV3EwbEt0MEFzVVZQT2cxN1dWR0lyZ3F0Q1Q4N1BISzJqLUpvcVA2aWtjbWtHOU1fTGowb1NSbl9QbHZFWUdyLTI0VlNPcW9TOUxvU0NoN19IT3Z4Zw?oc=5" target="_blank" rel="noopener">李斌：当下游客户竞争不激烈时，AI大模型反会陷入“价格战”</a> · 2 家转载 · 7 小时前 · ThePaper.cn</li>
-<li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTFBYLWFUUll6RTRfWlRkby1QT3pUa3d5djhIVEpLc3hDbHp4dVhKRGpBOGw4b2tLWVNaWWt5bDVfc1IzSW5UMG9yYWNRdkdvT2VvWlZIMVFOSHFqbm42ODR6Rw?oc=5" target="_blank" rel="noopener">木林森：拟投资22.5亿元建设半导体芯片封测项目</a> · 2 家转载 · 21 小时前 · 东方财富网</li>
-<li><a href="https://news.google.com/rss/articles/CBMickFVX3lxTE9RRjktV0dhMmVjYWNGUE5yQTh5VENQUTFKWVhiMG1pTUozWjU3aUk5ZkhUVVVKOUp5OFpMRzExOThFc3lKQ25vZFFwcFpSbmlMMWg4N0NpSi0wR1dEVFh1VXRacGpTM1hoZ04wWlY0SlEwQQ?oc=5" target="_blank" rel="noopener">AI类岗位扩容、技能人才需求旺 就业市场出现哪些新趋势？</a> · 10 分钟前 · 手机新浪网</li>
-<li><a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTE1jaktCb3puX1VhQXVFY2xuV0lqVHlxMGRYaGdqd2xORldGQ3hLTkZadmhvX3dHc19Nd1psRkdXenF2YnY2RmVzYXk0RXFkalZRLUw3N1IyMmQwWGotRzA2SzFoSQ?oc=5" target="_blank" rel="noopener">18项任务划重点！未来五年湖南将这样推进“人工智能+教育”</a> · 25 分钟前 · 红网</li>
-<li><a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxOOUIySnBsUGVwNVZlclhIRFQyaTVleFJTcmVVR2Fid21Sa2x2QmJwWkZIb2dqcDRyTU9BRWxidlZpSHFvYlNaZ2JaOWxkaWpsYXhPa25RWkxlNEhFV0I2Z2dEenNoUHpBdm1ZQm9aWkY0Ync2RDdJazRWMUp4WWJKZU01SnBWclVEYk1FMQ?oc=5" target="_blank" rel="noopener">华泰证券尝试金融中台AI实践：研究Agent矩阵跟踪，债务监测压缩至小时级</a> · 30 分钟前 · Sohu</li>
-<li><a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxOTUFuOXZ0THREYTU5VUI0LVVEWV9WcjEwNThkc2tmUGc1dFl4TUpKUjJrU2h3VV9xcWkxRHNNWmFCMXJIWTVkUVZFZ0o3SjFDb1djUlh2RjZqWmZUSmxCYzlTYWtBU1cycHdURDZsc29pZnBiRlBfdFFRc2FCMmxzVEVQREttQUhIdDB4eg?oc=5" target="_blank" rel="noopener">江苏发布“人工智能+金融”三年行动方案 到2028年培育百个典型应用场景</a> · 30 分钟前 · Sohu</li>
-<li><a href="https://news.google.com/rss/articles/CBMickFVX3lxTE54SnpNcE1RRm9ISlNKQVdhZVRnNThOY3pySTVBQzl6MGRPQ0pBV3B6Mi1RR3Rveld0T21hbV9mQk1Gb1NIekUyX0FBTWNNeHpQWGE1R05TS3VXVlpoSTB4N05vZklkaEU2NUJuUUpwRnFrQQ?oc=5" target="_blank" rel="noopener">重庆大学新闻学院把思政课搬进人工智能一线</a> · 32 分钟前 · 手机新浪网</li>
-<li><a href="https://news.google.com/rss/articles/CBMiZEFVX3lxTFBNVUVJQ0Z0OXBrc0pOc2QxbnBqR0R6R3N0a2FFZmRQVWlXc2JsZkViZEdQZ1N2TlAyZXlJRXUtV3dOcHlhQ1JtRm1CMGFhQ3h1Z3JNX2VtY19WeXpsZTNMQmZFTFA?oc=5" target="_blank" rel="noopener">北京市妇幼健康人工智能创新中心启动</a> · 34 分钟前 · 新京报</li>
+<li><a href="https://news.google.com/rss/articles/CBMiYEFVX3lxTFBYLWFUUll6RTRfWlRkby1QT3pUa3d5djhIVEpLc3hDbHp4dVhKRGpBOGw4b2tLWVNaWWt5bDVfc1IzSW5UMG9yYWNRdkdvT2VvWlZIMVFOSHFqbm42ODR6Rw?oc=5" target="_blank" rel="noopener">木林森：拟投资22.5亿元建设半导体芯片封测项目</a> · 2 家转载 · 22 小时前 · 东方财富网</li>
+<li class="is-new"><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE9xb0hZRzB5a2g0M2NEb1A3WHVEbGs3Qi16enV1WENpaFBCcTd1TWhjNENUd0R4SUhsV1pKLXNsRUlXZ05oaTZubUhzOFV3VlVpRlBSbkFtSjliUE1KaTdwVjJkVUNieTRtWkFJUQ?oc=5" target="_blank" rel="noopener">成都企业推出两款工程 AI 智能终端，云端加密与本地部署并进</a> · 18 分钟前 · 中华网</li>
+<li class="is-new"><a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxQUDl2ampsb3RWOTVFMEVhQzJad0lERExxZWotaGd4aEtNUGRYU0xpX21oRHQ5S19OTy1fNU5oMFpENExGd1ZsLW1oemRaQU9kcUkyVnM4Q1NDT01NRW1GUEV1aFhaYk5Dc1RtSVJUb0w5VklVQmN4NWhRWW9CSXhBVktaRWlpMDZhMW82Yg?oc=5" target="_blank" rel="noopener">英伟达单日暴跌14.01%，但斌：仍坚持人工智能十年牛市的判断</a> · 20 分钟前 · Sohu</li>
+<li class="is-new"><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTFA3aDRGUWRFQWQ0ZnhuaUkyRTQ2QWpJdDU5blFVNEQ4ZkI5NlhwN2NIUzJReF9XdlgybTNKZDNFd3lOdHVLam8xYVVhTTFzQnJvcFhDdDZ5OTVRc1I1TjcxUlpHb25oTmF1X1h1VA?oc=5" target="_blank" rel="noopener">成都⇆吉隆坡 创新同行，共拓科技合作新空间</a> · 21 分钟前 · 中华网</li>
+<li><a href="https://news.google.com/rss/articles/CBMiY0FVX3lxTE1jaktCb3puX1VhQXVFY2xuV0lqVHlxMGRYaGdqd2xORldGQ3hLTkZadmhvX3dHc19Nd1psRkdXenF2YnY2RmVzYXk0RXFkalZRLUw3N1IyMmQwWGotRzA2SzFoSQ?oc=5" target="_blank" rel="noopener">18项任务划重点！未来五年湖南将这样推进“人工智能+教育”</a> · 43 分钟前 · 红网</li>
+<li><a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxOOUIySnBsUGVwNVZlclhIRFQyaTVleFJTcmVVR2Fid21Sa2x2QmJwWkZIb2dqcDRyTU9BRWxidlZpSHFvYlNaZ2JaOWxkaWpsYXhPa25RWkxlNEhFV0I2Z2dEenNoUHpBdm1ZQm9aWkY0Ync2RDdJazRWMUp4WWJKZU01SnBWclVEYk1FMQ?oc=5" target="_blank" rel="noopener">华泰证券尝试金融中台AI实践：研究Agent矩阵跟踪，债务监测压缩至小时级</a> · 48 分钟前 · Sohu</li>
+<li><a href="https://news.google.com/rss/articles/CBMijAFBVV95cUxOTUFuOXZ0THREYTU5VUI0LVVEWV9WcjEwNThkc2tmUGc1dFl4TUpKUjJrU2h3VV9xcWkxRHNNWmFCMXJIWTVkUVZFZ0o3SjFDb1djUlh2RjZqWmZUSmxCYzlTYWtBU1cycHdURDZsc29pZnBiRlBfdFFRc2FCMmxzVEVQREttQUhIdDB4eg?oc=5" target="_blank" rel="noopener">江苏发布“人工智能+金融”三年行动方案 到2028年培育百个典型应用场景</a> · 48 分钟前 · Sohu</li>
 <li><a href="https://news.google.com/rss/articles/CBMiTEFVX3lxTE5XY1pKWEVubVFjYWRZV0FlY1VYZ29vMk9wM21NZDRGcFlMYzU2cl9sbXdVMDJGeXBiZjJfcmFNYUFacE5uTnJGa2FfN3E?oc=5" target="_blank" rel="noopener">腾讯混元团队称Hy4仍有很大改进空间</a> · 2 小时前 · www.itsdw.cn</li>
 </ol>
 <h2>YouTube（近 24 小时发布 · 按 播放/小时）</h2>
 <ol>
-<li><a href="https://youtu.be/ETqCvfWmk3w" target="_blank" rel="noopener">GPT-6.2 遭正面迎擊！谷歌 Gemini 4 Neon 憑什麼敢搶走 AI 霸主寶座？</a> · 53播放/h · 总 158 播放 · 3h</li>
+<li><a href="https://youtu.be/ETqCvfWmk3w" target="_blank" rel="noopener">GPT-6.2 遭正面迎擊！谷歌 Gemini 4 Neon 憑什麼敢搶走 AI 霸主寶座？</a> · 63播放/h · 总 189 播放 · 3h</li>
 </ol>
 <p>(近 7 小时内发布，按每小时播放量排序)</p>
 <h2>国内 · AI / 科技 热度激增</h2>
 <p>本轮暂无上涨条目（观测不足 60 分钟，或热度持平/回落）。当前在榜 4 条：</p>
 <ol>
-<li><a href="https://s.weibo.com/weibo?q=%23%E7%89%B9%E6%9C%97%E6%99%AE%E7%A7%B0%E4%B8%8D%E5%85%81%E8%AE%B8%E7%BE%8E%E4%BC%81%E6%B5%B7%E5%A4%96%E5%BB%BA%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%23" target="_blank" rel="noopener">特朗普称不允许美企海外建数据中心</a> · 微博 · 热 17万</li>
+<li><a href="https://s.weibo.com/weibo?q=%23%E7%89%B9%E6%9C%97%E6%99%AE%E7%A7%B0%E4%B8%8D%E5%85%81%E8%AE%B8%E7%BE%8E%E4%BC%81%E6%B5%B7%E5%A4%96%E5%BB%BA%E6%95%B0%E6%8D%AE%E4%B8%AD%E5%BF%83%23" target="_blank" rel="noopener">特朗普称不允许美企海外建数据中心</a> · 微博 · 热 16万</li>
 <li><a href="https://www.bilibili.com/video/BV1NQsm6gE3L" target="_blank" rel="noopener">英伟达拒绝黄仁勋，史上最大的泡沫更脆弱了</a> · B站 · 汤山老王 · 播放 171万</li>
-<li><a href="https://www.toutiao.com/trending/7710428187490943514/" target="_blank" rel="noopener">英伟达遭美国证券交易委员会调查</a> · 头条 · 热度 1027万</li>
-<li><a href="https://www.toutiao.com/trending/7710515105078709770/" target="_blank" rel="noopener">学者谈英伟达停止对华供应H200芯片</a> · 头条 · 热度 378万</li>
+<li class="is-new"><a href="https://www.toutiao.com/trending/7710507100245331510/" target="_blank" rel="noopener">博主：最担心有人说只有自己能管住AI</a> · 头条 · 热度 418万</li>
+<li class="is-new"><a href="https://www.toutiao.com/trending/7710494636740972070/" target="_blank" rel="noopener">AI攻破黎曼猜想 100万美元奖金该给谁</a> · 头条 · 热度 76万</li>
 </ol>
 </main>
 <script>
-  var left = 600;
+(function () {
+  var IV = 600, left = IV, busy = false;
+  var cd = document.getElementById('cd');
+  var btn = document.getElementById('rf');
+  var tip = document.getElementById('rf-tip');
+
+  // 按钮要打本地服务。页面由服务提供时同源；用 file:// 双击打开时打 8765。
+  // 线上（github.io）没有服务，隐藏按钮而不是让它点了报错。
+  var host = location.hostname;
+  var isLocal = host === '127.0.0.1' || host === 'localhost';
+  var API = isLocal ? '' : 'http://127.0.0.1:8765';
+  if (!isLocal && location.protocol !== 'file:') {
+    btn.style.display = 'none';
+  }
+
+  // 不用 meta refresh：它在抓取过程中也可能触发整页重载，
+  // 把正在等待的请求连同按钮状态一起清掉。
   setInterval(function () {
-    left = left > 0 ? left - 1 : 600;
-    document.getElementById('cd').textContent = left;
+    if (busy) return;
+    left -= 1;
+    if (left <= 0) { location.reload(); return; }
+    cd.textContent = left;
   }, 1000);
+
+  btn.addEventListener('click', function () {
+    if (busy) return;
+    busy = true;
+    btn.disabled = true;
+    btn.textContent = '抓取中…';
+    tip.className = '';
+    tip.textContent = '约 15 秒';
+    fetch(API + '/api/refresh', { method: 'POST' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j || !j.ok) throw new Error((j && j.error) || '抓取失败');
+        tip.textContent = '完成，正在刷新…';
+        setTimeout(function () { location.reload(); }, 400);
+      })
+      .catch(function (e) {
+        busy = false;
+        btn.disabled = false;
+        btn.textContent = '立即抓取';
+        tip.className = 'err';
+        tip.textContent = (e.message === 'Failed to fetch')
+          ? '连不上服务，双击桌面「启动看板服务」'
+          : e.message;
+      });
+  });
+})();
 </script>
 </body></html>
