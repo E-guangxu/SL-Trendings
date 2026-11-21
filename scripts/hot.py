@@ -828,6 +828,78 @@ def hn_stories(limit=12):
     return rows[:limit]
 
 
+# ---- GitHub 热榜（新项目的涨星速度）----
+# github.com/trending 的 HTML 在本机出口抓不动（22s 后连接被中断，exit 56），
+# 云端虽然能通但解析 HTML 太脆。改用官方 Search API：一次请求就带回
+# created_at 和 stargazers_count，相除即得「每天涨多少星」——
+# 和 HN 的「分/小时」、YouTube 的「播放/小时」是同一套口径，可横向比较。
+# 只统计近 GITHUB_WINDOW_D 天新建的仓库，所以榜单天然是「最近在爆的」。
+GITHUB_WINDOW_D = int(os.environ.get("GITHUB_WINDOW_D", "").strip() or "7")
+GITHUB_LIMIT = int(os.environ.get("GITHUB_LIMIT", "").strip() or "8")
+# 星/天下限。低于这个数的项目，热度曲线已经平了，不叫「激增」。
+GITHUB_MIN_SPD = float(os.environ.get("GITHUB_MIN_SPD", "").strip() or "120")
+# 新项目榜里刷星营销号和资源合集占比很高，这些不是「前沿」，先挡掉。
+GITHUB_BLOCK = (
+    "awesome-", "awesome_", "interview", "cheat", "crack", "keygen",
+    "tutorial", "roadmap", "面试", "教程", "破解", "题库", "学习路线",
+    "刷星", "引流", "接码", "爬虫池", "优惠券",
+    # 凭据提取 / 设备解锁这类工具在榜上常冲到前排，但不是前沿，是灰产。
+    "凭据提取", "密码提取", "提取工具", "unlock",
+)
+# 没写描述的仓库一律跳过：真项目都会写一句干什么用，
+# 空描述 + 高星速基本就是刷量空壳（实测 google-ultra 2555★、google-one-tools 466★ 都是空的）。
+
+
+def github_trending(limit=GITHUB_LIMIT):
+    """返回近 GITHUB_WINDOW_D 天新建、涨星最快的仓库，按 ★/天 排序。"""
+    since = (datetime.date.today() - datetime.timedelta(days=GITHUB_WINDOW_D)).isoformat()
+    q = urllib.parse.urlencode({
+        "q": "created:>%s" % since,
+        "sort": "stars",
+        "order": "desc",
+        "per_page": "40",
+    })
+    raw = fetch_retry("https://api.github.com/search/repositories?" + q, retries=2, timeout=20)
+    data = json.loads(raw)
+    now = datetime.datetime.now(datetime.timezone.utc)
+    rows = []
+    for it in data.get("items") or []:
+        name = (it.get("full_name") or "").strip()
+        if not name:
+            continue
+        blob = (name + " " + (it.get("description") or "")).lower()
+        if any(b in blob for b in GITHUB_BLOCK):
+            continue
+        desc = (it.get("description") or "").strip()
+        if not desc:
+            continue
+        stars = int(it.get("stargazers_count") or 0)
+        if stars <= 0:
+            continue
+        try:
+            t = datetime.datetime.strptime(
+                it.get("created_at") or "", "%Y-%m-%dT%H:%M:%SZ"
+            ).replace(tzinfo=datetime.timezone.utc)
+        except Exception:
+            continue
+        age_h = max((now - t).total_seconds() / 3600.0, 0.5)
+        spd = stars / (age_h / 24.0)
+        if spd < GITHUB_MIN_SPD:
+            continue
+        rows.append({
+            "title": name,
+            "url": it.get("html_url") or "",
+            "desc": (it.get("description") or "").strip(),
+            "stars": stars,
+            "forks": int(it.get("forks_count") or 0),
+            "lang": (it.get("language") or "").strip(),
+            "age_h": age_h,
+            "spd": spd,
+        })
+    rows.sort(key=lambda r: -r["spd"])
+    return rows[:limit]
+
+
 # ---- AI 实验室官方博客（最前沿的一手信息，不需要猜）----
 # 这些源更新慢（几天一条），所以按「近 N 小时」过滤，没有就整段不出现 ——
 # 免得看板上永远是同一条旧新闻。
@@ -1419,6 +1491,40 @@ def hn_section(lines):
     lines.append("")
 
 
+def github_section(lines):
+    """GitHub 新项目的涨星速度。看的是「这几天在爆什么」，不是总星数排行 ——
+    总星数榜永远被那几个巨型仓库占着，看不出任何趋势。"""
+    lines.append("## GitHub 热榜（近 %d 天新项目 · 按 ★/天）" % GITHUB_WINDOW_D)
+    lines.append("")
+    try:
+        rows = github_trending()
+    except Exception as exc:
+        lines.append("(抓取失败: %s)" % exc)
+        lines.append("")
+        return
+    if not rows:
+        lines.append("(本轮没有涨星速度达标的项目)")
+        lines.append("")
+        return
+    for i, r in enumerate(rows, 1):
+        meta = ["%s★" % fmt_num(r["stars"]), "%s★/天" % fmt_num(r["spd"])]
+        meta.append("%.0fh" % r["age_h"] if r["age_h"] < 48 else "%.0f天" % (r["age_h"] / 24))
+        if r["lang"]:
+            meta.append(r["lang"])
+        # 描述是仓库作者自己写的，里面常带 [wiki] / a|b 这类字符，
+        # 直接塞进 markdown 会把链接和表格语法搞坏。
+        desc = re.sub(r"[\[\]|`<>]", " ", r["desc"])
+        desc = re.sub(r"\s{2,}", " ", desc).strip()
+        if len(desc) > 60:
+            desc = desc[:60].rstrip() + "…"
+        head = "[%s](%s)" % (r["title"], r["url"])
+        if desc:
+            lines.append("%d. %s · %s · %s" % (i, head, desc, " · ".join(meta)))
+        else:
+            lines.append("%d. %s · %s" % (i, head, " · ".join(meta)))
+    lines.append("")
+
+
 def lab_section(lines):
     """AI 实验室官方博客。更新慢，但一条就是一条 —— 这是最一手的前沿。
     近 LAB_FRESH_H 小时内没有新文就整段不出现，免得永远挂着同一条旧闻。"""
@@ -1488,16 +1594,24 @@ def yt_section(lines, specs):
         lines.append("")
         return
     rows, seen, note = [], set(), ""
-    for name in ([s["name"] for s in specs] or ["AI"])[:3]:
+    # 话题之间并行搜。单次搜索走代理要 6s 左右，两个话题串着跑就是 13s，
+    # 这是整轮里最慢的一段。只有 2~3 个并发，不至于触发 YouTube 限流。
+    names = ([s["name"] for s in specs] or ["AI"])[:3]
+
+    def _one(name):
         try:
-            items, n = yt_search_recent(name, 8)
-            # 第二个查询常常一条都捞不到，别让它把前一个查询的有效说明覆盖成
-            # 「没有找到新视频」—— 那和上面列出的视频自相矛盾。
-            if items and n:
-                note = n
+            return yt_search_recent(name, 8)
         except Exception as exc:
             print("[yt] %s 抓取失败: %s" % (name, exc))
-            continue
+            return [], ""
+
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, len(names))) as pool:
+        results = list(pool.map(_one, names))
+    for items, n in results:
+        # 第二个查询常常一条都捞不到，别让它把前一个的有效说明覆盖成
+        # 「没有找到新视频」—— 那和上面列出的视频自相矛盾。取第一个非空的。
+        if items and n and not note:
+            note = n
         for it in items:
             if it["url"] in seen:
                 continue
@@ -1524,6 +1638,13 @@ def yt_section(lines, specs):
     lines.append("")
 
 
+def _seg(lines, fn, *args):
+    """跑一个报告段落并记录耗时。哪一段拖慢整轮，日志里一眼能看出来。"""
+    t0 = time.time()
+    fn(lines, *args)
+    plog("段 %s：%.1fs" % (fn.__name__.replace("_section", ""), time.time() - t0))
+
+
 def build_report(specs, now_ts, prev_surge, new_surge):
     """报告骨架：从「按平台列榜」改成「按热度涨速」。
 
@@ -1539,10 +1660,11 @@ def build_report(specs, now_ts, prev_surge, new_surge):
     lines.append("> 范围：%s｜只收 AI / 科技，无关话题已滤除；各段按热度涨速排序。" % (scope or "AI / 科技"))
     lines.append("")
 
-    hn_section(lines)
-    lab_section(lines)
-    news_section(lines, specs)
-    yt_section(lines, specs)
+    _seg(lines, hn_section)
+    _seg(lines, github_section)
+    _seg(lines, lab_section)
+    _seg(lines, news_section, specs)
+    _seg(lines, yt_section, specs)
     if CN_HOT:
         cn_surge_section(lines, now_ts, prev_surge, new_surge)
     return "\n".join(lines)
