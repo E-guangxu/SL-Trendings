@@ -1,102 +1,60 @@
 {
- "updated": "11-21 13:04:49",
+ "updated": "11-21 16:12:11",
  "sections": {
-  "话题：AI（主） > 最新新闻": [
-   "“中国对AI的理解，比美国政府要深入得多” - 凤凰网",
-   "AI燎原 智领未来 | 福建省医疗人工智能与医院高质量发展研讨会暨 AI百城计划福州站圆满举行 - 手机新浪网",
-   "马上评｜AI证明黎曼猜想，数学家该恐慌吗？ - ThePaper.cn",
-   "“数学界第一神山”被攻克？Anthropic数学家宣称证明黎曼猜想，给出1700万行Lean源码，AI证明文件超过25万页 - 华尔街见闻",
-   "数学史上最难啃的一块骨头！AI疑证明黎曼猜想：有人却高兴不起来 - 驱动之家",
-   "AI抛售推升避险需求，日元、瑞郎领涨主要货币，美元走低 - 华尔街见闻",
-   "AI是做精神导师，发布教法裁决？穆斯林对此意见不一 - BBC",
-   "Anthropic IPO受挫，华尔街AI板块4万亿美元市值蒸发 - 华尔街日报中文网"
+  "Hacker News（海外科技圈 · 按 分/小时）": [
+   "Levent Alpöge claims proof of the Generalized Riemann Hypothesis [pdf",
+   "Hurried Announcement: Alessandro Masullo GRH",
+   "Inkling 2 Mini",
+   "We promoted developers into architects without informing them",
+   "Unforced Navier-Stokes Singularity and the Generalized Riemann Hypothesis",
+   "Language Models Can Rewrite Their Own Weights",
+   "The stochastic parrots have apparently proved the Riemann Hypothesis",
+   "Finite-time blow-up for the Navier–Stokes equations",
+   "DreamCoder: Coding harness and IDE from the author of Mastering Emacs",
+   "Nasdaq erases all 2026 gains as AI sell-off dampens Anthropic’s second day",
+   "ClawDOS – An AI coding agent for DOS",
+   "Slopstrap – Make your site look hastily vibecoded"
   ],
-  "话题：AI（主） > YouTube 最新视频": [
-   "AI May Have Cracked Maths’ Biggest Mystery -  Riemann Hypothesis Solved?",
-   "NASDAQ loses 2026’s gains in AI correction: Economists react",
-   "how to ACTUALLY code with AI (2027)",
-   "AI News: This Is The Make or Break Week!!",
-   "OpenAI Just Revealed How Far AI Self-Improvement Has Gone…",
-   "AI Insiders Risk Everything to Reveal What Happens to Us in 90 Days",
-   "Godfather of AI: ‘It could get rid of us if it wanted to’",
-   "Anthropique's IPO: US and Japanese Stock Markets Fall, Amid Concerns About an AI Bubble [NIKKEI N..."
+  "GitHub 热榜（近 7 天新项目 · 按 ★/天）": [
+   "erkamyaman/rust-anything",
+   "krisgfx9/Wireless-Device-Battery-Monitor",
+   "bookwjitchieni1986/blender-ai-mcp-addon",
+   "iamajmeena/neonclipping",
+   "sybil-solutions/inference-optimisation-skill",
+   "nataphong-lab/Open-Source-Face-Recognition-Ultimate",
+   "joshpuckett/allo",
+   "Lemxy/WinRust"
   ],
-  "中文圈热点 > 微博热搜": [
+  "实验室动态（近 72 小时）": [
+   "Combatting adversarial distillation",
+   "Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
+   "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
+   "Hebbia sees improvements in financial research with GPT-6 Astra",
+   "Can AI help scientists identify promising drug candidates?",
+   "How OpenAI’s Performance Factory keeps ChatGPT fast",
+   "Explore the Codex Security Plugin",
+   "See PR scans in action"
+  ],
+  "前沿资讯（近 24 小时）": [
+   "南水北调“天河”大模型完成升级",
+   "李斌：当下游客户竞争不激烈时，AI大模型反会陷入“价格战”",
+   "木林森：拟投资22.5亿元建设半导体芯片封测项目",
+   "AI类岗位扩容、技能人才需求旺 就业市场出现哪些新趋势？",
+   "18项任务划重点！未来五年湖南将这样推进“人工智能+教育”",
+   "华泰证券尝试金融中台AI实践：研究Agent矩阵跟踪，债务监测压缩至小时级",
+   "江苏发布“人工智能+金融”三年行动方案 到2028年培育百个典型应用场景",
+   "重庆大学新闻学院把思政课搬进人工智能一线",
+   "北京市妇幼健康人工智能创新中心启动",
+   "腾讯混元团队称Hy4仍有很大改进空间"
+  ],
+  "YouTube（近 24 小时发布 · 按 播放/小时）": [
+   "GPT-6.2 遭正面迎擊！谷歌 Gemini 4 Neon 憑什麼敢搶走 AI 霸主寶座？"
+  ],
+  "国内 · AI / 科技 热度激增": [
    "特朗普称不允许美企海外建数据中心",
-   "特朗普说看看深圳再看看我们",
-   "五中全会决定这些话要牢记",
-   "我们来了阵容",
-   "炎亚纶铁了心要上后会友期",
-   "韩国高考中国史题正确率不足一成",
-   "天气转凉避开关节用药误区",
-   "伊能静发长文谈后会友期",
-   "胖东来搬离后原址所开新商场几乎倒闭",
-   "这段爆破戏疑似AI做的"
-  ],
-  "中文圈热点 > 抖音热榜": [
-   "U17男足0:5西班牙",
-   "终于懂李白走到哪都写诗了",
-   "APEC红利看得见摸得着",
-   "哈登51分助骑士击败步行者",
-   "美国三大股指全线大跌",
-   "贺炜长文鼓励U17中国队",
-   "特朗普回应普京是否为美国朋友",
-   "灯火里的深圳 照见开放与活力",
-   "特朗普公开点赞深圳干净整洁",
-   "高市早苗搭话特朗普遭无视"
-  ],
-  "中文圈热点 > B站全站排行": [
-   "【登陆少年】朱志鑫21岁生日特别企划短片《署名》(Signature)",
-   "第一次在B站发视频，求关注！",
-   "THANK YOU ZmjjKK",
-   "尾随NPC的真实反应",
-   "【侠盗猎车手6】4K 最高画质 全网首发 全任务 全剧情流程通关攻略 开放世界冒险游戏 GTA6 - Grand Theft Auto VI",
-   "最败家的一次",
-   "美国总统特朗普：美国不支持“台独”",
-   "对不起 欺骗了大家这么久 以后不会了",
-   "Mili - City Blue（都市之蓝）",
-   "当我用AI续写爱情公寓4关谷悠悠婚礼【AI全民制作人】"
-  ],
-  "中文圈热点 > 今日头条热榜": [
-   "胖东来原址开的新商场几乎倒闭",
-   "高市搭讪特朗普被无视 日网民：丢人",
-   "APEC参会来宾眼中的“奇迹之城”",
-   "魏建军去许昌考察学习胖东来",
-   "特朗普被问普京是美国的好朋友吗",
-   "金价下跌 现在买金镯子还是再等等",
-   "特朗普称国际刑事法院“失控”",
-   "特朗普在深圳跳了YMCA",
-   "深圳华丽转型生动诠释APEC理念",
-   "魏德尔：大国谈判桌上已没有欧洲"
-  ],
-  "话题：科技（辅） > 最新新闻": [
-   "2027年度河南省科技攻关、软科学拟立项项目公示 - 科学网—新闻",
-   "尹力在北京市科学技术奖励大会上强调 推动北京（京津冀）国际科技创新中心跃升发展 努力打造科技强国建设的重要战略支点 殷勇主持 - 北京市人民政府门户网站",
-   "4万亿“灰飞烟灭”、疫情以来最惨烈的一周！美国科技股跌入熊市 - 华尔街见闻",
-   "算力争夺战打响？特朗普警告科技巨头：海外建数据中心，要交巨额税款！ - 财联社"
-  ],
-  "话题：科技（辅） > YouTube 最新视频": [
-   "Anthropic Gives Up Half Its Gains! Are Tech Stocks Due for a Rebound? AMD Shorted! Walmart’s New ...",
-   "资本家的大陷阱？AI科技股为何会危机四伏？Anthropic的上市会引起一场怎样的市场风暴？#AMD #NVDA #MU #tsm #avgo #tsla #intc #GOOGL",
-   "COP31聚焦減碳 AI科技助攻城市轉型",
-   "輝達成績單穩軍心!科技股回溫 明天換看Anthropic IPO表演...川習會即將登場｜主播 賴家瑩｜【新聞午夜場】20261118｜非凡財經新聞"
-  ],
-  "YouTube 全球热门": [
-   "Avengers: Doomsday | The Return | In Theaters December 18",
-   "skibidi toilet 83 (part 2)",
-   "🔴PLAYING GTA 6 EARLY ACCESS GAMEPLAY GET IN HERE!",
-   "I Survived 100 Hours In GTA 6",
-   "Whatever You Steal in GTA 6, You Keep!",
-   "NAYEON “BABY ANGEL” M/V",
-   "Anuel AA | SE TOCO EL T*TITO CON MI GL*CK (Video Oficial)",
-   "Me CONVERTÍ en REY OSCURO en Secreto en Minecraft!",
-   "Trailer final de Avengers Doomsday última fecha y nuevas escenas Magneto y Steve Rogers",
-   "JUGUÉ GTA 6 POR PRIMERA VEZ",
-   "GiiiRIP",
-   "GTA 6 Gameplay Walkthrough Part 1 FULL GAME [4K PS5 PRO",
-   "El Punto MÁS ALTO del Mapa (GTA VI)",
-   "INVENCIBLE Temporada 5 Tráiler Español Latino (2026)",
-   "SANTOS BRAVOS x &TEAM - “ORIGAMI” OFFICIAL MV"
+   "英伟达拒绝黄仁勋，史上最大的泡沫更脆弱了",
+   "英伟达遭美国证券交易委员会调查",
+   "学者谈英伟达停止对华供应H200芯片"
   ]
  }
 }
