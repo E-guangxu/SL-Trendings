@@ -163,6 +163,11 @@ MAX_PUSH_BYTES = 30000
 BOARD_PATH = os.environ.get("BOARD_PATH", "").strip()
 BOARD_EVERY_MIN = int(os.environ.get("BOARD_EVERY_MIN", "").strip() or "30")
 BOARD_RELOAD_SEC = int(os.environ.get("BOARD_RELOAD_SEC", "").strip() or "300")
+# 页面顶栏那行说明文字。云端是每天跑一次，写死"每 N 分钟"会骗人，所以允许整句覆盖。
+BOARD_EVERY_TEXT = os.environ.get("BOARD_EVERY_TEXT", "").strip()
+# BOARD_ALSO=1：写完看板后不要退出，继续走当日归档 + 推送。
+# 云端每日那次用它，一份数据同时产出 data/<date>.md（给微信/仓库）和 docs/index.html（给网页）。
+BOARD_ALSO = os.environ.get("BOARD_ALSO", "").strip().lower() in ("1", "true", "yes", "on")
 
 # 冗余触发的守卫：workflow 在同一小时内排了多个时间点互为备份（GitHub 的 cron
 # 在整点高负载时会被延迟甚至直接丢弃）。设 FORCE=1 忽略"今天已跑过"的检查强制重跑。
@@ -1091,6 +1096,7 @@ def render_board(report, stamp, interval=None, new_idx=None, new_count=0, has_ba
     new_idx 是「本轮新增」的行号集合，命中的 li 会加 .is-new 高亮。"""
     if interval is None:
         interval = BOARD_RELOAD_SEC
+    every_text = BOARD_EVERY_TEXT or ("每 %d 分钟重抓" % BOARD_EVERY_MIN)
     body, in_list = [], False
     new_idx = new_idx or set()
 
@@ -1203,7 +1209,7 @@ def render_board(report, stamp, interval=None, new_idx=None, new_count=0, has_ba
   <span class="dot"></span>
   <span>更新于 <b>%(stamp)s</b></span>
   <span>·</span>
-  <span>每 %(every)d 分钟重抓，页面 <b id="cd">%(iv)d</b> 秒后自动刷新</span>
+  <span>%(every_text)s，页面 <b id="cd">%(iv)d</b> 秒后自动刷新</span>
   %(chip)s
 </div>
 %(body)s
@@ -1216,7 +1222,7 @@ def render_board(report, stamp, interval=None, new_idx=None, new_count=0, has_ba
   }, 1000);
 </script>
 </body></html>""" % {"iv": interval, "stamp": stamp, "body": "\n".join(body), "chip": chip,
-       "every": BOARD_EVERY_MIN}
+       "every_text": every_text}
 
 
 def _push_once(title, body):
@@ -1336,7 +1342,8 @@ def main():
         save_board_state(state_file, stamp, sections)
         print("[board] 已更新 %s（%d 条，新增 %d 条，%d 字节）"
               % (target, n_items, n_new, len(report.encode("utf-8"))))
-        return
+        if FREQUENT or not BOARD_ALSO:
+            return
 
     if FREQUENT:
         # 只留一份覆盖文件，不写按日文件、不动 latest.md

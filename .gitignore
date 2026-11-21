@@ -5,4 +5,7 @@ __pycache__/
 board.html
 board.html.state.json
 *.state.json
+# 例外：云端网页版的状态文件要跟着仓库走，否则每次运行都没有上一轮基准，
+# 首页会变成"所有条目都是新增"。
+!docs/*.state.json
 logs/

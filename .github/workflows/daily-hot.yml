@@ -117,6 +117,14 @@ jobs:
           CN_HOT: ${{ github.event.inputs.cn_hot || 'true' }}
           # 高频档的静默时段（北京时区）：8 点到 23 点。想全天就改成 "0-24"
           ACTIVE_HOURS: '8-23'
+          # 网页版：每日那次额外产出 docs/index.html，交给 GitHub Pages 托管，
+          # 任何设备打开网址就能看，不用装 Python、不用传文件。
+          # 只在 daily 出：adhoc 是临时查询、frequent 是速报体，都不该覆盖对外的首页。
+          BOARD_PATH: ${{ env.MODE == 'daily' && 'docs/index.html' || '' }}
+          # 写完网页后不要提前退出，继续归档 data/<date>.md 并推送微信
+          BOARD_ALSO: '1'
+          BOARD_EVERY_TEXT: '每日 08:00 更新'
+          BOARD_RELOAD_SEC: '600'
         run: python scripts/hot.py
 
       - name: 提交结果
