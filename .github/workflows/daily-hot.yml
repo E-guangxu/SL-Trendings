@@ -125,7 +125,9 @@ jobs:
           BOARD_ALSO: '1'
           BOARD_EVERY_TEXT: '每日 08:00 更新'
           BOARD_RELOAD_SEC: '600'
-        run: python scripts/hot.py
+        run: |
+          echo "MODE=$MODE  BOARD_PATH=${BOARD_PATH:-（空，本次不产出网页）}"
+          python scripts/hot.py
 
       - name: 提交结果
         if: env.MODE != 'frequent'
