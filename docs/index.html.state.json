@@ -1,60 +1,59 @@
 {
- "updated": "11-21 16:30:20",
+ "updated": "11-22 07:50:38",
  "sections": {
   "Hacker News（海外科技圈 · 按 分/小时）": [
-   "Levent Alpöge claims proof of the Generalized Riemann Hypothesis [pdf",
+   "Lean verification of the Riemann Hypothesis",
    "Hurried Announcement: Alessandro Masullo GRH",
+   "Inkling-2-Mini in 5.4 GB Memory",
    "Inkling 2 Mini",
+   "Detonating a pile of lead azide",
+   "My monitor was cutting my download speed by 75%",
    "We promoted developers into architects without informing them",
-   "Unforced Navier-Stokes Singularity and the Generalized Riemann Hypothesis",
-   "Language Models Can Rewrite Their Own Weights",
-   "The stochastic parrots have apparently proved the Riemann Hypothesis",
-   "Finite-time blow-up for the Navier–Stokes equations",
-   "DreamCoder: Coding harness and IDE from the author of Mastering Emacs",
-   "Nasdaq erases all 2026 gains as AI sell-off dampens Anthropic’s second day",
-   "ClawDOS – An AI coding agent for DOS",
-   "Slopstrap – Make your site look hastily vibecoded"
+   "Pill to treat pancreatic cancer hailed as 'biggest breakthrough in decades'",
+   "PostgreSQL Extensions in Go",
+   "Advice for the next 100 Rust GUIs",
+   "RCE in Gnupg",
+   "Show HN: Zero C# – C# without a runtime or GC"
   ],
   "GitHub 热榜（近 7 天新项目 · 按 ★/天）": [
+   "ItsNotRexed/Leonida",
    "erkamyaman/rust-anything",
+   "omonkeyz/xbox-emulator",
    "krisgfx9/Wireless-Device-Battery-Monitor",
    "bookwjitchieni1986/blender-ai-mcp-addon",
+   "R0Y00/Xbox2Windows",
    "iamajmeena/neonclipping",
-   "sybil-solutions/inference-optimisation-skill",
-   "nataphong-lab/Open-Source-Face-Recognition-Ultimate",
-   "joshpuckett/allo",
-   "Lemxy/WinRust"
+   "sybil-solutions/inference-optimisation-skill"
   ],
   "实验室动态（近 72 小时）": [
    "Combatting adversarial distillation",
-   "Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
-   "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
    "Hebbia sees improvements in financial research with GPT-6 Astra",
    "Can AI help scientists identify promising drug candidates?",
+   "Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
+   "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
    "How OpenAI’s Performance Factory keeps ChatGPT fast",
    "Explore the Codex Security Plugin",
    "See PR scans in action"
   ],
   "前沿资讯（近 24 小时）": [
    "南水北调“天河”大模型完成升级",
-   "李斌：当下游客户竞争不激烈时，AI大模型反会陷入“价格战”",
-   "木林森：拟投资22.5亿元建设半导体芯片封测项目",
-   "成都企业推出两款工程 AI 智能终端，云端加密与本地部署并进",
-   "英伟达单日暴跌14.01%，但斌：仍坚持人工智能十年牛市的判断",
-   "成都⇆吉隆坡 创新同行，共拓科技合作新空间",
-   "18项任务划重点！未来五年湖南将这样推进“人工智能+教育”",
-   "华泰证券尝试金融中台AI实践：研究Agent矩阵跟踪，债务监测压缩至小时级",
-   "江苏发布“人工智能+金融”三年行动方案 到2028年培育百个典型应用场景",
-   "腾讯混元团队称Hy4仍有很大改进空间"
+   "首批五座昇腾AI词元工厂落地！江苏AI产业发展按下“快充键”",
+   "新质生产力大咖说·AI季｜城市大脑的“智控”密码",
+   "Anthropic上市未能止住美股暴跌 华尔街追问什么能拯救AI交易",
+   "双创半导体ETF来了！10家基金公司集体出手",
+   "思想者｜胡延平：打造智能经济新形态，为何需要“生态算法”？",
+   "[朝闻天下",
+   "一款智能盒子，服务20多个行业（创业创富的年轻人） --经济·科技",
+   "最新 | 试题经过大模型测试？官方连夜声明！",
+   "英伟达，被查"
   ],
   "YouTube（近 24 小时发布 · 按 播放/小时）": [
-   "GPT-6.2 遭正面迎擊！谷歌 Gemini 4 Neon 憑什麼敢搶走 AI 霸主寶座？"
+   "November 2026 AI Industry Weekly Recap: Anthropic’s Record-Breaking IPO, AI Solves Century-Old Ma..."
   ],
   "国内 · AI / 科技 热度激增": [
-   "特朗普称不允许美企海外建数据中心",
-   "英伟达拒绝黄仁勋，史上最大的泡沫更脆弱了",
-   "博主：最担心有人说只有自己能管住AI",
-   "AI攻破黎曼猜想 100万美元奖金该给谁"
+   "AI剧里的太监都像太子",
+   "星芒O1 Pro与华为阔直板外观对比",
+   "特朗普一句话搅乱硅谷AI企业出海生意"
   ]
  }
 }
