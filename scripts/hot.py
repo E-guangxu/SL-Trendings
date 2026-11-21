@@ -392,6 +392,9 @@ BOARD_ALSO = os.environ.get("BOARD_ALSO", "").strip().lower() in ("1", "true", "
 # 冗余触发的守卫：workflow 在同一小时内排了多个时间点互为备份（GitHub 的 cron
 # 在整点高负载时会被延迟甚至直接丢弃）。设 FORCE=1 忽略"今天已跑过"的检查强制重跑。
 FORCE = os.environ.get("FORCE", "").strip().lower() in ("1", "true", "yes", "on")
+# 手动点「立即抓取」时由本地服务置 1：绕过 GitHub 的 1 小时缓存。
+# 定时轮次不设，走缓存 —— 星数是慢变量，重复抓只是白烧 API 配额。
+FORCE_GITHUB = os.environ.get("FORCE_GITHUB", "").strip().lower() in ("1", "true", "yes", "on")
 
 # 本地跑的时候，Clash 的出口 IP 被 Reddit 硬限流（实测每条都是 429，
 # 换 old.reddit 也是 302 跳走），重试只会浪费 20s+40s 的退避。
@@ -838,6 +841,10 @@ GITHUB_WINDOW_D = int(os.environ.get("GITHUB_WINDOW_D", "").strip() or "7")
 GITHUB_LIMIT = int(os.environ.get("GITHUB_LIMIT", "").strip() or "8")
 # 星/天下限。低于这个数的项目，热度曲线已经平了，不叫「激增」。
 GITHUB_MIN_SPD = float(os.environ.get("GITHUB_MIN_SPD", "").strip() or "120")
+# 缓存有效期（小时）。GitHub 的星数是慢变量：同一批仓库半小时也就涨 2~5 星，
+# 每 30 分钟重抓一次等于 12 次里有 11 次在做无用功，还占未认证 API 的配额。
+# 设 0 关闭缓存（云端每天只跑一次，缓存反而会让它拿到陈旧数据）。
+GITHUB_CACHE_H = float(os.environ.get("GITHUB_CACHE_H", "").strip() or "1")
 # 新项目榜里刷星营销号和资源合集占比很高，这些不是「前沿」，先挡掉。
 GITHUB_BLOCK = (
     "awesome-", "awesome_", "interview", "cheat", "crack", "keygen",
@@ -850,8 +857,50 @@ GITHUB_BLOCK = (
 # 空描述 + 高星速基本就是刷量空壳（实测 google-ultra 2555★、google-one-tools 466★ 都是空的）。
 
 
-def github_trending(limit=GITHUB_LIMIT):
-    """返回近 GITHUB_WINDOW_D 天新建、涨星最快的仓库，按 ★/天 排序。"""
+def _github_cache_path():
+    """缓存放在看板旁边，和 .state / .surge 同一套路。
+    没有看板路径（adhoc 等模式）时落到 data/ 下。"""
+    if BOARD_PATH:
+        p = pathlib.Path(BOARD_PATH)
+        return p.with_name(p.name + ".github.json")
+    return REPO_ROOT / "data" / ".github_cache.json"
+
+
+def _github_apply_age(rows, now_ts):
+    """按当前时间重算 age_h 与 ★/天。
+    缓存命中也走这一遍 —— 星数没变但仓库又老了几十分钟，
+    直接沿用缓存里的 spd 会让数字虚高。"""
+    for r in rows:
+        age_h = max((now_ts - r["created_ts"]) / 3600.0, 0.5)
+        r["age_h"] = age_h
+        r["spd"] = r["stars"] / (age_h / 24.0)
+    return rows
+
+
+def github_trending(limit=GITHUB_LIMIT, force=False):
+    """返回近 GITHUB_WINDOW_D 天新建、涨星最快的仓库，按 ★/天 排序。
+
+    force=True 绕过缓存，供「立即抓取」按钮用。"""
+    cache_path = _github_cache_path()
+    now_ts = time.time()
+
+    if not force and GITHUB_CACHE_H > 0 and cache_path.is_file():
+        try:
+            cache = json.loads(cache_path.read_text(encoding="utf-8"))
+            ts = float(cache.get("ts") or 0)
+            rows = cache.get("rows") or []
+            if rows and ts and (now_ts - ts) < GITHUB_CACHE_H * 3600:
+                _github_apply_age(rows, now_ts)
+                age_min = int((now_ts - ts) / 60)
+                for r in rows:
+                    r["cache_age_min"] = age_min
+                    r["cached"] = True
+                rows.sort(key=lambda r: -r["spd"])
+                plog("GitHub 命中缓存（%d 分钟前抓的，共 %d 条）" % (age_min, len(rows)))
+                return rows[:limit]
+        except Exception as exc:
+            print("[github] 缓存读取失败，改为重新抓取: %s" % exc)
+
     since = (datetime.date.today() - datetime.timedelta(days=GITHUB_WINDOW_D)).isoformat()
     q = urllib.parse.urlencode({
         "q": "created:>%s" % since,
@@ -861,7 +910,6 @@ def github_trending(limit=GITHUB_LIMIT):
     })
     raw = fetch_retry("https://api.github.com/search/repositories?" + q, retries=2, timeout=20)
     data = json.loads(raw)
-    now = datetime.datetime.now(datetime.timezone.utc)
     rows = []
     for it in data.get("items") or []:
         name = (it.get("full_name") or "").strip()
@@ -882,21 +930,33 @@ def github_trending(limit=GITHUB_LIMIT):
             ).replace(tzinfo=datetime.timezone.utc)
         except Exception:
             continue
-        age_h = max((now - t).total_seconds() / 3600.0, 0.5)
-        spd = stars / (age_h / 24.0)
-        if spd < GITHUB_MIN_SPD:
-            continue
         rows.append({
             "title": name,
             "url": it.get("html_url") or "",
-            "desc": (it.get("description") or "").strip(),
+            "desc": desc,
             "stars": stars,
             "forks": int(it.get("forks_count") or 0),
             "lang": (it.get("language") or "").strip(),
-            "age_h": age_h,
-            "spd": spd,
+            "created_ts": t.timestamp(),
         })
+
+    _github_apply_age(rows, now_ts)
+    rows = [r for r in rows if r["spd"] >= GITHUB_MIN_SPD]
     rows.sort(key=lambda r: -r["spd"])
+
+    # 缓存存全量（不只是前 limit 条），下次命中时能直接排。
+    if GITHUB_CACHE_H > 0:
+        try:
+            cache_path.parent.mkdir(parents=True, exist_ok=True)
+            keep = ("title", "url", "desc", "stars", "forks", "lang", "created_ts")
+            cache_path.write_text(
+                json.dumps({"ts": now_ts, "rows": [{k: r[k] for k in keep} for r in rows]},
+                           ensure_ascii=False),
+                encoding="utf-8",
+            )
+        except Exception as exc:
+            print("[warn] 写 GitHub 缓存失败（不影响本轮）: %s" % exc)
+
     return rows[:limit]
 
 
@@ -1497,7 +1557,7 @@ def github_section(lines):
     lines.append("## GitHub 热榜（近 %d 天新项目 · 按 ★/天）" % GITHUB_WINDOW_D)
     lines.append("")
     try:
-        rows = github_trending()
+        rows = github_trending(force=FORCE_GITHUB)
     except Exception as exc:
         lines.append("(抓取失败: %s)" % exc)
         lines.append("")
@@ -1522,6 +1582,12 @@ def github_section(lines):
             lines.append("%d. %s · %s · %s" % (i, head, desc, " · ".join(meta)))
         else:
             lines.append("%d. %s · %s" % (i, head, " · ".join(meta)))
+    if rows and rows[0].get("cached"):
+        lines.append("")
+        lines.append(
+            "(%d 小时更新一次；本段数据为 %d 分钟前抓取，点页面顶部「立即抓取」可强制刷新)"
+            % (GITHUB_CACHE_H, rows[0].get("cache_age_min") or 0)
+        )
     lines.append("")
 
 
@@ -1883,7 +1949,6 @@ def render_board(report, stamp, interval=None, new_idx=None, new_count=0, has_ba
 
     return """<!DOCTYPE html>
 <html lang="zh-CN"><head><meta charset="utf-8">
-<meta http-equiv="refresh" content="%(iv)d">
 <title>热点看板 · %(stamp)s</title>
 <style>
   :root { color-scheme: light; }
@@ -1931,6 +1996,15 @@ def render_board(report, stamp, interval=None, new_idx=None, new_count=0, has_ba
           border: 1px solid #e6e8eb; background: #f6f8fa; color: #57606a; }
   .chip-new { background: #fff8c5; border-color: #e9c352; color: #7d4e00; font-weight: 600; }
   .chip-base { background: #eef4ff; border-color: #c7d8f7; color: #0a4ea8; }
+  .btn {
+    margin-left: auto; padding: 4px 14px; border-radius: 6px;
+    border: 1px solid #d0d7de; background: #fff; color: #1f2328;
+    font-size: 13px; font-weight: 600; font-family: inherit; cursor: pointer;
+  }
+  .btn:hover { background: #f3f4f6; border-color: #afb8c1; }
+  .btn:disabled { opacity: .5; cursor: progress; }
+  #rf-tip { color: #57606a; }
+  #rf-tip.err { color: #cf222e; }
   a { color: #0969da; text-decoration: none; }
   a:hover { text-decoration: underline; }
   main > p { color: #57606a; }
@@ -1942,15 +2016,61 @@ def render_board(report, stamp, interval=None, new_idx=None, new_count=0, has_ba
   <span>·</span>
   <span>%(every_text)s，页面 <b id="cd">%(iv)d</b> 秒后自动刷新</span>
   %(chip)s
+  <button id="rf" class="btn" type="button">立即抓取</button>
+  <span id="rf-tip"></span>
 </div>
 %(body)s
 </main>
 <script>
-  var left = %(iv)d;
+(function () {
+  var IV = %(iv)d, left = IV, busy = false;
+  var cd = document.getElementById('cd');
+  var btn = document.getElementById('rf');
+  var tip = document.getElementById('rf-tip');
+
+  // 按钮要打本地服务。页面由服务提供时同源；用 file:// 双击打开时打 8765。
+  // 线上（github.io）没有服务，隐藏按钮而不是让它点了报错。
+  var host = location.hostname;
+  var isLocal = host === '127.0.0.1' || host === 'localhost';
+  var API = isLocal ? '' : 'http://127.0.0.1:8765';
+  if (!isLocal && location.protocol !== 'file:') {
+    btn.style.display = 'none';
+  }
+
+  // 不用 meta refresh：它在抓取过程中也可能触发整页重载，
+  // 把正在等待的请求连同按钮状态一起清掉。
   setInterval(function () {
-    left = left > 0 ? left - 1 : %(iv)d;
-    document.getElementById('cd').textContent = left;
+    if (busy) return;
+    left -= 1;
+    if (left <= 0) { location.reload(); return; }
+    cd.textContent = left;
   }, 1000);
+
+  btn.addEventListener('click', function () {
+    if (busy) return;
+    busy = true;
+    btn.disabled = true;
+    btn.textContent = '抓取中…';
+    tip.className = '';
+    tip.textContent = '约 15 秒';
+    fetch(API + '/api/refresh', { method: 'POST' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j || !j.ok) throw new Error((j && j.error) || '抓取失败');
+        tip.textContent = '完成，正在刷新…';
+        setTimeout(function () { location.reload(); }, 400);
+      })
+      .catch(function (e) {
+        busy = false;
+        btn.disabled = false;
+        btn.textContent = '立即抓取';
+        tip.className = 'err';
+        tip.textContent = (e.message === 'Failed to fetch')
+          ? '连不上服务，双击桌面「启动看板服务」'
+          : e.message;
+      });
+  });
+})();
 </script>
 </body></html>""" % {"iv": interval, "stamp": stamp, "body": "\n".join(body), "chip": chip,
        "every_text": every_text}

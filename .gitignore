@@ -12,4 +12,10 @@ board.html.state.json
 # 热度涨速的历史基线（算「这段时间涨了多少」用），同样只留云端那份
 *.surge.json
 !docs/*.surge.json
+
+# GitHub 热榜的 1 小时缓存。纯本机节流用：云端每天只跑一次，
+# 命中缓存反而会拿到昨天的星数，所以那边 GITHUB_CACHE_H=0 关掉，
+# 缓存文件也不该进仓库。
+*.github.json
+
 logs/
