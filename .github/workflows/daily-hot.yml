@@ -117,6 +117,16 @@ jobs:
           CN_HOT: ${{ github.event.inputs.cn_hot || 'true' }}
           # 高频档的静默时段（北京时区）：8 点到 23 点。想全天就改成 "0-24"
           ACTIVE_HOURS: '8-23'
+          # 涨速基线窗口。云端是**一天跑一次**，间隔 24 小时 —— 用本机那套 6 小时
+          # 窗口的话每轮都会「基线过期 → 重新起算」，永远算不出涨幅。
+          # 所以这里放到 30 小时，等价于给出「过去一天的涨幅」。
+          SURGE_WINDOW_H: '30'
+          SURGE_MIN_SPAN_H: '1'
+          # 时间窗同理：本机 30 分钟一轮用 12 小时刚好，云端一天一次要看满 24 小时
+          NEWS_WINDOW_H: '24'
+          LAB_FRESH_H: '72'
+          YT_LIVE_H: '24'
+          HN_MAX_AGE_H: '48'
           # 网页版：每日那次额外产出 docs/index.html，交给 GitHub Pages 托管，
           # 任何设备打开网址就能看，不用装 Python、不用传文件。
           # 只在 daily 出：adhoc 是临时查询、frequent 是速报体，都不该覆盖对外的首页。

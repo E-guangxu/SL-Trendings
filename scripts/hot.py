@@ -33,6 +33,7 @@ import pathlib
 import urllib.request
 import urllib.parse
 import urllib.error
+import concurrent.futures
 
 UA = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
@@ -143,6 +144,225 @@ def topic_query(topic):
 # 但 B站 会间歇性返回 code=-352（风控），所以逐源容错：单源失败只跳过它自己，不影响整体。
 CN_HOT = (os.environ.get("CN_HOT", "").strip().lower() or "on") not in ("0", "false", "no", "off")
 CN_HOT_LIMIT = int(os.environ.get("CN_HOT_LIMIT", "").strip() or "10")
+
+# ==================== 范围过滤与涨速引擎（2026-11-21）====================
+# 用户诉求：① 只要 AI / 科技，无关的一律不进版；② 不要平台热搜排行罗列；
+# ③ 要「一段时间内浏览/热度激增」的具体帖子与新闻。
+# 所以整份报告的骨架从「按平台列榜」改成「按热度涨速排序」。
+AI_ONLY = (os.environ.get("AI_ONLY", "").strip().lower() or "on") not in ("0", "false", "no", "off")
+
+# 中文/通用白名单：命中即收。国内热榜噪声极大（娱乐、社会新闻占九成），
+# 必须用「白名单命中」而不是「黑名单剔除」，否则永远滤不干净。
+AI_TERMS_CN = (
+    "人工智能", "大模型", "大语言模型", "多模态", "智能体", "算法", "算力", "芯片",
+    "半导体", "光刻", "晶圆", "GPU", "CPU", "NPU", "TPU", "数据中心", "液冷", "光模块",
+    "云计算", "边缘计算", "量子计算", "量子芯片", "核聚变", "机器人", "人形机器人",
+    "具身智能", "自动驾驶", "无人驾驶", "智能驾驶", "无人机", "脑机", "神经网络",
+    "机器学习", "深度学习", "强化学习", "开源", "编程", "程序员", "开发者", "代码",
+    "操作系统", "数据库", "网络安全", "黑客", "漏洞", "稀土", "光伏", "储能", "电池",
+    "科创板", "科技", "硬科技", "黑科技", "数码", "智能手机", "折叠屏", "卫星", "航天",
+    "火箭", "星链", "元宇宙", "虚拟现实", "增强现实", "空间计算", "智能眼镜",
+    "AI", "AGI", "AIGC", "LLM", "GPT", "ChatGPT", "OpenAI", "Anthropic", "Claude",
+    "Gemini", "Llama", "DeepSeek", "Qwen", "Kimi", "Sora", "Midjourney", "Copilot",
+    "NVIDIA", "英伟达", "AMD", "英特尔", "Intel", "台积电", "ASML", "特斯拉", "Tesla",
+    "SpaceX", "苹果", "Apple", "华为", "小米", "字节", "腾讯", "阿里", "百度", "Meta",
+    "微软", "Microsoft", "谷歌", "Google", "三星", "Samsung", "高通", "联发科",
+)
+# 这些是「看着像科技、其实是消费/娱乐」的高频误命中，命中就丢掉。
+# 比如「苹果」既是公司也是水果，「特斯拉」也会出现在车祸社会新闻里。
+AI_TERMS_BLOCK = (
+    "苹果价格", "苹果滞销", "苹果丰收", "吃苹果", "苹果园", "卖苹果",
+    "特斯拉车祸", "特斯拉自燃", "小米粥", "小米辣", "小米椒", "小米种植",
+    "华为手机壳", "明星", "恋情", "结婚", "离婚", "分手", "出轨", "塌房",
+    "综艺", "电视剧", "电影票房", "演唱会", "选秀", "网红", "直播带货",
+    "世界杯", "奥运会", "足球", "篮球", "彩票", "星座", "算命",
+    # 含 AI 但本质是娱乐二次创作：鬼畜、AI 翻唱、AI MV 大赛。
+    # 这类在国内视频平台上量很大，不挡的话 B 站段会被它们占满。
+    "鬼畜", "AI翻唱", "AI MV", "MV大赛", "整活", "沙雕", "二创", "同人",
+    "AI续写", "全民制作人",
+)
+
+# 英文术语必须自己划边界：Python 的 \b 把中文也算 \w，
+# 所以 "AI技术" 里 `\bAI\b` 匹配不到。用显式前后否定更可靠。
+_EN_TERM_RE = re.compile(
+    r"(?<![A-Za-z0-9])(?:AI|AGI|AIGC|LLM|GPT|GPU|CPU|NPU|TPU|API|SDK|RAG|"
+    r"OpenAI|Anthropic|Claude|Gemini|Llama|DeepSeek|Qwen|Kimi|Sora|Midjourney|"
+    r"Copilot|NVIDIA|AMD|Intel|Tesla|SpaceX|Meta|Microsoft|Google|Samsung|"
+    r"Apple|AWS|Azure|Kubernetes|Linux|Rust|Python|GitHub)(?![A-Za-z0-9])",
+    re.I,
+)
+_CN_TERM_SET = tuple(t for t in AI_TERMS_CN if t.isascii() is False)
+_EN_TERM_SET = tuple(t for t in AI_TERMS_CN if t.isascii())
+
+
+# 这几个词太泛：热榜里「某科技公司发布会」「新款数码产品」大多是消费导购，
+# strict 模式下不算命中，用于国内榜单这种必须从严的源。
+_WEAK_TERMS = ("科技", "数码", "黑科技", "硬科技", "智能手机")
+
+# 娱乐内容的强特征。必须单独拦一道：像「黄俊捷出道十周年苹果烟花」这种，
+# 靠「苹果」命中了公司白名单，但整条是粉丝应援，和科技毫无关系。
+# 黑名单式短语（"明星""恋情"）盖不住这种变体，只能认「出道/应援/专辑」这类词。
+_ENTERTAIN_MARK = (
+    "出道", "应援", "粉丝", "新歌", "专辑", "杀青", "番位", "塌房", "打榜",
+    "演唱会", "追星", "爱豆", "剧组", "预告片",
+)
+
+
+def is_ai_tech(text, strict=False):
+    """判断一条内容是否属于 AI / 科技范围。
+
+    strict=True 用于国内热榜、YouTube 搜索这类噪声源：命中黑名单直接否，
+    且「科技/数码」这种泛词不算数 —— 否则一条手机促销也能混进来。
+    HN / 官方博客这类源天然就是科技内容，不必过滤。
+    """
+    if not AI_ONLY:
+        return True
+    s = (text or "").strip()
+    if not s:
+        return False
+    for bad in AI_TERMS_BLOCK:
+        if bad in s:
+            return False
+    if strict and any(w in s for w in _ENTERTAIN_MARK):
+        return False
+    if _EN_TERM_RE.search(s):
+        return True
+    for t in _CN_TERM_SET:
+        if t in s:
+            if strict and t in _WEAK_TERMS:
+                continue
+            return True
+    # 英文术语只能走上面的边界正则 —— 拿 "AI" 当子串搜会命中 said/trail/email，
+    # 那是把整条时间线都放进来，等于没过滤。
+    return False
+
+
+# ---- 涨速：每小时热度 ----
+# 两种算法，取决于这个源能不能给出「绝对热度 + 存在时长」：
+#   A) 绝对速度（HN 分数、YouTube 播放量）：vph = heat / age_h
+#   B) 跨轮增量（微博/抖音/头条/B站 只给当前热度值）：vph = Δheat / Δt
+SURGE_WINDOW_H = float(os.environ.get("SURGE_WINDOW_H", "").strip() or "6")
+# 新条目至少要观测这么久才算得出可信涨速（不然 30 分钟内的小波动会被放大成天文数字）
+SURGE_MIN_SPAN_H = float(os.environ.get("SURGE_MIN_SPAN_H", "").strip() or "0.4")
+# 「本轮最猛」摘要取几条
+SURGE_TOP_N = int(os.environ.get("SURGE_TOP_N", "").strip() or "6")
+
+
+def vph_abs(heat, age_h):
+    """绝对速度：把「当前热度」摊到它的存在时长上。
+    下限 0.5 小时，避免刚发布 3 分钟的帖子算出荒唐的天文数字。"""
+    try:
+        heat = float(heat)
+    except (TypeError, ValueError):
+        return 0.0
+    return heat / max(float(age_h or 0), 0.5)
+
+
+_SURGE_STATE_DEFAULT = ""
+
+
+def surge_state_path(board_path=""):
+    """涨速历史单独存一个文件 —— 看板的 sections 状态每轮全量覆盖，
+    没有「上一次的热度值」，不能拿它算增量。"""
+    env = os.environ.get("SURGE_STATE", "").strip()
+    if env:
+        return pathlib.Path(env)
+    base = board_path or BOARD_PATH or str(REPO_ROOT / "data" / "surge.html")
+    return pathlib.Path(str(base) + ".surge.json")
+
+
+def load_surge(path):
+    try:
+        raw = json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
+        items = raw.get("items")
+        return items if isinstance(items, dict) else {}
+    except Exception:
+        return {}
+
+
+def bump_surge(prev, key, heat, now_ts):
+    """把本条的最新热度并入历史，返回 (新记录, 增量信息或 None)。
+
+    记录结构 {first:[热度,时间], last:[热度,时间]}：
+    first 是窗口起点，超过 SURGE_WINDOW_H 就往后挪一格，
+    这样算出来的是「最近最多 6 小时的平均涨速」，单轮抓取失败也不会丢基线。
+    """
+    try:
+        heat = float(heat)
+    except (TypeError, ValueError):
+        return None, None
+    rec = prev.get(key)
+    if not isinstance(rec, dict) or not rec.get("first"):
+        return {"first": [heat, now_ts], "last": [heat, now_ts]}, None
+    first_h, first_t = rec["first"]
+    last_h, last_t = rec.get("last") or [first_h, first_t]
+    # 起点太旧：把上一轮的观测值提为新起点，重新起算窗口
+    if now_ts - first_t > SURGE_WINDOW_H * 3600:
+        first_h, first_t = last_h, last_t
+        if now_ts - first_t > SURGE_WINDOW_H * 3600:
+            first_h, first_t = heat, now_ts
+    span_h = (now_ts - first_t) / 3600.0
+    delta = heat - first_h
+    info = None
+    if span_h >= SURGE_MIN_SPAN_H:
+        # 注意这里**不要求 delta > 0**：热度回落的条目也要返回信息，
+        # 否则调用方会把「明明有基线、只是没涨」误判成「还没建立基线」。
+        info = {"delta": delta, "span_h": span_h, "vph": delta / span_h,
+                "base": first_h, "heat": heat}
+    return {"first": [first_h, first_t], "last": [heat, now_ts]}, info
+
+
+def prune_surge(items, now_ts):
+    """只留 24 小时内还在更新的条目，防止状态文件无限膨胀。"""
+    out = {}
+    for k, rec in items.items():
+        try:
+            last_t = (rec.get("last") or rec.get("first"))[1]
+        except Exception:
+            continue
+        if now_ts - last_t <= 24 * 3600:
+            out[k] = rec
+    return out
+
+
+def save_surge(path, items, now_ts):
+    try:
+        pathlib.Path(path).parent.mkdir(parents=True, exist_ok=True)
+        pathlib.Path(path).write_text(
+            json.dumps({"updated": int(now_ts), "items": items},
+                       ensure_ascii=False, separators=(",", ":")),
+            encoding="utf-8",
+        )
+    except Exception as exc:
+        print("[warn] 写涨速状态失败（本轮无法算增量）: %s" % exc)
+
+
+def fmt_num(v):
+    """热度数字人读友好：12345 → 1.2万。"""
+    try:
+        v = float(v)
+    except (TypeError, ValueError):
+        return ""
+    if v >= 1e8:
+        return "%.1f亿" % (v / 1e8)
+    if v >= 1e4:
+        return "%.1f万" % (v / 1e4)
+    if v >= 1000:
+        return "%.0f" % v
+    return "%.0f" % v
+
+
+def speed_text(vph, delta=None, span_h=None, unit=""):
+    """涨速的展示文案。
+    绝对速度：`148分/h`；跨轮增量：`+12.4万 / 2.1h（5.9万/h）`。"""
+    if vph is None:
+        return ""
+    if delta is not None and span_h:
+        # 不足 1 小时就说「25 分钟」，比 "0.4h" 直观得多
+        span = ("%.1fh" % span_h) if span_h >= 1 else ("%d 分钟" % max(1, round(span_h * 60)))
+        return "+%s / %s（%s%s/h）" % (fmt_num(delta), span, fmt_num(vph), unit)
+    return "%s%s/h" % (fmt_num(vph), unit)
+
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parent.parent
 TOPICS_FILE = REPO_ROOT / "config" / "topics.txt"
@@ -462,46 +682,238 @@ def yt_channel_latest(channel_id, limit=5):
     return out
 
 
-def gnews_topic(query, limit=TOPIC_NEWS_LIMIT):
-    """Google News RSS 搜索。无需 key、无需登录，是最稳的话题新闻源。
-    标题形如「标题 - 来源」，保持原样更有信息量。"""
+# 资讯的时间窗。12 小时是权衡出来的：再短会漏掉「昨晚发生、今早发酵」的，
+# 再长就开始混进已经凉掉的旧闻。
+NEWS_WINDOW_H = float(os.environ.get("NEWS_WINDOW_H", "").strip() or "12")
+
+# 中文科技新闻里一大半是活动稿和政务通稿：「XX 论坛圆满收官」「XX 座谈会召开」
+# 「某地擘画 AI 产业蓝图」。它们含 AI/科技关键词，但没有任何前沿信息 ——
+# 这是「前沿资讯」里最该滤掉的一类，比娱乐八卦更耗注意力。
+NEWS_TITLE_BLOCK = (
+    "论坛", "峰会", "揭牌", "签约", "圆满", "共话", "擘画", "调研", "座谈",
+    "走访", "宣讲", "党建", "主题教育", "开幕式", "闭幕式", "发布会现场",
+)
+
+
+def fmt_age(pub):
+    """把 RSS 的 pubDate 换算成「几分钟前」。看板上「什么时候发生的」
+    比「Sat, 21 Nov 2026」有用得多。"""
+    if not pub:
+        return ""
+    try:
+        from email.utils import parsedate_to_datetime
+        dt = parsedate_to_datetime(pub)
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
+        h = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 3600.0
+        if h < 0:
+            return "刚刚"
+        if h < 1:
+            return "%d 分钟前" % max(1, int(h * 60))
+        if h < 24:
+            return "%.0f 小时前" % h
+        return "%.0f 天前" % (h / 24)
+    except Exception:
+        return pub[:16]
+
+
+def _pub_ts(text):
+    """RSS pubDate → epoch 秒；解析不了给 0（排序时沉底）。"""
+    try:
+        from email.utils import parsedate_to_datetime
+        dt = parsedate_to_datetime(text or "")
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
+        return dt.timestamp()
+    except Exception:
+        return 0.0
+
+
+def gnews_topic(query, limit=TOPIC_NEWS_LIMIT, hours=12):
+    """Google News RSS 搜索，**限定时间窗**。
+
+    `when:Nh` 是这次改造的关键 —— 不加时间窗时返回的是「相关度排序」，
+    里面混着两周前的旧闻；而「前沿资讯」的价值全在「刚刚发生」。
+    同一条新闻会被几十家媒体转载，按标题归并后用转载家数当热度信号：
+    3 家同时报的，比只有 1 家报的更值得看。
+    """
+    q = query if not hours else "%s when:%dh" % (query, int(hours))
     url = "https://news.google.com/rss/search?" + urllib.parse.urlencode(
-        {"q": query, "hl": "zh-CN", "gl": "CN", "ceid": "CN:zh-Hans"}
+        {"q": q, "hl": "zh-CN", "gl": "CN", "ceid": "CN:zh-Hans"}
     )
     xml = fetch_retry(url)
-    out = []
-    for item in re.findall(r"<item>([\s\S]*?)</item>", xml)[:limit]:
+
+    buckets, order = {}, []
+    for item in re.findall(r"<item>([\s\S]*?)</item>", xml)[: max(limit * 5, 25)]:
         t = re.search(r"<title>([\s\S]*?)</title>", item)
         l = re.search(r"<link>([\s\S]*?)</link>", item)
         d = re.search(r"<pubDate>([\s\S]*?)</pubDate>", item)
-        title = html.unescape(t.group(1).strip()) if t else "(无标题)"
-        pub = d.group(1).strip()[:16] if d else ""
-        out.append((title, l.group(1).strip() if l else "", pub))
+        if not t:
+            continue
+        full = clean_title(t.group(1))
+        # Google News 的标题统一是「正文标题 - 媒体名」。多数用 " - "，
+        # 但不少中文源省略空格写成 "标题-媒体名"，两种都要认。
+        m = re.search(r"\s+-\s+([^-]{2,24})$", full) or re.search(r"-([^-]{2,12})$", full)
+        head, src = (full[: m.start()].strip(), m.group(1).strip()) if m else (full, "")
+        key = re.sub(r"[\s\W_]+", "", head)[:44]
+        if not key:
+            continue
+        if key in buckets:
+            buckets[key]["n"] += 1
+            continue
+        pub_raw = d.group(1).strip() if d else ""
+        buckets[key] = {
+            "title": head,
+            "url": l.group(1).strip() if l else "",
+            "age": fmt_age(pub_raw),
+            "ts": _pub_ts(pub_raw),
+            "src": src,
+            "n": 1,
+        }
+        order.append(key)
+
+    out = [buckets[k] for k in order]
+    # 转载家数一样的（绝大多数），按发生时间新→旧。前沿资讯里「最新」本身就是信息。
+    out.sort(key=lambda x: (-x["n"], -x["ts"]))
+    return out[:limit]
+
+
+# ---- Hacker News（海外科技圈最快、最干净的激增信号）----
+# Algolia 一次请求就把 30 条首页帖连同 points / 发布时间 / 评论数一起返回，
+# 比官方 API 逐个拉 item 快一个数量级（后者 60 条要 20s+）。
+# 分数 ÷ 存在时长 = 「每小时涨多少分」，这是最接近「热度激增」的量化指标。
+HN_MAX_AGE_H = float(os.environ.get("HN_MAX_AGE_H", "").strip() or "24")
+HN_MIN_SCORE = int(os.environ.get("HN_MIN_SCORE", "").strip() or "30")
+# HN 首页偶尔会漂上来音乐归档、隐私政策这种和科技无关的帖子。不做白名单过滤
+# （那会把「黎曼猜想证明」这类没有科技关键词的前沿数学一并误杀），
+# 只用一小组精确短语挡掉明显跑题的。
+HN_TITLE_BLOCK = (
+    "privacy policy", "terms of service", "cookie policy", "at collection",
+    "live archive", "who is hiring", "who wants to be hired", "unemployed",
+)
+
+
+def hn_stories(limit=12):
+    """返回 HN 首页里「新且涨得猛」的帖子，按每小时得分排序。"""
+    raw = fetch("https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=50",
+                timeout=25)
+    data = json.loads(raw)
+    now = time.time()
+    rows = []
+    for h in data.get("hits") or []:
+        title = (h.get("title") or "").strip()
+        if not title:
+            continue
+        low = title.lower()
+        if any(b in low for b in HN_TITLE_BLOCK):
+            continue
+        pts = h.get("points") or 0
+        ts = h.get("created_at_i") or 0
+        age_h = (now - ts) / 3600.0 if ts else 99
+        if age_h > HN_MAX_AGE_H or pts < HN_MIN_SCORE:
+            continue
+        oid = h.get("objectID") or ""
+        rows.append({
+            "title": title,
+            "url": h.get("url") or "https://news.ycombinator.com/item?id=%s" % oid,
+            "hn_url": "https://news.ycombinator.com/item?id=%s" % oid,
+            "heat": float(pts),
+            "heat_text": "%d 分" % pts,
+            "comments": h.get("num_comments") or 0,
+            "age_h": age_h,
+            "vph": vph_abs(pts, age_h),
+            "source": "Hacker News",
+        })
+    rows.sort(key=lambda r: -r["vph"])
+    return rows[:limit]
+
+
+# ---- AI 实验室官方博客（最前沿的一手信息，不需要猜）----
+# 这些源更新慢（几天一条），所以按「近 N 小时」过滤，没有就整段不出现 ——
+# 免得看板上永远是同一条旧新闻。
+LAB_FEEDS = [
+    ("OpenAI", "https://openai.com/news/rss.xml"),
+    ("Google DeepMind", "https://deepmind.google/blog/rss.xml"),
+    ("Hugging Face", "https://huggingface.co/blog/feed.xml"),
+]
+LAB_FRESH_H = float(os.environ.get("LAB_FRESH_H", "").strip() or "48")
+
+
+def _lab_one(feed):
+    """抓单个实验室博客。失败返回空表 —— 一家挂了不影响其他家。"""
+    name, url = feed
+    try:
+        xml = fetch_retry(url, retries=2, timeout=25)
+    except Exception as exc:
+        print("[lab] %s 抓取失败: %s" % (name, exc))
+        return []
+    out = []
+    for item in re.findall(r"<item>([\s\S]*?)</item>", xml)[:15]:
+        t = re.search(r"<title>([\s\S]*?)</title>", item)
+        l = re.search(r"<link>([\s\S]*?)</link>", item)
+        d = re.search(r"<pubDate>([\s\S]*?)</pubDate>", item)
+        if not t or not d:
+            continue
+        ts = _pub_ts(clean_title(d.group(1)))
+        if not ts:
+            continue
+        age_h = (time.time() - ts) / 3600.0
+        if age_h > LAB_FRESH_H:
+            continue
+        out.append({
+            "title": clean_title(t.group(1)),
+            "url": (l.group(1).strip() if l else ""),
+            "age_h": age_h,
+            "age": fmt_age(clean_title(d.group(1))),
+            "source": name,
+        })
     return out
+
+
+def lab_posts(limit=8):
+    """抓各家 AI 实验室博客的最新文章，只留近 LAB_FRESH_H 小时的。
+
+    三个 feed 并行抓 —— OpenAI 的 RSS 带全文，单个就将近 1MB，
+    串行跑光这一段就要 5 秒以上。"""
+    rows = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(LAB_FEEDS)) as pool:
+        for chunk in pool.map(_lab_one, LAB_FEEDS):
+            rows.extend(chunk)
+    rows.sort(key=lambda r: r["age_h"])
+    return rows[:limit]
 
 
 # 发布时间文本 → 天数。YouTube 会按界面语言给「17 小時前」或「17 hours ago」，
 # 繁体/简体都可能出现，所以单位要覆盖全。
+#
+# 2026-11-21 补：YouTube 实际返回的简体形式是 **`8h ago` / `4d ago` / `2m ago`**
+# 这种单字母缩写，原来的表里只有 hour/day 全词，导致 age 全部解析失败、
+# 播放量涨速算不出来（页面上只剩「总播放」）。单字母必须补上，
+# 且 "mo" 要排在 "m" 前面，否则「3 months」会被当成 3 分钟。
 _AGE_UNITS = [
     ("秒", 1.0 / 86400), ("second", 1.0 / 86400),
-    ("分鐘", 1.0 / 1440), ("分钟", 1.0 / 1440), ("分", 1.0 / 1440), ("minute", 1.0 / 1440),
-    ("小時", 1.0 / 24), ("小时", 1.0 / 24), ("hour", 1.0 / 24),
-    ("天", 1.0), ("day", 1.0),
-    ("週", 7.0), ("周", 7.0), ("week", 7.0),
-    ("個月", 30.0), ("个月", 30.0), ("month", 30.0),
-    ("年", 365.0), ("year", 365.0),
+    ("分鐘", 1.0 / 1440), ("分钟", 1.0 / 1440), ("分", 1.0 / 1440),
+    ("month", 30.0), ("mo", 30.0),
+    ("minute", 1.0 / 1440), ("min", 1.0 / 1440), ("m", 1.0 / 1440),
+    ("小時", 1.0 / 24), ("小时", 1.0 / 24), ("hour", 1.0 / 24), ("h", 1.0 / 24),
+    ("天", 1.0), ("day", 1.0), ("d", 1.0),
+    ("週", 7.0), ("周", 7.0), ("week", 7.0), ("w", 7.0),
+    ("個月", 30.0), ("个月", 30.0), ("month", 30.0), ("mo", 30.0),
+    ("年", 365.0), ("year", 365.0), ("y", 365.0),
 ]
+
+_AGE_RE = re.compile(
+    r"(\d+)\s*(秒|分鐘|分钟|分|小時|小时|天|週|周|個月|个月|年|"
+    r"seconds?|minutes?|months?|hours?|days?|weeks?|years?|mo|[hdwmy])",
+    re.I,
+)
 
 
 def age_days(text):
-    """把「1 天前」「4 年前」解析成天数；解析不出来返回 None。"""
+    """把「1 天前」「4d ago」解析成天数；解析不出来返回 None。"""
     if not text:
         return None
-    m = re.search(
-        r"(\d+)\s*(秒|分鐘|分钟|分|小時|小时|天|週|周|個月|个月|年|second|minute|hour|day|week|month|year)",
-        text,
-        re.I,
-    )
+    m = _AGE_RE.search(text)
     if not m:
         return None
     n = int(m.group(1))
@@ -510,6 +922,13 @@ def age_days(text):
         if key in u:
             return n * days
     return None
+
+
+def clean_title(text):
+    """RSS 标题里偶尔带 CDATA 包装（OpenAI 的 feed 就是），
+    不清掉会原样显示成 `<![CDATA[Combatting ...]]>`。"""
+    s = re.sub(r"<!\[CDATA\[([\s\S]*?)\]\]>", r"\1", text or "")
+    return html.unescape(s).strip()
 
 
 def _runs_text(node):
@@ -564,35 +983,86 @@ def _yt_search_raw(query, sp, cap):
     return raw
 
 
-def yt_search_recent(query, limit=TOPIC_YT_LIMIT):
-    """按话题找「最新视频」。
+def parse_views(text):
+    """`12万次观看` / `1.2M views` / `3,456 views` → 数字。"""
+    s = (text or "").replace(",", "").replace(" ", "")
+    m = re.search(r"([\d.]+)\s*(亿|万|M|K|B)", s, re.I)
+    if m:
+        try:
+            n = float(m.group(1))
+        except ValueError:
+            return 0.0
+        mul = {"亿": 1e8, "万": 1e4, "M": 1e6, "K": 1e3, "B": 1e9}.get(m.group(2).upper(), 1)
+        return n * mul
+    m = re.search(r"(\d+)", s)
+    return float(m.group(1)) if m else 0.0
 
-    返回 (items, note)。items 每项 (title, url, pub, views)。
-    note 是人类可读的说明，写进报告里，让你知道这一段的时效范围。
-    发布时间解析不出数字的一律保留（宁多勿漏）。
+
+# 搜索词。直接用话题名搜 "AI" 会回来一堆「零基础学 AI」的课程广告，
+# 加限定词能把结果压到「新闻 / 发布会 / 实测」这类有信息量的视频上。
+YT_QUERIES = {
+    "AI": "AI 最新进展",
+    "人工智能": "人工智能 最新",
+    "科技": "科技 前沿",
+}
+YT_LIVE_H = float(os.environ.get("YT_LIVE_H", "").strip() or "14")
+# YouTube 的时政/军事聚合号很爱在标题里挂「英伟达」「芯片」蹭流量，
+# 光靠科技白名单挡不住 —— 这类标题的落点在人物和冲突上，不在技术上。
+YT_TITLE_BLOCK = ("热搜", "时政", "大选", "普京", "泽连斯基", "军事", "六代机", "导弹",
+                  "鬼畜", "赖清德", "蔡英文", "卖台", "中共", "FBI", "Trump")
+
+
+def yt_search_recent(query, limit=TOPIC_YT_LIMIT):
+    """按话题找「正在涨」的视频。
+
+    这里做过一次方向修正：原来按「发布时间」排，只能说明它新，说明不了它火。
+    现在解析播放量，用 **播放量 ÷ 发布时长 = 每小时播放** 排序 ——
+    「刚发 6 小时已经 20 万播放」远比「发了 3 天 50 万播放」更值得看。
+    时间窗仍卡在 YT_LIVE_H 小时内，否则老视频的累计播放量会把指标彻底拉爆。
+
+    返回 (items, note)，items 每项是 dict。
     """
-    cap = max(limit * 4, 20)
-    best = None       # 任何一档里筛出来的最好结果
-    last_raw = None   # 全都筛空时，退回到原始结果
+    cap = max(limit * 5, 25)
     last_err = None
+    q = YT_QUERIES.get(query, query)
 
     for sp, max_age in YT_SP_TIERS:
+        # 时间窗收得比比对参数更紧：这里要的是「最近在涨」，不是「本月还行」
+        max_age = min(max_age, YT_LIVE_H)
         try:
-            raw = _yt_search_raw(query, sp, cap)
+            raw = _yt_search_raw(q, sp, cap)
         except Exception as exc:
             last_err = exc
             continue
-        last_raw = raw
-        fresh = [it for it in raw if age_days(it[2]) is None or age_days(it[2]) <= max_age]
-        if len(fresh) >= YT_MIN_ITEMS:
-            return fresh[:limit], "近 %d 天内" % max_age
-        if best is None or len(fresh) > len(best[0]):
-            best = (fresh, max_age)
+        rows = []
+        for title, url, pub, views in raw:
+            # 中文 YouTube 搜索污染很重：「AI 最新进展」会捞回军事、农业、时政
+            # 这类只是蹭到关键词的视频，必须按标题过一遍白名单和黑名单。
+            if not is_ai_tech(title):
+                continue
+            if any(b in title for b in YT_TITLE_BLOCK):
+                continue
+            a = age_days(pub)
+            if a is not None and a * 24 > max_age:
+                continue
+            v = parse_views(views)
+            age_h = (a * 24) if a is not None else None
+            rows.append({
+                "title": title, "url": url,
+                "heat": v, "heat_text": views,
+                "age_h": age_h,
+                "vph": vph_abs(v, age_h) if age_h else 0.0,
+                "views": v,
+            })
+        if not rows:
+            # 这一档在时间窗内确实没东西。**不要再试下一档**：max_age 已经被
+            # YT_LIVE_H 封顶，换 sp 只是放宽取样范围，过滤标准一模一样，
+            # 多试一次就是白等 3~5 秒。之前 46 秒一轮主要浪费在这里。
+            return [], "近 %d 小时内没有找到符合条件的视频" % YT_LIVE_H
+        # 有播放量的排前面；解析不出播放量的垫底但保留
+        rows.sort(key=lambda r: -r["vph"])
+        return rows[:limit], "近 %d 小时内发布，按每小时播放量排序" % max_age
 
-    if best and best[0]:
-        return best[0][:limit], "近 %d 天内（该话题近期视频较少）" % best[1]
-    if last_raw:
-        return last_raw[:limit], "未找到近期视频，以下为相关度排序（可能较旧）"
     raise last_err or RuntimeError("YouTube 搜索没拿到任何结果")
 
 
@@ -657,11 +1127,14 @@ def _cn_weibo(j, limit):
         if not word:
             continue
         tag = x.get("label_name") or x.get("icon_desc") or ""
-        num = x.get("num")
+        num = x.get("num") or 0
         meta = " · ".join(v for v in (tag, ("热 " + _cn_num(num)) if num else "") if v)
-        out.append(
-            (word, "https://s.weibo.com/weibo?q=%s" % urllib.parse.quote("#" + word + "#"), meta)
-        )
+        out.append({
+            "title": word,
+            "url": "https://s.weibo.com/weibo?q=%s" % urllib.parse.quote("#" + word + "#"),
+            "meta": meta,
+            "heat": float(num or 0),
+        })
         if len(out) >= limit:
             break
     return out
@@ -673,14 +1146,13 @@ def _cn_douyin(j, limit):
         word = (x.get("word") or "").strip()
         if not word:
             continue
-        hv = x.get("hot_value")
-        out.append(
-            (
-                word,
-                "https://www.douyin.com/search/%s" % urllib.parse.quote(word),
-                ("热度 " + _cn_num(hv)) if hv else "",
-            )
-        )
+        hv = x.get("hot_value") or 0
+        out.append({
+            "title": word,
+            "url": "https://www.douyin.com/search/%s" % urllib.parse.quote(word),
+            "meta": ("热度 " + _cn_num(hv)) if hv else "",
+            "heat": float(hv or 0),
+        })
         if len(out) >= limit:
             break
     return out
@@ -696,9 +1168,12 @@ def _cn_bili(j, limit):
         views = (x.get("stat") or {}).get("view") or 0
         meta = " · ".join(v for v in (owner, ("播放 " + _cn_num(views)) if views else "") if v)
         bvid = x.get("bvid") or ""
-        out.append(
-            (title, "https://www.bilibili.com/video/%s" % bvid if bvid else "", meta)
-        )
+        out.append({
+            "title": title,
+            "url": "https://www.bilibili.com/video/%s" % bvid if bvid else "",
+            "meta": meta,
+            "heat": float(views or 0),
+        })
         if len(out) >= limit:
             break
     return out
@@ -710,11 +1185,16 @@ def _cn_toutiao(j, limit):
         title = (x.get("Title") or "").strip()
         if not title:
             continue
-        hv = x.get("HotValue")
+        hv = x.get("HotValue") or 0
         # 头条给的 URL 后面挂着一长串跟踪参数（实测每条 700+ 字节，
         # 10 条就把消息撑大 7KB），只保留 /trending/<id>/ 这一段。
         link = (x.get("Url") or "").split("?")[0]
-        out.append((title, link, ("热度 " + _cn_num(hv)) if hv else ""))
+        out.append({
+            "title": title,
+            "url": link,
+            "meta": ("热度 " + _cn_num(hv)) if hv else "",
+            "heat": float(hv or 0),
+        })
         if len(out) >= limit:
             break
     return out
@@ -724,18 +1204,21 @@ def _cn_toutiao(j, limit):
 CN_SOURCES = [
     {
         "label": "微博热搜",
+        "short": "微博",
         "url": "https://weibo.com/ajax/side/hotSearch",
         "referer": "https://weibo.com/",
         "parse": _cn_weibo,
     },
     {
         "label": "抖音热榜",
+        "short": "抖音",
         "url": "https://www.iesdouyin.com/web/api/v2/hotsearch/billboard/word/",
         "referer": "https://www.douyin.com/",
         "parse": _cn_douyin,
     },
     {
         "label": "B站全站排行",
+        "short": "B站",
         "url": "https://api.bilibili.com/x/web-interface/ranking/v2?rid=0&type=all",
         # ranking 接口会间歇性返回 code=-352（风控，实测约一半概率中招）。
         # 两道保险：① 先访问主页拿 cookie 带上（不带时几乎必挂）
@@ -747,6 +1230,7 @@ CN_SOURCES = [
     },
     {
         "label": "今日头条热榜",
+        "short": "头条",
         "url": "https://www.toutiao.com/hot-event/hot-board/?origin=toutiao_pc",
         "referer": "https://www.toutiao.com/",
         "parse": _cn_toutiao,
@@ -766,15 +1250,9 @@ def _bili_cookie():
             "https://www.bilibili.com/",
             headers={"User-Agent": UA, "Accept": "text/html,*/*"},
         )
-        # 这里要读响应头里的 Set-Cookie，所以不能直接用 open_bytes
-        if PROXY_DEAD or OPENER is OPENER_DIRECT:
-            resp = OPENER_DIRECT.open(req, timeout=20)
-        else:
-            try:
-                resp = OPENER.open(req, timeout=20)
-            except Exception:
-                resp = OPENER_DIRECT.open(req, timeout=20)
-        with resp:
+        # 这里要读响应头里的 Set-Cookie，所以不能直接用 open_bytes。
+        # 直连：B站是国内站，走代理只会更慢。
+        with OPENER_DIRECT.open(req, timeout=20) as resp:
             jar = "; ".join(
                 c.split(";")[0].strip() for c in (resp.headers.get_all("Set-Cookie") or [])
             )
@@ -793,7 +1271,10 @@ def _cn_json(url, referer, cookie=None):
     if cookie:
         headers["Cookie"] = cookie
     req = urllib.request.Request(url, headers=headers)
-    return json.loads(open_bytes(req, timeout=30).decode("utf-8", "ignore"))
+    # 国内接口一律直连。走 Clash 等于「本机 → 代理 → 国内」绕一圈，
+    # 实测慢 3~5 倍；代理规则切到全局时还会因为出口 IP 变化被判风控。
+    with OPENER_DIRECT.open(req, timeout=30) as resp:
+        return json.loads(resp.read().decode("utf-8", "ignore"))
 
 
 def _cn_items(src, limit, retries=2):
@@ -819,123 +1300,251 @@ def _cn_items(src, limit, retries=2):
     raise last
 
 
-def cn_sections(lines):
-    """中文圈热点：国内四个榜单，逐源容错 —— 挂一个不影响其他。"""
-    lines.append("## 中文圈热点")
+CN_SURGE_LIMIT = int(os.environ.get("CN_SURGE_LIMIT", "").strip() or "10")
+
+
+def cn_surge_section(lines, now_ts, prev_surge, new_surge):
+    """国内四榜 → 只留 AI / 科技 → 用跨轮热度差算「每小时涨多少」。
+
+    这是本次改造动作最大的一段。以前是把四个榜单原样倒出来，
+    微博热搜前十里有八个是明星八卦 —— 那不是「前沿资讯」，是噪音。
+    现在榜单只作为**原料**：滤掉非 AI/科技，剩下的按涨速排。
+    第一轮没有历史基线，算不出涨速，就退化成「当前在榜」并说明原因。
+    """
+    lines.append("## 国内 · AI / 科技 热度激增")
     lines.append("")
+    rows, pending, errors = [], [], []
+
     for src in CN_SOURCES:
-        lines.append("### %s" % src["label"])
-        n = 0
         try:
-            for i, (t, link, meta) in enumerate(_cn_items(src, CN_HOT_LIMIT), 1):
-                n = i
-                if link:
-                    lines.append("%d. [%s](%s)%s" % (i, t, link, (" · " + meta) if meta else ""))
-                else:
-                    lines.append("%d. %s%s" % (i, t, (" · " + meta) if meta else ""))
+            items = _cn_items(src, max(CN_HOT_LIMIT * 4, 40))
         except Exception as exc:
-            lines.append("(抓取失败: %s)" % exc)
-        plog("中文圈 · %s：%s" % (src["label"], ("%d 条" % n) if n else "失败"))
-        lines.append("")
-
-
-def topic_sections(lines, specs):
-    """话题段落：每个话题 = 最新新闻 + Reddit 讨论 + YouTube 最新视频。
-
-    specs 是 load_topic_specs() 的返回（带档位）；主档每段多取几条。"""
-    for idx, spec in enumerate(specs):
-        topic, tier = spec["name"], spec["tier"]
-        lim = TIER_LIMITS.get(tier, TIER_LIMITS[""])
-        if idx:
-            time.sleep(REDDIT_GAP)
-        plog("开始话题 %s（%s）…" % (topic, tier or "常"))
-        lines.append("## 话题：%s%s" % (topic, ("（%s）" % tier) if tier else ""))
-        lines.append("")
-
-        lines.append("### 最新新闻")
-        if PROXY_DEAD:
-            lines.append("(代理未开，海外源已跳过)")
-        else:
-            try:
-                items = gnews_topic(topic, lim["news"])
-                if items:
-                    for i, (t, link, pub) in enumerate(items, 1):
-                        lines.append("%d. [%s](%s) · %s" % (i, t, link, pub))
-                else:
-                    lines.append("(无数据)")
-            except Exception as exc:
-                lines.append("(抓取失败: %s)" % exc)
-        lines.append("")
-
-        if not SKIP_REDDIT:
-            time.sleep(REDDIT_GAP)
-        rq = topic_query(topic)
-        lines.append(
-            "### Reddit 讨论（近 24 小时）" + ("" if rq == topic else "　搜索词：%s" % rq)
-        )
-        try:
-            if SKIP_REDDIT:
-                raise RuntimeError("已跳过：本地出口被 Reddit 限流 429，云端版照常抓")
-            items = reddit_search(rq, lim["reddit"])
-            if items:
-                for i, (t, link) in enumerate(items, 1):
-                    lines.append("%d. [%s](%s)" % (i, t, link))
+            errors.append("%s %s" % (src["short"], exc))
+            continue
+        kept = 0
+        for it in items:
+            title = it["title"]
+            if not is_ai_tech(title, strict=True):
+                continue
+            kept += 1
+            key = "cn|%s|%s" % (src["short"], title)
+            rec, info = bump_surge(prev_surge, key, it["heat"], now_ts)
+            if rec:
+                new_surge[key] = rec
+            row = dict(it)
+            row["source"] = src["short"]
+            if info and info["vph"] > 0:
+                row.update(info)
+                rows.append(row)
             else:
-                lines.append("(无数据)")
-        except Exception as exc:
-            lines.append("(抓取失败: %s)" % exc)
-        lines.append("")
+                # 两种都进 pending：还没攒够观测时间，或者热度在回落。
+                # 下面那句提示对两种情况都成立，不用分开写。
+                pending.append(row)
+        plog("国内 · %s：%d 条命中 AI/科技" % (src["short"], kept))
 
-        time.sleep(5)
-        lines.append("### YouTube 最新视频")
-        if PROXY_DEAD:
-            lines.append("(代理未开，海外源已跳过)")
+    rows.sort(key=lambda r: -r.get("vph", 0))
+    if rows:
+        for i, r in enumerate(rows[:CN_SURGE_LIMIT], 1):
+            lines.append("%d. [%s](%s) · %s · %s" % (
+                i, r["title"], r["url"], r["source"],
+                speed_text(r["vph"], r["delta"], r["span_h"]),
+            ))
+    elif pending:
+        # 两种可能：还没攒够观测时间，或者热度持平/回落。
+        # 老实说明，别把「当前在榜」伪装成「激增」。
+        lines.append("本轮暂无上涨条目（观测不足 %d 分钟，或热度持平/回落）。当前在榜 %d 条：" % (
+            int(SURGE_MIN_SPAN_H * 60), len(pending)))
+        for i, r in enumerate(pending[:6], 1):
+            lines.append("%d. [%s](%s) · %s%s" % (
+                i, r["title"], r["url"], r["source"],
+                (" · " + r["meta"]) if r.get("meta") else "",
+            ))
+    else:
+        lines.append("本轮四个平台都没有 AI / 科技相关条目（娱乐与社会新闻已全部滤掉）。")
+
+    if errors:
+        lines.append("")
+        lines.append("(抓取失败：%s)" % "；".join(errors))
+    lines.append("")
+
+
+def _dedup_key(text):
+    return re.sub(r"[\s\W_]+", "", text or "")[:44]
+
+
+def _news_queries(specs):
+    """把话题名翻成 Google News 的查询词。
+
+    「AI」这种两字母词单独搜会回来一堆不相关的缩写命中，
+    所以换成「人工智能 / 大模型」这类指向明确的中文词。"""
+    env = os.environ.get("NEWS_QUERIES", "").strip()
+    if env:
+        return [q.strip() for q in re.split(r"[,，、]+", env) if q.strip()][:4]
+    names = [s["name"] for s in specs] or ["人工智能"]
+    out = []
+    for n in names:
+        if n in ("AI", "人工智能", "ai"):
+            out.extend(["人工智能", "大模型"])
+        elif n == "科技":
+            out.extend(["芯片 半导体", "科技公司"])
         else:
-            try:
-                items, note = yt_search_recent(topic, lim["yt"])
-                for i, (t, link, pub, views) in enumerate(items, 1):
-                    meta = " · ".join(x for x in (pub, views) if x)
-                    lines.append("%d. [%s](%s)%s" % (i, t, link, (" · " + meta) if meta else ""))
-                if note:
-                    lines.append("")
-                    lines.append("(%s)" % note)
-            except Exception as exc:
-                lines.append("(抓取失败: %s)" % exc)
+            out.append(n)
+    seen, res = set(), []
+    for q in out:
+        if q not in seen:
+            seen.add(q)
+            res.append(q)
+    return res[:4]
+
+
+def hn_section(lines):
+    """海外科技圈：按「每小时涨多少分」排。HN 本身就是 AI/科技浓度最高的地方，
+    不需要再做关键词过滤。"""
+    lines.append("## Hacker News（海外科技圈 · 按 分/小时）")
+    lines.append("")
+    try:
+        rows = hn_stories(12)
+    except Exception as exc:
+        lines.append("(抓取失败: %s)" % exc)
         lines.append("")
-        plog("话题 %s 完成" % topic)
-
-
-def build_report(specs):
-    today = datetime.date.today().isoformat()
-    lines = ["# 每日热榜 · %s" % today, ""]
-
-    if specs:
-        label = " / ".join(
-            ("%s（%s）" % (s["name"], s["tier"])) if s["tier"] else s["name"] for s in specs
-        )
-        lines.append("> 关注范围：%s" % label)
+        return
+    if not rows:
+        lines.append("(本轮没有分数达标的新帖)")
         lines.append("")
+        return
+    for i, r in enumerate(rows, 1):
+        meta = "%s · %d 分 · %.0fh · %d 评论" % (
+            speed_text(r["vph"], unit="分"), int(r["heat"]), r["age_h"], r["comments"])
+        lines.append("%d. [%s](%s) · %s" % (i, r["title"], r["url"], meta))
+    lines.append("")
 
-    primary = [s for s in specs if s["tier"] == "主"]
-    others = [s for s in specs if s["tier"] != "主"]
 
-    # 主话题顶到最前面：一眼先看到 AI，而不是先划过大盘榜单才找到。
-    if primary:
-        topic_sections(lines, primary)
+def lab_section(lines):
+    """AI 实验室官方博客。更新慢，但一条就是一条 —— 这是最一手的前沿。
+    近 LAB_FRESH_H 小时内没有新文就整段不出现，免得永远挂着同一条旧闻。"""
+    try:
+        rows = lab_posts(8)
+    except Exception as exc:
+        print("[lab] 整段失败: %s" % exc)
+        return
+    if not rows:
+        return
+    lines.append("## 实验室动态（近 %d 小时）" % int(LAB_FRESH_H))
+    lines.append("")
+    for i, r in enumerate(rows, 1):
+        lines.append("%d. [%s](%s) · %s · %s" % (
+            i, r["title"], r["url"], r["source"], r["age"]))
+    lines.append("")
 
-    # 中文圈热点：国内榜单是每天第二眼要看的东西。
-    # 临时查询（adhoc + 指定话题）时不带 —— 那次的目的就是看这个话题，别塞一堆大盘进来。
-    if CN_HOT and not (MODE == "adhoc" and specs):
-        cn_sections(lines)
 
-    # 辅话题跟在中文圈后面，只做补充。
-    if others:
-        topic_sections(lines, others)
+def news_section(lines, specs):
+    """前沿资讯：时间窗卡死，先把活动稿/政务通稿滤掉，剩下的按新鲜度排。"""
+    lines.append("## 前沿资讯（近 %d 小时）" % int(NEWS_WINDOW_H))
+    lines.append("")
+    if PROXY_DEAD:
+        lines.append("(代理未开，海外源已跳过)")
+        lines.append("")
+        return
+    seen, rows = set(), []
+    for q in _news_queries(specs):
+        try:
+            for it in gnews_topic(q, 8, NEWS_WINDOW_H):
+                if not is_ai_tech(it["title"]):
+                    continue
+                if any(b in it["title"] for b in NEWS_TITLE_BLOCK):
+                    continue
+                k = _dedup_key(it["title"])
+                if not k or k in seen:
+                    continue
+                seen.add(k)
+                rows.append(it)
+        except Exception as exc:
+            print("[news] %s 抓取失败: %s" % (q, exc))
+    if not rows:
+        lines.append("(近 %d 小时没有抓到相关资讯)" % int(NEWS_WINDOW_H))
+        lines.append("")
+        return
+    rows.sort(key=lambda x: (-x["n"], -x.get("ts", 0)))
+    for i, r in enumerate(rows[:10], 1):
+        extra = []
+        if r["n"] > 1:
+            extra.append("%d 家转载" % r["n"])
+        if r["age"]:
+            extra.append(r["age"])
+        if r["src"]:
+            extra.append(r["src"])
+        lines.append("%d. [%s](%s)%s" % (
+            i, r["title"], r["url"], (" · " + " · ".join(extra)) if extra else ""))
+    lines.append("")
 
-    if specs and not KEEP_GLOBAL:
-        return "\n".join(lines)
 
-    global_sections(lines)
+def yt_section(lines, specs):
+    """YouTube：按「播放量/小时」排。真正说明「这条正在被大量观看」的是
+    播放增速，而不是发布时间。"""
+    lines.append("## YouTube（近 %d 小时发布 · 按 播放/小时）" % int(YT_LIVE_H))
+    lines.append("")
+    if PROXY_DEAD:
+        lines.append("(代理未开，海外源已跳过)")
+        lines.append("")
+        return
+    rows, seen, note = [], set(), ""
+    for name in ([s["name"] for s in specs] or ["AI"])[:3]:
+        try:
+            items, n = yt_search_recent(name, 8)
+            # 第二个查询常常一条都捞不到，别让它把前一个查询的有效说明覆盖成
+            # 「没有找到新视频」—— 那和上面列出的视频自相矛盾。
+            if items and n:
+                note = n
+        except Exception as exc:
+            print("[yt] %s 抓取失败: %s" % (name, exc))
+            continue
+        for it in items:
+            if it["url"] in seen:
+                continue
+            seen.add(it["url"])
+            rows.append(it)
+    if not rows:
+        lines.append("(近 %d 小时没有抓到新视频)" % int(YT_LIVE_H))
+        lines.append("")
+        return
+    rows.sort(key=lambda r: -r["vph"])
+    for i, r in enumerate(rows[:12], 1):
+        meta = []
+        if r["vph"]:
+            meta.append(speed_text(r["vph"], unit="播放"))
+        if r["heat"]:
+            meta.append("总 %s 播放" % fmt_num(r["heat"]))
+        if r["age_h"]:
+            meta.append("%.0fh" % r["age_h"])
+        lines.append("%d. [%s](%s)%s" % (
+            i, r["title"], r["url"], (" · " + " · ".join(meta)) if meta else ""))
+    if note:
+        lines.append("")
+        lines.append("(%s)" % note)
+    lines.append("")
+
+
+def build_report(specs, now_ts, prev_surge, new_surge):
+    """报告骨架：从「按平台列榜」改成「按热度涨速」。
+
+    段序就是重要性排序 —— 先海外最硬的技术讨论，再一手实验室动态，
+    然后才是新闻、视频、国内。国内放最后是因为它的信号最软
+    （平台热度指数，不是真实浏览量），但它是唯一能反映中文舆论的。
+    """
+    today = bj_now().date().isoformat()
+    scope = " / ".join(
+        ("%s（%s）" % (s["name"], s["tier"])) if s["tier"] else s["name"] for s in specs
+    )
+    lines = ["# AI · 科技前沿 · %s" % today, ""]
+    lines.append("> 范围：%s｜只收 AI / 科技，无关话题已滤除；各段按热度涨速排序。" % (scope or "AI / 科技"))
+    lines.append("")
+
+    hn_section(lines)
+    lab_section(lines)
+    news_section(lines, specs)
+    yt_section(lines, specs)
+    if CN_HOT:
+        cn_surge_section(lines, now_ts, prev_surge, new_surge)
     return "\n".join(lines)
 
 
@@ -1302,14 +1911,21 @@ def main():
         print("[skip] %s 今天已经跑过了，跳过（这是冗余触发的正常行为，不是错误）" % today)
         return
 
-    report = build_report(specs)
+    now_ts = time.time()
+    surge_file = surge_state_path()
+    prev_surge = load_surge(surge_file)
+    new_surge = {}
+    report = build_report(specs, now_ts, prev_surge, new_surge)
+    # 合并而不是覆盖：某一轮国内源全挂时，上一轮的基线要留着，否则下一轮又从零开始。
+    save_surge(surge_file, prune_surge({**prev_surge, **new_surge}, now_ts), now_ts)
+    plog("涨速基线：上轮 %d 条 → 本轮更新 %d 条" % (len(prev_surge), len(new_surge)))
 
     if FREQUENT:
-        # 速报体：普通段留 4 条，主话题段留 6 条（AI 要压得住版面）
+        # 只换标题，不再压缩。高频档已经不发微信了（消费方是看板），
+        # 压缩的唯一理由（一条消息装得下）早就没了，留着只会让看板少看内容。
         stamp = bj_now().strftime("%m-%d %H:%M")
-        report = compact_report(report, keep=4, keep_main=6)
         report = re.sub(
-            r"^# 每日热榜 · \S+", "# 热点速报 · %s" % stamp, report, count=1, flags=re.M
+            r"^# [^\n]*", "# AI · 科技前沿 · %s" % stamp, report, count=1, flags=re.M
         )
 
     # 全军覆没要报错，不能静默变成"今天没热点"。
@@ -1349,7 +1965,7 @@ def main():
         # 只留一份覆盖文件，不写按日文件、不动 latest.md
         data_dir.mkdir(exist_ok=True)
         (data_dir / "frequent.md").write_text(report, encoding="utf-8")
-        title = "热点速报 · %s" % bj_now().strftime("%m-%d %H:%M")
+        title = "AI 科技前沿 · %s" % bj_now().strftime("%m-%d %H:%M")
         print("[frequent] 写入 data/frequent.md（速报体 %d 条）" % n_items)
     elif adhoc:
         # 临时查询：单独归档，绝不写当日文件、也不覆盖 latest.md，
@@ -1357,13 +1973,13 @@ def main():
         target = data_dir / "adhoc" / ("%s-%s.md" % (today, slugify("+".join(topics) or "global")))
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(report, encoding="utf-8")
-        title = "每日热榜 · %s · %s" % (today, " / ".join(topics) or "全站榜")
+        title = "AI 科技前沿 · %s · %s" % (today, " / ".join(topics) or "AI/科技")
         print("[adhoc] 写入 %s" % target)
     else:
         data_dir.mkdir(exist_ok=True)
         (data_dir / ("%s.md" % today)).write_text(report, encoding="utf-8")
         (data_dir / "latest.md").write_text(report, encoding="utf-8")
-        title = "每日热榜 · %s" % today
+        title = "AI 科技前沿 · %s" % today
 
     sys.stdout.write(report + "\n")
 
