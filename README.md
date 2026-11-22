@@ -42,7 +42,9 @@
 |---|---|---|
 | Hacker News | `hn.algolia.com` 首页 50 条 | 分数 ÷ 存在时长 = **分/小时** |
 | GitHub 热榜 | Search API，**近 7 天新建**的仓库 | 星数 ÷ 存在时长 = **★/天** |
+| 具身智能 · 人形机器人 | Google News（中） + 12 个媒体 RSS 关键词 + **arXiv cs.RO** | 转载家数 → 新鲜度；论文按投稿时间 |
 | 实验室动态 | OpenAI / Google DeepMind / Hugging Face 官方 RSS | 发布时间（近 48h，没新文就整段省略） |
+| Reddit 热帖 | Arctic Shift 归档 API，5 个 AI/机器人版块 | 分数（每版块限 2 条） |
 | 前沿资讯 · 多源印证 | Google News，**时间窗 24 小时**，只留 ≥2 家转载 | 转载家数 → 新鲜度 |
 | 前沿资讯 · 海外媒体 | TechCrunch AI / The Decoder / The Verge AI / Techmeme / Ars Technica / Simon Willison | 发布时间（同源轮转，避免一家占满） |
 | 前沿资讯 · 国内媒体 | 量子位 / IT之家 / Solidot / Readhub / 雷锋网 / 36氪 | 同上 |
@@ -72,6 +74,23 @@
 `ai=True` 的垂直源（量子位、TechCrunch AI、The Decoder、The Verge AI）不再过关键词 ——
 「GPT-6.2 暴击具身模型」这种标题不含任何白名单词，但显然该收。综合源（IT之家、36氪、
 Readhub、Ars、Techmeme）必须过 `is_ai_tech(strict)`，否则半版是手机导购和财报。
+
+**具身智能为什么要单独一段。** 这条线的信号结构和其他 AI 新闻不一样：中文媒体一天能出
+一堆「某地训练场揭牌」「机器人拳击赛」，但真正的前沿在 arXiv 的 cs.RO。所以这一段拆成
+**动态**（Google News 中文查询「具身智能」「人形机器人」+ 媒体 RSS 关键词，机器表演赛和
+赛事稿被 `EMBODIED_BLOCK` 拦掉）和 **arXiv 新论文**（走 API，不用 `rss.arxiv.org` ——
+那个只在工作日发公告，周末拿到的是 0 条）。
+
+英文查询要避开：Google News 中文版对 `embodied AI` 这种查询会返回县城比赛新闻，实测五条
+里四条是「退役军人事务局开展基层业务培训」。所以只用中文查询词，英文内容靠 arXiv 和
+Reddit 补。
+
+**Reddit 为什么走归档接口而不是 reddit.com。** 本机（含 Clash）访问 reddit.com 一律 **429**，
+`.json` 返回 403 拦截页（189 KB），redlib 镜像、RSSHub 镜像全挂。唯一能用的是
+Arctic Shift 归档 API。但它只按 `created_utc` 排序，`score` 是**入库那一刻的快照** ——
+刚发的帖子永远是 1 分；实测 12 小时以上的帖子会被重新扫描，分数才是真的。
+所以这段是「过去一天 Reddit 在热什么」，标题里写明了「约滞后半天」，别当成实时。
+每版块限 2 条：不限的话 r/singularity 一条 4000 分的梗图能把前八名全占了。
 
 国内四榜**逐源容错**：某个源挂了只在段尾写「抓取失败」，不影响其他部分。
 

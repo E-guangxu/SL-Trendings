@@ -1,70 +1,102 @@
 {
- "updated": "11-22 11:38:29",
+ "updated": "11-22 14:41:46",
  "sections": {
   "Hacker News（海外科技圈 · 按 分/小时）": [
-   "Hurried Announcement: Alessandro Masullo GRH",
+   "Toyota, Nissan, and Honda to standardize parts to lower costs",
    "Lean verification of the Riemann Hypothesis",
-   "Inkling-2-Mini in 5.4 GB Memory",
    "Detonating a pile of lead azide",
+   "Inkling-2-Mini in 5.4 GB Memory",
    "My monitor was cutting my download speed by 75%",
-   "Data Processing Incidents on Inference Providers",
    "Pill to treat pancreatic cancer hailed as 'biggest breakthrough in decades'",
-   "Leonida – PC Recompilation of the Xbox Version of GTA 6",
-   "We promoted developers into architects without informing them",
    "Sandwich Simulator",
+   "Data Processing Incidents on Inference Providers",
+   "Leonida – PC Recompilation of the Xbox Version of GTA 6",
    "Advice for the next 100 Rust GUIs",
+   "Why there are still no non-WebKit browsers on iOS",
    "PcapAnalyzer – self-hosted pcap analyzer with 27 problem detectors"
   ],
   "GitHub 热榜（近 7 天新项目 · 按 ★/天）": [
    "ItsNotRexed/Leonida",
    "erkamyaman/rust-anything",
    "krisgfx9/Wireless-Device-Battery-Monitor",
-   "omonkeyz/xbox-emulator",
    "bookwjitchieni1986/blender-ai-mcp-addon",
+   "omonkeyz/xbox-emulator",
    "R0Y00/Xbox2Windows",
    "iamajmeena/neonclipping",
-   "sybil-solutions/skill-distill"
+   "opokukopoku/gta-6-pc-release"
+  ],
+  "具身智能 · 人形机器人 > 动态（近 24 小时）": [
+   "【城事】具身智能正融入城市生活“第一现场”",
+   "机器人也要“实习”？探访香港首个具身智能国际应用训练场",
+   "共建消费级具身智能开源新生态，启元机器人亮相2026开放原子开发者大会",
+   "人形机器人“贴身肉搏”，搏出了什么？",
+   "工信部:《计算机行业快评报告：发布5项人形机器人标准，评测与训练数据同步立规》",
+   "花数十万买台机器人搬箱子，只顶0.1个人｜蚂蚁灵波圆桌对话",
+   "摩根大通预计美国人形机器人2030年产量达40万台 2035年市场规模或逼近300亿美元",
+   "从拼算力到拼效率 机器人训练成本迎变局"
+  ],
+  "具身智能 · 人形机器人 > arXiv 机器人新论文（cs.RO）": [
+   "One Prior, Two Dynamics: Repurposing Video Diffusion Transformers for Self-Supervised Latent Action Learning",
+   "AgentRoboCritic: Understanding the Capability of Frontier Agents on Direct Robot Control",
+   "A Tutorial on Complementarity-Based Contact Models for Robotics",
+   "PGX: Physically Grounded Execution for Long-Horizon Humanoid Loco-Manipulation"
   ],
   "实验室动态（近 72 小时）": [
    "Combatting adversarial distillation",
-   "Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
-   "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
    "Hebbia sees improvements in financial research with GPT-6 Astra",
    "Can AI help scientists identify promising drug candidates?",
+   "Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
+   "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
    "How OpenAI’s Performance Factory keeps ChatGPT fast"
   ],
   "前沿资讯（近 24 小时） > 多源印证（多家同时报道）": [
+   "韩国高考AI作弊事件发酵 教育部长引咎辞职",
    "南水北调“天河”大模型完成升级"
   ],
   "前沿资讯（近 24 小时） > 海外媒体": [
-   "Matchmakers say more tech workers fear romantic espionage after the Jensen Huang scandal; an AI companion app pitches \"zero espionage\" executive girlfriends (Wired)",
+   "Tesla rolls out FSD v15, featuring a photorealistic rendering of car surroundings; Elon Musk says it is real-time AI video generation without using game engines (Mike Pearl/Gizmodo)",
    "Muru",
    "Signal restricts mobile screenshots as it confronts ‘existential threat’ of AI surveillance",
    "The UN fails to agree on rules regulating ‘killer robots’",
    "Nvidia researchers argue huge AI context windows are a dead end",
-   "Researchers used canary credentials in requests to AI routers like OpenRouter and Vercel, even under \"ZDR\" policies, and saw \"privacy\" often broken, keys stolen (Dan Goodin/Ars Technica)",
+   "Sources: AI server suppliers like Dell, HPE, Lenovo, and Supermicro are demanding substantially higher prices from buyers, months after contracts were signed (Financial Times)",
    "A tale of two Nvidias",
    "Can Anthropic afford to put safety first?",
    "Silicon Valley's growing obsession with AI doomsday is turning parts of the tech industry toward cult-like devotion"
   ],
   "前沿资讯（近 24 小时） > 国内媒体": [
-   "Claude宣称攻克黎曼猜想数小时后，斯坦福数学家公布纯人类证明",
-   "特斯拉 FSD v15 全新可视化 UI 引热议，消息称是在硬件劣势的情况做了 3D 高斯全场景重建",
-   "行业报告：中国脑机接口产业集聚于三大城市群",
-   "GPT-6.2 Astra再次暴击具身模型：16项任务成功率较GPT-6 Astra翻倍",
-   "特斯拉在美推出FSDv 15",
-   "神舟二十三乘组在轨将满六个月，中国空间站将迎来首位外籍航天员到访",
-   "Nest 应用及网页端 2027 年停服 相关能力迁移至 Google Home",
-   "刚刚，DeepSeek V1作者创业项目曝光：开源Agent",
-   "国家中医药管理局认证中心：未与任何大模型企业合作 亦未开展测评"
+   "腾讯 Chatterfly 输入法安卓版开启内测，支持语音转写、自动翻译等 AI 功能",
+   "澳大利亚情报主管警示数据中心与AI潜藏风险",
+   "丘成桐回应 AI 辅助证明黎曼猜想相关言论",
+   "特斯拉更新 Robotaxi 应急方案：确认 Cybercab 新硬件，个人车辆入网在即",
+   "AI芯片拉动出口破万亿，韩国出口冲刺全球第四，高度依赖半导体暗藏风险",
+   "Linux 7.4-rc4 内核将支持并行删除 NVMe 命名空间优化性能",
+   "全球电子协会警告 PCB 或短缺至 2027 年上半年，风险堪比 2021 年芯片短缺",
+   "丘成桐回应AI辅助证明黎曼猜想",
+   "因科美 SL10 通过开源鸿蒙测评 成为全球首款星闪音箱"
+  ],
+  "Reddit 热帖（近 36 小时 · 按分数）": [
+   "Anthropic’s Claude solves the Riemann Hypothesis (the Holy Grail of maths) with a massive 250,000-page formal proof🚨",
+   "One of my greatest contributions to making Gemini Neon 4 better than Claude fable 5.2",
+   "Basalt: Inkling 2 Mini on one 5090 at up to 613 tok/s decode and 14.100 tok/s prefill (NVFP4)",
+   "Inkling simply *cheff kiss*",
+   "Starting work on a wheeled version. Day 389 of building Asimov, an open-source humanoid robot",
+   "Inkling 2 Mini memory and speed, explained: the loop costs nothing in weights but you pay for it in KV cache and decode speed",
+   "I designed a 3D-printed robotic hand with under $25 in parts",
+   "Hy4-mini is on the Way — a Good Alternative to Qwen3.6-35B-A3B?"
   ],
   "YouTube（近 24 小时发布 · 按 播放/小时）": [
-   "POET迎来关键转折！从巨头撤单到九大客户入局，光通信商业模式正在改变！科技股反弹乏力，下一轮真正的考验是什么？POET,LITE,COHR,NVDA,MRVL",
-   "November 2026 AI Industry Weekly Recap: Anthropic’s Record-Breaking IPO, AI Solves Century-Old Ma..."
+   "AI日报：智谱GLM5.5终极王炸？Claude称攻克黎曼猜想，AI圈怎么天天在地震？",
+   "谷歌DeepMind最新Genie 4登場！AI開始自己造世界，人類即將失業還是迎來大解放？",
+   "人类历史教科书高光时刻？Claude携手数学家公布167年难题黎曼猜想证明！",
+   "SpaceX董事：「你刚花百亿造出的AI，第一件事就是告诉你这笔投资有多蠢」"
   ],
   "国内 · AI / 科技 热度激增": [
-   "25万页AI黎曼猜想证明难核验",
-   "Anthropic造富 谁接住了泼天富贵"
+   "特斯拉车载算力实时AI建模",
+   "特斯拉 FSD",
+   "AG版阿里嘎多喵萌到我了",
+   "在B站就能玩到的像素射击游戏，点击即玩！【B站AI创造公开赛】",
+   "特斯拉FSD v15全新可视化UI引热议"
   ]
  }
 }

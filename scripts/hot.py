@@ -1069,6 +1069,17 @@ NEWS_FEEDS = [
 # 那就又变回「一个来源」了。
 NEWS_PER_FEED = int(os.environ.get("NEWS_PER_FEED", "").strip() or "3")
 
+# 「具身智能」段的判定词。标题统一转小写再比，所以英文词写小写就行。
+# 包含 vla（Vision-Language-Action）和 manipulation —— 这两个是这条线
+# 最常用的术语，光靠「具身」「机器人」会漏掉三分之一。
+EMBODIED_TERMS = ("具身", "人形", "机器人", "robot", "embodied", "humanoid",
+                  "vla", "manipulation", "teleop", "locomotion")
+
+# 机器人表演赛/活动稿。这类新闻量大、上镜，但没有任何技术信息 ——
+# 「格斗挑战赛」「拳击金腰带」本质是厂商营销，不是具身智能的进展。
+EMBODIED_BLOCK = ("格斗", "拳击", "拔河", "跳舞", "舞蹈", "马拉松", "表演赛",
+                  "剪彩", "打卡", "快闪", "巡演", "擂台", "赛事")
+
 
 def _rss_dt(text):
     """RSS 用 RFC822（`Sun, 22 Nov 2026 03:21:10 GMT`），Atom 用 ISO8601。
@@ -1182,23 +1193,164 @@ def _interleave(rows):
     return out
 
 
+_FEED_ROWS_CACHE = {}
+
+
+def _all_feed_rows(window_h, skip_en=False):
+    """所有媒体源抓一遍，结果缓存。
+
+    「具身智能」段要在这批稿子里筛机器人的，同一轮里不能再抓一遍 ——
+    12 个 feed 重抓一次就是 4 秒白花。"""
+    key = (round(float(window_h), 1), bool(skip_en))
+    if key in _FEED_ROWS_CACHE:
+        return _FEED_ROWS_CACHE[key]
+    feeds = [f for f in NEWS_FEEDS if not (skip_en and not f["cn"])]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(feeds)) as pool:
+        results = list(pool.map(lambda f: _feed_one(f, window_h), feeds))
+    rows = [r for chunk in results for r in chunk]
+    _FEED_ROWS_CACHE[key] = rows
+    return rows
+
+
 def news_feed_rows(window_h, seen=None, skip_en=False):
     """所有媒体源并行抓，去重后分成海外/国内两组。"""
     seen = seen if seen is not None else set()
     en, cn = [], []
-    feeds = [f for f in NEWS_FEEDS if not (skip_en and not f["cn"])]
-    with concurrent.futures.ThreadPoolExecutor(max_workers=len(feeds)) as pool:
-        results = list(pool.map(lambda f: _feed_one(f, window_h), feeds))
-    for rows in results:
-        for r in rows:
-            k = _dedup_key(r["title"])
-            if not k or k in seen:
-                continue
-            seen.add(k)
-            (cn if r["cn"] else en).append(r)
+    for r in _all_feed_rows(window_h, skip_en):
+        k = _dedup_key(r["title"])
+        if not k or k in seen:
+            continue
+        seen.add(k)
+        (cn if r["cn"] else en).append(r)
     en.sort(key=lambda r: -r["ts"])
     cn.sort(key=lambda r: -r["ts"])
     return _interleave(en), _interleave(cn)
+
+
+# ---- Reddit 热点 ----
+# 2026-11-22 实测：本机（含 Clash 7890）访问 reddit.com 一律 429，
+# .json 返回 403 拦截页（189KB），redlib 镜像全挂，RSSHub 镜像也挂。
+# 唯一能用的是 Arctic Shift 归档 API —— 但它只按 created_utc 排序，
+# 且 score 是「入库那一刻」的快照：刚发的帖子永远是 1 分。
+# 实测 12 小时以上的帖子会被重新扫描，分数才是真的（219 分、459 分）。
+# 所以这一段本质是「过去一天 Reddit 最热的帖子」，不是「正在涨的」。
+REDDIT_SUBS = ("LocalLLaMA", "MachineLearning", "LocalLLM", "singularity", "robotics")
+REDDIT_MIN_SCORE = int(os.environ.get("REDDIT_MIN_SCORE", "").strip() or "40")
+REDDIT_WINDOW_H = float(os.environ.get("REDDIT_WINDOW_H", "").strip() or "36")
+REDDIT_LIMIT = int(os.environ.get("REDDIT_LIMIT", "").strip() or "8")
+# 每个版块最多几条。不设上限时 r/singularity 一条 4000 分的梗图能把前八名
+# 全占了 —— 那版块情绪浓度高、涨分快，但一半是「今天又发生了什么」的闲聊。
+REDDIT_PER_SUB = int(os.environ.get("REDDIT_PER_SUB", "").strip() or "2")
+ARCTIC_API = "https://arctic-shift.photon-reddit.com/api/posts/search"
+
+# 高热但无信息量的帖式。这类帖分数极高（情绪共鸣），但对「AI 前沿」零价值。
+REDDIT_BLOCK = (
+    "average day", "final moments", "what did i miss", "am i the only one",
+    "in this sub", "shitpost", "meme", "unpopular opinion", "rant",
+    "just me?", "how do you feel", "anyone else",
+)
+
+
+def _reddit_archive(sub, window_h):
+    """单个版块：取近 window_h 小时的帖子，带上分数。
+
+    一次只能查一个版块 —— 用逗号拼多个实测返回 0 条。
+    字段名写错（permalink / stickied）整个请求会 400，只能用白名单里的。"""
+    now = datetime.datetime.now(datetime.timezone.utc)
+    q = urllib.parse.urlencode({
+        "subreddit": sub,
+        "limit": "100",
+        "after": (now - datetime.timedelta(hours=window_h)).strftime("%Y-%m-%dT%H:%M:%S"),
+        "fields": "id,title,score,num_comments,created_utc,subreddit,url",
+    })
+    data = json.loads(fetch_retry(ARCTIC_API + "?" + q, retries=2, timeout=25))
+    out = []
+    for p in (data.get("data") or []):
+        pid = (p.get("id") or "").strip()
+        title = (p.get("title") or "").strip()
+        if not pid or not title:
+            continue
+        out.append({
+            "title": title,
+            # /comments/<id> 会跳到原帖；用自帖链接的话点开是图片/外链，讨论反而丢了
+            "url": "https://www.reddit.com/comments/%s" % pid,
+            "score": int(p.get("score") or 0),
+            "comments": int(p.get("num_comments") or 0),
+            "ts": float(p.get("created_utc") or 0),
+            "sub": (p.get("subreddit") or sub).strip(),
+        })
+    return out
+
+
+def reddit_hot_posts(limit=REDDIT_LIMIT):
+    """几个 AI / 机器人版块合并，按分数排，每个版块限量。"""
+    rows = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(REDDIT_SUBS)) as pool:
+        for chunk in pool.map(lambda s: _reddit_archive(s, REDDIT_WINDOW_H), REDDIT_SUBS):
+            rows.extend(chunk)
+    now = datetime.datetime.now(datetime.timezone.utc).timestamp()
+    picked, seen, per_sub = [], set(), {}
+    rows.sort(key=lambda r: -r["score"])
+    for r in rows:
+        if r["score"] < REDDIT_MIN_SCORE:
+            continue
+        low = r["title"].lower()
+        if any(b in low for b in REDDIT_BLOCK):
+            continue
+        k = _dedup_key(r["title"])
+        if not k or k in seen:
+            continue
+        if per_sub.get(r["sub"], 0) >= REDDIT_PER_SUB:
+            continue
+        seen.add(k)
+        per_sub[r["sub"]] = per_sub.get(r["sub"], 0) + 1
+        r["age_h"] = max((now - r["ts"]) / 3600.0, 0.1)
+        picked.append(r)
+    return picked[:limit]
+
+
+# ---- arXiv 机器人论文（具身智能真正的「前沿」在这）----
+ARXIV_API = "https://export.arxiv.org/api/query"
+
+
+def arxiv_robotics(limit=4, days=5):
+    """cs.RO 最新投稿。
+
+    用 API 而不是 rss.arxiv.org：后者只在工作日发公告，周日拿到的是空 feed
+    （实测 892 字节、0 条），正好会是「周末这条永远空着」。"""
+    q = urllib.parse.urlencode({
+        "search_query": "cat:cs.RO",
+        "sortBy": "submittedDate",
+        "sortOrder": "descending",
+        "max_results": "40",
+    })
+    xml = fetch_retry(ARXIV_API + "?" + q, retries=2, timeout=25)
+    now = datetime.datetime.now(datetime.timezone.utc)
+    out = []
+    for blk in re.findall(r"<entry>([\s\S]*?)</entry>", xml):
+        t = re.search(r"<title>([\s\S]*?)</title>", blk)
+        i = re.search(r"<id>([\s\S]*?)</id>", blk)
+        d = re.search(r"<published>([\s\S]*?)</published>", blk)
+        if not (t and i and d):
+            continue
+        dt = _rss_dt(d.group(1))
+        if dt is None:
+            continue
+        age_h = (now - dt).total_seconds() / 3600.0
+        if age_h > days * 24:
+            continue
+        title = re.sub(r"\s+", " ", clean_title(t.group(1))).strip()
+        if not title:
+            continue
+        out.append({
+            "title": title,
+            "url": clean_title(i.group(1)).replace("http://", "https://"),
+            "age": fmt_age(d.group(1)),
+            "age_h": age_h,
+        })
+    out.sort(key=lambda r: r["age_h"])
+    return out[:limit]
+
 
 
 
@@ -1796,6 +1948,120 @@ def lab_section(lines):
     lines.append("")
 
 
+def embodied_section(lines):
+    """具身智能 / 人形机器人：单独成段。
+
+    不塞进「前沿资讯」是因为这条线的信号结构和别的不一样 ——
+    新闻在中文媒体里一天能出一堆，但真正的前沿在 arXiv 的 cs.RO，
+    两部分要分开看：哪个是「谁又发了什么通稿」，哪个是「学术界在做什么」。"""
+    lines.append("## 具身智能 · 人形机器人")
+    lines.append("")
+
+    # 1) 中文媒体动态（Google News 的中文版对英文查询处理很怪，
+    #    "embodied AI" 会返回县城比赛新闻，所以只用中文查询词）
+    rows, seen = [], set()
+    if not PROXY_DEAD:
+        for q in ("具身智能", "人形机器人"):
+            try:
+                for it in gnews_topic(q, 8, NEWS_WINDOW_H):
+                    if any(b in it["title"] for b in NEWS_TITLE_BLOCK):
+                        continue
+                    if any(b in it["title"] for b in EMBODIED_BLOCK):
+                        continue
+                    k = _dedup_key(it["title"])
+                    if not k or k in seen:
+                        continue
+                    seen.add(k)
+                    rows.append(it)
+            except Exception as exc:
+                print("[embodied] %s 抓取失败: %s" % (q, exc))
+        rows.sort(key=lambda x: (-x["n"], -x.get("ts", 0)))
+    else:
+        lines.append("(代理未开，Google News 已跳过)")
+        lines.append("")
+
+    # 2) 媒体 RSS 里命中机器人关键词的（复用资讯段已抓的 result，不重复请求）
+    try:
+        for r in _all_feed_rows(NEWS_WINDOW_H, PROXY_DEAD):
+            low = r["title"].lower()
+            if not any(t in low for t in EMBODIED_TERMS):
+                continue
+            k = _dedup_key(r["title"])
+            if not k or k in seen:
+                continue
+            seen.add(k)
+            row = dict(r)
+            row["n"] = 1
+            rows.append(row)
+    except Exception as exc:
+        print("[embodied] 媒体补充失败: %s" % exc)
+
+    if rows:
+        lines.append("### 动态（近 %d 小时）" % int(NEWS_WINDOW_H))
+        lines.append("")
+        for i, r in enumerate(rows[:8], 1):
+            extra = []
+            if r.get("n", 1) > 1:
+                extra.append("%d 家转载" % r["n"])
+            if r.get("age"):
+                extra.append(r["age"])
+            if r.get("source"):
+                extra.append(r["source"])
+            lines.append("%d. [%s](%s)%s" % (
+                i, r["title"], r["url"], (" · " + " · ".join(extra)) if extra else ""))
+        lines.append("")
+    elif PROXY_DEAD:
+        pass
+    else:
+        lines.append("(近 %d 小时没有抓到相关动态)" % int(NEWS_WINDOW_H))
+        lines.append("")
+
+    # 3) arXiv cs.RO 最新投稿 —— 「前沿」在这个位置上最准
+    if not PROXY_DEAD:
+        lines.append("### arXiv 机器人新论文（cs.RO）")
+        lines.append("")
+        try:
+            papers = arxiv_robotics(4)
+            if papers:
+                for i, p in enumerate(papers, 1):
+                    lines.append("%d. [%s](%s) · %s" % (i, p["title"], p["url"], p["age"]))
+            else:
+                lines.append("(近几天没有新投稿)")
+        except Exception as exc:
+            lines.append("(抓取失败: %s)" % exc)
+        lines.append("")
+
+
+def reddit_section(lines):
+    """Reddit 热点。
+
+    本机访问 reddit.com 是硬限流（429），只能走 Arctic Shift 归档，
+    而归档里的分数只对 12 小时以上的帖子可信 —— 刚发的永远是 1 分。
+    所以这段的定位是「过去一天 Reddit 在热什么」，标题里写清楚，别假装实时。"""
+    lines.append("## Reddit 热帖（近 %d 小时 · 按分数）" % int(REDDIT_WINDOW_H))
+    lines.append("")
+    if PROXY_DEAD:
+        lines.append("(代理未开，海外源已跳过)")
+        lines.append("")
+        return
+    try:
+        rows = reddit_hot_posts()
+    except Exception as exc:
+        lines.append("(抓取失败: %s)" % exc)
+        lines.append("")
+        return
+    if not rows:
+        lines.append("(本轮没有分数达标的帖子)")
+        lines.append("")
+        return
+    for i, r in enumerate(rows, 1):
+        lines.append("%d. [%s](%s) · %d 分 · %d 评论 · r/%s" % (
+            i, r["title"], r["url"], r["score"], r["comments"], r["sub"]))
+    lines.append("")
+    lines.append("(分数来自归档接口，约滞后半天；新发的帖子在归档里还只有 1 分)")
+    lines.append("")
+
+
 def news_section(lines, specs):
     """前沿资讯：时间窗卡死，多渠道并收。
 
@@ -1959,8 +2225,10 @@ def build_report(specs, now_ts, prev_surge, new_surge):
 
     _seg(lines, hn_section)
     _seg(lines, github_section)
+    _seg(lines, embodied_section)
     _seg(lines, lab_section)
     _seg(lines, news_section, specs)
+    _seg(lines, reddit_section)
     _seg(lines, yt_section, specs)
     if CN_HOT:
         cn_surge_section(lines, now_ts, prev_surge, new_surge)
