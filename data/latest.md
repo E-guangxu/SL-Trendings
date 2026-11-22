@@ -1,122 +1,110 @@
-# AI · 科技前沿 · 2026-11-22
+# AI · 科技前沿 · 2026-11-23
 
 > 范围：AI（主） / 科技（辅）｜只收 AI / 科技，无关话题已滤除；各段按热度涨速排序。
 
 ## Hacker News（海外科技圈 · 按 分/小时）
 
-1. [Toyota, Nissan, and Honda to standardize parts to lower costs](https://www.caranddriver.com/news/a74490092/toyota-nissan-honda-standardize-parts-lower-costs/) · 93分/h · 242 分 · 3h · 116 评论
-2. [Lean verification of the Riemann Hypothesis](https://leanprover-community.github.io/blog/posts/riemann-hypothesis/) · 59分/h · 942 分 · 16h · 806 评论
-3. [Detonating a pile of lead azide](https://www.science.org/content/blog-post/detonating-huge-pile-lead-azide-really) · 34分/h · 582 分 · 17h · 377 评论
-4. [Inkling-2-Mini in 5.4 GB Memory](https://github.com/ShinMegamiBoson/lookatmyquant) · 34分/h · 424 分 · 13h · 107 评论
-5. [My monitor was cutting my download speed by 75%](https://blog.tymscar.com/posts/studiodisplayethernet/) · 27分/h · 550 分 · 20h · 264 评论
-6. [Pill to treat pancreatic cancer hailed as 'biggest breakthrough in decades'](https://www.theguardian.com/society/2026/nov/20/pill-pancreatic-cancer-breakthrough-daraxonrasib) · 26分/h · 865 分 · 34h · 201 评论
-7. [Sandwich Simulator](https://stulle.app/) · 21分/h · 136 分 · 7h · 52 评论
-8. [Data Processing Incidents on Inference Providers](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/) · 21分/h · 92 分 · 4h · 32 评论
-9. [Leonida – PC Recompilation of the Xbox Version of GTA 6](https://github.com/ItsNotRexed/Leonida) · 21分/h · 118 分 · 6h · 80 评论
-10. [Advice for the next 100 Rust GUIs](https://linebender.org/blog/next-100-guis/) · 14分/h · 130 分 · 9h · 35 评论
-11. [Why there are still no non-WebKit browsers on iOS](https://blog.mozilla.org/en/mozilla/internet-policy/apple-ios-browser-engine-rules/) · 14分/h · 540 分 · 40h · 289 评论
-12. [PcapAnalyzer – self-hosted pcap analyzer with 27 problem detectors](https://github.com/sebaandrada-cell/PcapAnalyzer) · 11分/h · 98 分 · 9h · 9 评论
+1. [Progress map for the Lean formalization of Alessandro Masullo's manuscript](https://claude.ai/artifact/CtQyX8qfYAF822bgHJHHE3) · 88分/h · 56 分 · 1h · 11 评论
+2. [What Happened to Silicon Valley?](https://www.oreilly.com/radar/what-happened-to-silicon-valley/) · 74分/h · 332 分 · 5h · 178 评论
+3. [Perplexity and Intelligence](https://openai.com/index/perplexity-and-intelligence/) · 66分/h · 443 分 · 7h · 300 评论
+4. [The Birds of GTA 6: A Field Guide to Vice City and Leonida's Wildlife](https://www.audubon.org/magazine/birds-of-gta-6-field-guide-vice-city-wildlife) · 63分/h · 293 分 · 5h · 119 评论
+5. [Toyota, Nissan, and Honda to standardize parts to lower costs](https://www.caranddriver.com/news/a74490092/toyota-nissan-honda-standardize-parts-lower-costs/) · 59分/h · 1166 分 · 20h · 669 评论
+6. [87% of the Anthropic power will come from gas and 11% from coal in 2028](https://betterdatacenterproject.com/2026/11/16/how-ai-is-powered-a-breakdown-of-byop-and-grid-power/) · 57分/h · 849 分 · 15h · 864 评论
+7. [A Beginner's Guide to Local AI with Inkling, Qwen, and Unsloth](https://www.gpupartner.com/blog/beginners-guide-local-ai-inkling-qwen-unsloth) · 45分/h · 127 分 · 3h · 40 评论
+8. [A miniature San Francisco with live buses, planes and boats](https://smallsf.com/) · 29分/h · 96 分 · 3h · 37 评论
+9. [Agent swarm trying to solve P vs. NP](https://pequalnp.com/) · 27分/h · 53 分 · 2h · 57 评论
+10. [Show HN: I built a game where you are an LLM's subagent](https://github.com/gulivan/worker755) · 26分/h · 257 分 · 10h · 59 评论
+11. [Open Social Web Alliance](https://osw-alliance.net/en/) · 24分/h · 206 分 · 8h · 204 评论
+12. [Sandwich Simulator](https://stulle.app/) · 24分/h · 562 分 · 24h · 196 评论
 
 ## GitHub 热榜（近 7 天新项目 · 按 ★/天）
 
-1. [ItsNotRexed/Leonida](https://github.com/ItsNotRexed/Leonida) · Leonida Is A Native PC Recompilation Of The Xbox Version Of… · 7552★ · 5243★/天 · 35h · Python
-2. [erkamyaman/rust-anything](https://github.com/erkamyaman/rust-anything) · Rewrite your whole app in Rust, one piece at a time, checked… · 7560★ · 1310★/天 · 6天 · Rust
-3. [krisgfx9/Wireless-Device-Battery-Monitor](https://github.com/krisgfx9/Wireless-Device-Battery-Monitor) · Show the battery level of wireless mice, headsets, keyboards… · 5890★ · 1077★/天 · 5天 · C++
-4. [bookwjitchieni1986/blender-ai-mcp-addon](https://github.com/bookwjitchieni1986/blender-ai-mcp-addon) · AI assistant and MCP server for Blender: visual chat, scene… · 2687★ · 1008★/天 · 3天
-5. [omonkeyz/xbox-emulator](https://github.com/omonkeyz/xbox-emulator) · Progress notes for running Xbox Series X S builds on PC (Tom… · 911★ · 970★/天 · 23h · Rust
-6. [R0Y00/Xbox2Windows](https://github.com/R0Y00/Xbox2Windows) · GTA VI static recompilation research for x64 Windows. Source… · 1020★ · 662★/天 · 37h · Python
-7. [iamajmeena/neonclipping](https://github.com/iamajmeena/neonclipping) · Paste a link, get captioned 9:16 clips in ~2 min. Free, loca… · 1812★ · 633★/天 · 3天 · Python
-8. [opokukopoku/gta-6-pc-release](https://github.com/opokukopoku/gta-6-pc-release) · GTA 6 PC Release: Full Access, Zero Hassle · 379★ · 554★/天 · 16h · HTML
+1. [ItsNotRexed/Leonida](https://github.com/ItsNotRexed/Leonida) · Leonida Is A Native PC Recompilation Of The Xbox Version Of… · 1.5万★ · 6864★/天 · 2天 · Python
+2. [EL4CTEO/fast-anything](https://github.com/EL4CTEO/fast-anything) · Don't rewrite it in Rust. Rewrite the 5% that's slow: profil… · 1859★ · 1345★/天 · 33h · Rust
+3. [erkamyaman/rust-anything](https://github.com/erkamyaman/rust-anything) · Rewrite your whole app in Rust, one piece at a time, checked… · 7979★ · 1230★/天 · 6天 · Rust
+4. [bookwjitchieni1986/blender-ai-mcp-addon](https://github.com/bookwjitchieni1986/blender-ai-mcp-addon) · AI assistant and MCP server for Blender: visual chat, scene… · 2746★ · 812★/天 · 3天
+5. [os6/nospeaker](https://github.com/os6/nospeaker) · make your macbook's trackpad talk using its haptic motor · 397★ · 811★/天 · 12h · Swift
+6. [omonkeyz/xbox-emulator](https://github.com/omonkeyz/xbox-emulator) · Progress notes for running Xbox Series X S builds on PC (Tom… · 1297★ · 784★/天 · 40h · Rust
+7. [iamajmeena/neonclipping](https://github.com/iamajmeena/neonclipping) · Paste a link, get captioned 9:16 clips in ~2 min. Free, loca… · 2092★ · 585★/天 · 4天 · Python
+8. [R0Y00/Xbox2Windows](https://github.com/R0Y00/Xbox2Windows) · GTA VI static recompilation research for x64 Windows. Source… · 1298★ · 576★/天 · 2天 · Python
 
 ## 具身智能 · 人形机器人
 
 ### 动态（近 24 小时）
 
-1. [【城事】具身智能正融入城市生活“第一现场”](https://news.google.com/rss/articles/CBMiWkFVX3lxTFBzTkJkWTlOdmlRMzAzQThtMHI5VXNYNlducC1kbjM1ejhMdXZMR0hBUUs3TjFYV2UxWktheXlwVDBXazJvT0k4WEE5bmVOZVpnVTcwSGF0a0tWdw?oc=5) · 2 家转载 · 9 小时前
-2. [机器人也要“实习”？探访香港首个具身智能国际应用训练场](https://news.google.com/rss/articles/CBMiZEFVX3lxTE9KRFhZUjg4SGtzdGtucWFXWGY4VGZaY1BPUEozcFhCam9DMkkzNkk2Z2pYZUtsbHE3QjNwZ3VzeEVVdG9vd0NFSWFEaWJTRWRCYUlVLWJvSzB2LVRfV2VYamx3V0Y?oc=5) · 2 家转载 · 21 小时前
-3. [共建消费级具身智能开源新生态，启元机器人亮相2026开放原子开发者大会](https://news.google.com/rss/articles/CBMijAFBVV95cUxOM3NlcVZGbEc1YUdSYTd1ajVPTW8ya0EzZWNvNlZnb2Y3SGdfaVcxWDJnXzVKTUowbm1FeXhfTGlMRlVramstSzBDUlE5bEZraE5tODVKd294RlB3cFVyLVJJSGNDZ0FvT3dFTFdhSHFXd0plU3Z6YW53T2RqWENZODI4VlNmbEtfRXJYaw?oc=5) · 2 家转载 · 23 小时前
-4. [人形机器人“贴身肉搏”，搏出了什么？](https://news.google.com/rss/articles/CBMijAFBVV95cUxPN2ZkTERaZFpmaEUtR2FUNTlUR2E4NkNsSW5FZEFfWVhhVktrWVRPUW0tYzJaRHRsQklPTGRCWThlMkdncnpYMU1LdzJBQm9DM2RkM1lIRHZzcVBqckJtNW53NHFKVl94MlJMeExYZmFIQ0ZTd2UwVC1SeFlxTmZGMlFOcHlfS09QYzkzcg?oc=5) · 58 分钟前
-5. [工信部:《计算机行业快评报告：发布5项人形机器人标准，评测与训练数据同步立规》](https://news.google.com/rss/articles/CBMiUEFVX3lxTFBPeGVWaHNlNXM4ZXB1SnNGV09CcmxIOVFHQkRENGNrTDJmRUZ4ZDNDbWRNNjJpajVYZHBScEdjYS1RY3ozMU5PSVdyeTFfQWM3?oc=5) · 1 小时前
-6. [花数十万买台机器人搬箱子，只顶0.1个人｜蚂蚁灵波圆桌对话](https://news.google.com/rss/articles/CBMiiAFBVV95cUxPazZHc1dvZWhIMDB6UUo5MnNFVVRMdVNSS0tWcFBLa0hpblZ5Rlhra1gwTkNTWlFPVWtVSTBlQldhTGJBUERIc1lINWhJVzNwSldBZ0dCTVVnaUo5ZWZlYmRZTnpBWjRuREhiT2QxOWY2M2xTbGQ5STR4TDZLUnJkcjkwa2FUcjV0?oc=5) · 1 小时前
-7. [摩根大通预计美国人形机器人2030年产量达40万台 2035年市场规模或逼近300亿美元](https://news.google.com/rss/articles/CBMiSEFVX3lxTE5XM3VfeUoxMVBFdG1IZlRwWWtNSDJkY1hhV3FEUkY4VVdPdEVseGV4SFY4RkJUbXFRR3FHeUdzbHlmR1NXX2tiNA?oc=5) · 2 小时前
-8. [从拼算力到拼效率 机器人训练成本迎变局](https://news.google.com/rss/articles/CBMijAFBVV95cUxNREpZVElfbFU2UHVqUVA1QU41aEVyMFc3YXBrd2JjaGlNd1pyLXlvLUsxNkFEbTJxQ2U2VTlyaHRaMXU3VUdiR1lUcGN3NHFSbHUwb0xycmoxa1lNMmVqN01EMm5VTlQxVzYxS2FmWXZ2ZXhGN0FzRmJOdkgtWG9JQl9fTXdQQzF1UGtzMQ?oc=5) · 3 小时前
+1. [河南郑州：人形机器人秀“功夫” 吸引观众驻足观看](https://news.google.com/rss/articles/CBMiaEFVX3lxTE5Iem0yb0hlM28yamlQNHNzNzZrTV95c0lsb2VpcFY0ZWRtSzZYaFN3QVRjY3VxeERfR2pISy1hc3ZhUllwVTl6NFNwcHBoUE9GaGpMQWo1dGpKQkRMa2tCbU1MMzk4UVhT?oc=5) · 2 家转载 · 13 小时前
+2. [绿的谐波毛利率四年回落，人形机器人收入未单列](https://news.google.com/rss/articles/CBMiYkFVX3lxTE9nRVhBalNiMkF4anB3ZmhJd0ItN1RlQmt2TU1EUmhxOVN1VzBfeGVPMG1OQ0V6UGlzVjBUdTU4dnpIVjhOOGRQWEJ6aEVSMkx0RmVLX1Z1c0hmWmw2SFlrTEl3?oc=5) · 23 分钟前
+3. [把机器人“教”进真实世界（新职·新知㊶）](https://news.google.com/rss/articles/CBMijAFBVV95cUxNUUxUZDhhcTRHbXVGYWJPUGZFVnJoX0N3U2I3OWpsZ0J3TU9xNWRnQVVRZE1yQlFBaE5Nc2RlNWNjQlVra1hEQVRKaGx6bTZJamFERFRZLUVzY1NmX0N1eXBobGxaQm4zNXFGQ1k0ZVdPUjA5a0Y4MkpTSXhOYkhhWjJhTnpWT0k0cVJDaQ?oc=5) · 42 分钟前
+4. [[新闻直播间]我国启动具身智能数据国家标准研制](https://news.google.com/rss/articles/CBMidkFVX3lxTE9KeVRFcm1jd0hQVjZDcl9ybjlTZlh1YVprNENMNE9FU1JWLTFJTHdnOW5jb0FHSk1MN0p2OUxZTXdteEcxeHlnWWhfYmx5Vk5Fem9BZHdhTE9zajhLenJBVENUakZxZFhabk1jWVlTTXhabGpZR2c?oc=5) · 2 小时前
+5. [马斯克“私人助理” 机器人火了](https://news.google.com/rss/articles/CBMiVEFVX3lxTE1jcTlIWVJxN29iRVpiM2FjX2xjalV4aEVYUVFfMkNOMk03LWtlSUtBemNKT3NpMzRSWnJyQnpWN1NnYkpSLWk1dDJoeU1lMFo4djNVVg?oc=5) · 3 小时前
+6. [开普云：拟与四川发展、智元等共建具身智能场景应用生态](https://news.google.com/rss/articles/CBMiZkFVX3lxTE9UMDcwMWtLbFlIN29QZ1BtT2ZSOFNTa21mN0lQUzlaNS1pYVlfVW5EQjJaT1o3bkFjdHNTVzJ3UFhZN3YwaVJhcDNlQ0xxams2M0RNX21wY0w3czdWNkdpTklJMnJNQQ?oc=5) · 4 小时前
+7. [美国以安全为由禁止进口中国的人形机器人](https://news.google.com/rss/articles/CBMioAFBVV95cUxQNjBONjhSOGVjWklEeDBXdU53MWMxZWhjeFhJbWNKQ21EQXhJT0hwQW1XUm1oYk5SYjNzRHhXdk94VFU4UjdMVDdZYWVxWGVXQ1RxTEllcmJkZEluRElpOUFJN2MyRUJWbWliR2s4THpoSlJZY1R6OVRDejhpaE1aeGNyM2taTUhJWTdsQmVJWDRNWWpFT3ZYUXNuQ1RsekhZ?oc=5) · 6 小时前
+8. [以标准创新赋能高质量发展，浦东具身智能等领域多项成果跻身“上海标准”](https://news.google.com/rss/articles/CBMijAFBVV95cUxPRUZZc0Y3OWRKQlFDR3ZYd0p0UjAySXRPNG9TT21MNmgzWjBlRllieGxhbmdMLWNmVXI3NXo4NGt6MHlyYVBRR1F5NDJTOXU3c19Vc3Y2SElzOWpiRTljY3dfZ0VocXRFUHp0NDRTa3dqSE9ITENaa1ZkZEpvTnA1WEV2V28ycjhoYWExZQ?oc=5) · 8 小时前
 
 ### arXiv 机器人新论文（cs.RO）
 
-1. [One Prior, Two Dynamics: Repurposing Video Diffusion Transformers for Self-Supervised Latent Action Learning](https://arxiv.org/abs/2611.26617v1) · 2 天前
-2. [AgentRoboCritic: Understanding the Capability of Frontier Agents on Direct Robot Control](https://arxiv.org/abs/2611.26613v1) · 2 天前
-3. [A Tutorial on Complementarity-Based Contact Models for Robotics](https://arxiv.org/abs/2611.26600v1) · 2 天前
-4. [PGX: Physically Grounded Execution for Long-Horizon Humanoid Loco-Manipulation](https://arxiv.org/abs/2611.26596v1) · 2 天前
+1. [One Prior, Two Dynamics: Repurposing Video Diffusion Transformers for Self-Supervised Latent Action Learning](https://arxiv.org/abs/2611.26617v1) · 3 天前
+2. [AgentRoboCritic: Understanding the Capability of Frontier Agents on Direct Robot Control](https://arxiv.org/abs/2611.26613v1) · 3 天前
+3. [A Tutorial on Complementarity-Based Contact Models for Robotics](https://arxiv.org/abs/2611.26600v1) · 3 天前
+4. [PGX: Physically Grounded Execution for Long-Horizon Humanoid Loco-Manipulation](https://arxiv.org/abs/2611.26596v1) · 3 天前
 
 ## 实验室动态（近 72 小时）
 
-1. [Combatting adversarial distillation](https://openai.com/index/combatting-adversarial-distillation) · OpenAI · 2 天前
-2. [Hebbia sees improvements in financial research with GPT-6 Astra](https://openai.com/business/customer-stories/hebbia) · OpenAI · 2 天前
-3. [Can AI help scientists identify promising drug candidates?](https://openai.com/index/introducing-medchembench) · OpenAI · 2 天前
-4. [Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup](https://huggingface.co/blog/inkling2mini) · Hugging Face · 2 天前
-5. [Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost](https://huggingface.co/blog/harness-adapters-at-scale) · Hugging Face · 2 天前
-6. [How OpenAI’s Performance Factory keeps ChatGPT fast](https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast) · OpenAI · 3 天前
+1. [Perplexity and Intelligence](https://openai.com/index/perplexity-and-intelligence) · OpenAI · 24 小时前
+2. [Combatting adversarial distillation](https://openai.com/index/combatting-adversarial-distillation) · OpenAI · 3 天前
+3. [Hebbia sees improvements in financial research with GPT-6 Astra](https://openai.com/business/customer-stories/hebbia) · OpenAI · 3 天前
+4. [Can AI help scientists identify promising drug candidates?](https://openai.com/index/introducing-medchembench) · OpenAI · 3 天前
+5. [Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup](https://huggingface.co/blog/inkling2mini) · Hugging Face · 3 天前
+6. [Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost](https://huggingface.co/blog/harness-adapters-at-scale) · Hugging Face · 3 天前
 
 ## 前沿资讯（近 24 小时）
 
-渠道：Google News · Techmeme · Simon Willison · TechCrunch · The Verge · The Decoder · IT之家 · 36氪 · Readhub
-
-### 多源印证（多家同时报道）
-
-1. [韩国高考AI作弊事件发酵 教育部长引咎辞职](https://news.google.com/rss/articles/CBMiaEFVX3lxTE1jMGhEMUM5S0F1U3JScDJjVFN3TG1iNW84UmRzcTkzNGdnalgtRm9PUXU0UzZFdWFPUUdITnJQNmg3YWhKaUU0aC1hYl94N0t4bnBaQV9hdVhFd1I4NEN5ZDJ0RzVtVVJM?oc=5) · 2 家转载 · 3 小时前
-2. [南水北调“天河”大模型完成升级](https://news.google.com/rss/articles/CBMiZEFVX3lxTE5IazBZMklVU2xqcF92VU1xQlV6Mi1QdDJzUF9zTERSY0lILW1RZHhleTdHT2ZHaThSaktXSUJSZFRRVEhRSmxRYTdQTFQtNzlSbVdKcUtUZW80cDFkU3VWYTNFNHA?oc=5) · 2 家转载 · 19 小时前
+渠道：Techmeme · The Verge · TechCrunch · The Decoder · Simon Willison · IT之家 · 36氪 · Readhub · Solidot · 雷锋网 · 量子位
 
 ### 海外媒体
 
-1. [Tesla rolls out FSD v15, featuring a photorealistic rendering of car surroundings; Elon Musk says it is real-time AI video generation without using game engines (Mike Pearl/Gizmodo)](https://www.techmeme.com/261122/p4#a261122p4) · 1 分钟前 · Techmeme
-2. [Muru](https://simonwillison.net/2026/Nov/21/muru/) · 7 小时前 · Simon Willison
-3. [Signal restricts mobile screenshots as it confronts ‘existential threat’ of AI surveillance](https://techcrunch.com/2026/11/21/signal-restricts-mobile-screenshots-as-it-confronts-existential-threat-of-ai-surveillance/) · 9 小时前 · TechCrunch
-4. [The UN fails to agree on rules regulating ‘killer robots’](https://www.theverge.com/tech/1039554/un-regulations-killer-robots) · 11 小时前 · The Verge
-5. [Nvidia researchers argue huge AI context windows are a dead end](https://the-decoder.com/nvidia-researchers-argue-huge-ai-context-windows-are-a-dead-end/) · 14 小时前 · The Decoder
-6. [Sources: AI server suppliers like Dell, HPE, Lenovo, and Supermicro are demanding substantially higher prices from buyers, months after contracts were signed (Financial Times)](https://www.techmeme.com/261122/p2#a261122p2) · 51 分钟前 · Techmeme
-7. [A tale of two Nvidias](https://techcrunch.com/2026/11/21/a-tale-of-two-nvidias/) · 10 小时前 · TechCrunch
-8. [Can Anthropic afford to put safety first?](https://www.theverge.com/podcast/1038701/anthropic-ipo-ai-safety-openai-nvidia-structure) · 17 小时前 · The Verge
-9. [Silicon Valley's growing obsession with AI doomsday is turning parts of the tech industry toward cult-like devotion](https://the-decoder.com/silicon-valleys-growing-obsession-with-ai-doomsday-is-turning-parts-of-the-tech-industry-toward-cult-like-devotion/) · 15 小时前 · The Decoder
+1. [How Dario Amodei built Anthropic's tightly knit culture with essays, Slack memos, and "Vision Quest" talks, as Anthropic seeds his ideas with opinion-makers (Nitasha Tiku/Washington Post)](https://www.techmeme.com/261122/p12#a261122p12) · 30 分钟前 · Techmeme
+2. [We haven’t seen the last of the major tech outages](https://www.theverge.com/tech/1039851/major-tech-outages) · 1 小时前 · The Verge
+3. [OpenAI’s chief scientist has thoughts on how to limit AI development](https://techcrunch.com/2026/11/22/openais-chief-scientist-has-thoughts-on-how-to-limit-ai-development/) · 3 小时前 · TechCrunch
+4. [AI coding agents ace isolated tests but complete fewer than one in ten tasks in a simulated workplace](https://the-decoder.com/ai-coding-agents-ace-isolated-tests-but-complete-fewer-than-one-in-ten-tasks-in-a-simulated-workplace/) · 9 小时前 · The Decoder
+5. [Muru](https://simonwillison.net/2026/Nov/21/muru/) · 24 小时前 · Simon Willison
+6. [After FAA, Microsoft, and bank outages, DNI Jay Clayton says Americans should prepare for "bumps in the road" as systems are upgraded to adapt to the AI age (Garrett Downs/CNBC)](https://www.techmeme.com/261122/p11#a261122p11) · 3 小时前 · Techmeme
+7. [Binding of Isaac developer removes AI music from Repentance Plus](https://www.theverge.com/games/1039770/binding-of-isaac-ai-music) · 6 小时前 · The Verge
+8. [Why data centers are at the center of the Big Tech backlash](https://techcrunch.com/2026/11/22/why-data-centers-are-at-the-center-of-the-big-tech-backlash/) · 6 小时前 · TechCrunch
+9. [Perplexity's new Monitor API turns web search from a one-off query into a nonstop watchdog](https://the-decoder.com/perplexitys-new-monitor-api-turns-web-search-from-a-one-off-query-into-a-nonstop-watchdog/) · 10 小时前 · The Decoder
 
 ### 国内媒体
 
-1. [腾讯 Chatterfly 输入法安卓版开启内测，支持语音转写、自动翻译等 AI 功能](https://www.ithome.com/1/030/576.htm) · 8 分钟前 · IT之家
-2. [澳大利亚情报主管警示数据中心与AI潜藏风险](https://36kr.com/newsflashes/4080472194175876?f=rss) · 10 分钟前 · 36氪
-3. [丘成桐回应 AI 辅助证明黎曼猜想相关言论](https://readhub.cn/topic/8yFzSChs8BO) · 1 小时前 · Readhub
-4. [特斯拉更新 Robotaxi 应急方案：确认 Cybercab 新硬件，个人车辆入网在即](https://www.ithome.com/1/030/575.htm) · 11 分钟前 · IT之家
-5. [AI芯片拉动出口破万亿，韩国出口冲刺全球第四，高度依赖半导体暗藏风险](https://36kr.com/newsflashes/4080471684600961?f=rss) · 26 分钟前 · 36氪
-6. [Linux 7.4-rc4 内核将支持并行删除 NVMe 命名空间优化性能](https://readhub.cn/topic/8yFt2F6vfmI) · 3 小时前 · Readhub
-7. [全球电子协会警告 PCB 或短缺至 2027 年上半年，风险堪比 2021 年芯片短缺](https://www.ithome.com/1/030/573.htm) · 16 分钟前 · IT之家
-8. [丘成桐回应AI辅助证明黎曼猜想](https://36kr.com/newsflashes/4080470183253125?f=rss) · 1 小时前 · 36氪
-9. [因科美 SL10 通过开源鸿蒙测评 成为全球首款星闪音箱](https://readhub.cn/topic/8yFlWhCbtlt) · 3 小时前 · Readhub
+1. [IT早报 1123：菲尔兹奖得主谈“AI 攻克黎曼猜想”仍需解决关键思路；特斯拉 FSD v15 全新实景视图引热议；张雪机车计划明年推出外卖电摩...](https://www.ithome.com/1/030/725.htm) · 25 分钟前 · IT之家
+2. [OpenAI首席科学家呼吁业界限制模型开发，首席执行官Altman表示赞同](https://36kr.com/newsflashes/4081507595424901?f=rss) · 46 分钟前 · 36氪
+3. [Kimi 也要往 AI for Science 方向发力了](https://readhub.cn/topic/8yGKBUKIfyo) · 5 小时前 · Readhub
+4. [Anthropic 到 2028 年使用的电力 98% 来自化石燃料](https://www.solidot.org/story?sid=85959) · 8 小时前 · Solidot
+5. [特朗普表态：英伟达Blackwell芯片可对华销售，但有个条件；OpenAI被曝入局智能手机赛道；DeepSeek第二轮千亿融资落地，31家出资方入局](https://www.leiphone.com/category/zaobao/qb1uol6hKvK6pRgF.html) · 14 小时前 · 雷锋网
+6. [Nature：糖尿病大鼠成功恢复正常血糖！用电刺激迷走神经控糖](https://www.qbitai.com/2026/11/511904.html) · 17 小时前 · 量子位
+7. [郑州“7·6”火灾调查报告公布：非法改装电摩入户充电，锂电池爆燃引发事故致 5 人死亡](https://www.ithome.com/1/030/721.htm) · 37 分钟前 · IT之家
+8. [马斯克：AI行业明年可能面临严重资金短缺](https://36kr.com/newsflashes/4081506751714439?f=rss) · 50 分钟前 · 36氪
+9. [OpenAI 用 GPT 优化 AMD 旗舰 GPU 电路，相关设计已送流片](https://readhub.cn/topic/8yGtuVnVSCi) · 6 小时前 · Readhub
 
 ## Reddit 热帖（近 36 小时 · 按分数）
 
-1. [Anthropic’s Claude solves the Riemann Hypothesis (the Holy Grail of maths) with a massive 250,000-page formal proof🚨](https://www.reddit.com/comments/1y1ibpk) · 4364 分 · 2266 评论 · r/singularity
-2. [One of my greatest contributions to making Gemini Neon 4 better than Claude fable 5.2](https://www.reddit.com/comments/1y1zkd4) · 1633 分 · 44 评论 · r/singularity
-3. [Basalt: Inkling 2 Mini on one 5090 at up to 613 tok/s decode and 14.100 tok/s prefill (NVFP4)](https://www.reddit.com/comments/1y1x7zo) · 459 分 · 155 评论 · r/LocalLLaMA
-4. [Inkling simply *cheff kiss*](https://www.reddit.com/comments/1y1y7rz) · 339 分 · 100 评论 · r/LocalLLaMA
-5. [Starting work on a wheeled version. Day 389 of building Asimov, an open-source humanoid robot](https://www.reddit.com/comments/1y1nhna) · 107 分 · 6 评论 · r/robotics
-6. [Inkling 2 Mini memory and speed, explained: the loop costs nothing in weights but you pay for it in KV cache and decode speed](https://www.reddit.com/comments/1y1xyqh) · 68 分 · 18 评论 · r/LocalLLM
-7. [I designed a 3D-printed robotic hand with under $25 in parts](https://www.reddit.com/comments/1y1ucbq) · 65 分 · 6 评论 · r/robotics
-8. [Hy4-mini is on the Way — a Good Alternative to Qwen3.6-35B-A3B?](https://www.reddit.com/comments/1y1xn81) · 48 分 · 4 评论 · r/LocalLLM
+1. [Old Reddit thread discussing if we will ever solve the Riemann Hypothesis](https://www.reddit.com/comments/1y22y94) · 2357 分 · 387 评论 · r/singularity
+2. [One of my greatest contributions to making Gemini Neon 4 better than Claude fable 5.2](https://www.reddit.com/comments/1y1zkd4) · 2231 分 · 54 评论 · r/singularity
+3. [Current situation](https://www.reddit.com/comments/1y2m4fd) · 571 分 · 164 评论 · r/LocalLLM
+4. [Please add a new rule: when you say "I can run X at Y" you also have to say what quant/bpw/size was used.](https://www.reddit.com/comments/1y2oe1x) · 398 分 · 68 评论 · r/LocalLLaMA
+5. [Inkling absolutely rips. ~200 tok/s decode, ~6,700 prefill on 2x3090s](https://www.reddit.com/comments/1y2gxo7) · 395 分 · 92 评论 · r/LocalLLaMA
+6. [I put Qwen3.8 Flash-Next and Inkling-2-Mini to the test, and the results are surprising!](https://www.reddit.com/comments/1y2qnic) · 140 分 · 54 评论 · r/LocalLLM
+7. [First robot I saw in the wild. It had rolled past me 6 ft and I jokingly said out loud "How rude, didn't even say hello." AND I THINK it HEARD ME! 😂](https://www.reddit.com/comments/1y29o3d) · 98 分 · 12 评论 · r/robotics
+8. [ICLR 2027 Rebuttal Score Ranked by University [N]](https://www.reddit.com/comments/1y24szp) · 74 分 · 15 评论 · r/MachineLearning
 
 (分数来自归档接口，约滞后半天；新发的帖子在归档里还只有 1 分)
 
 ## YouTube（近 24 小时发布 · 按 播放/小时）
 
-1. [AI日报：智谱GLM5.5终极王炸？Claude称攻克黎曼猜想，AI圈怎么天天在地震？](https://youtu.be/4KhTGawyCRk) · 214播放/h · 总 428 播放 · 2h
-2. [谷歌DeepMind最新Genie 4登場！AI開始自己造世界，人類即將失業還是迎來大解放？](https://youtu.be/1YaqV52azUA) · 124播放/h · 总 248 播放 · 2h
-3. [人类历史教科书高光时刻？Claude携手数学家公布167年难题黎曼猜想证明！](https://youtu.be/zP9-prZk9eY) · 76播放/h · 总 153 播放 · 2h
-4. [SpaceX董事：「你刚花百亿造出的AI，第一件事就是告诉你这笔投资有多蠢」](https://youtu.be/5i9B_16wsds) · 3播放/h · 总 3 播放 · 1h
+1. [AI周报：GPT-6.2与Gemini 4震撼全球！世纪难题告破，时代变天？](https://youtu.be/Iv2kMb1KPlQ) · 979播放/h · 总 6854 播放 · 7h
+2. [我们可能低估了AI：它正在触碰人类知识的边界](https://youtu.be/X7voWW4xMAI) · 1播放/h · 总 3 播放 · 4h
 
-(近 24 小时内发布，按每小时播放量排序)
+(近 7 小时内发布，按每小时播放量排序)
 
 ## 国内 · AI / 科技 热度激增
 
-本轮暂无上涨条目（观测不足 60 分钟，或热度持平/回落）。当前在榜 5 条：
-1. [特斯拉车载算力实时AI建模](https://s.weibo.com/weibo?q=%23%E7%89%B9%E6%96%AF%E6%8B%89%E8%BD%A6%E8%BD%BD%E7%AE%97%E5%8A%9B%E5%AE%9E%E6%97%B6AI%E5%BB%BA%E6%A8%A1%23) · 微博 · 热 29万
-2. [特斯拉 FSD](https://s.weibo.com/weibo?q=%23%E7%89%B9%E6%96%AF%E6%8B%89%20FSD%23) · 微博 · 新 · 热 26万
-3. [AG版阿里嘎多喵萌到我了](https://www.douyin.com/search/AG%E7%89%88%E9%98%BF%E9%87%8C%E5%98%8E%E5%A4%9A%E5%96%B5%E8%90%8C%E5%88%B0%E6%88%91%E4%BA%86) · 抖音 · 热度 767万
-4. [在B站就能玩到的像素射击游戏，点击即玩！【B站AI创造公开赛】](https://www.bilibili.com/video/BV1vBypzDECn) · B站 · 土豆味小哲 · 播放 60万
-5. [特斯拉FSD v15全新可视化UI引热议](https://www.toutiao.com/trending/7710844468404211227/) · 头条 · 热度 10万
+1. [在B站就能玩到的像素射击游戏，点击即玩！【B站AI创造公开赛】](https://www.bilibili.com/video/BV1vBypzDECn) · B站 · +13.3万 / 17.2h（7751/h）

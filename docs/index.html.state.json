@@ -1,39 +1,39 @@
 {
- "updated": "11-22 14:41:46",
+ "updated": "11-23 07:50:36",
  "sections": {
   "Hacker News（海外科技圈 · 按 分/小时）": [
+   "Progress map for the Lean formalization of Alessandro Masullo's manuscript",
+   "What Happened to Silicon Valley?",
+   "Perplexity and Intelligence",
+   "The Birds of GTA 6: A Field Guide to Vice City and Leonida's Wildlife",
    "Toyota, Nissan, and Honda to standardize parts to lower costs",
-   "Lean verification of the Riemann Hypothesis",
-   "Detonating a pile of lead azide",
-   "Inkling-2-Mini in 5.4 GB Memory",
-   "My monitor was cutting my download speed by 75%",
-   "Pill to treat pancreatic cancer hailed as 'biggest breakthrough in decades'",
-   "Sandwich Simulator",
-   "Data Processing Incidents on Inference Providers",
-   "Leonida – PC Recompilation of the Xbox Version of GTA 6",
-   "Advice for the next 100 Rust GUIs",
-   "Why there are still no non-WebKit browsers on iOS",
-   "PcapAnalyzer – self-hosted pcap analyzer with 27 problem detectors"
+   "87% of the Anthropic power will come from gas and 11% from coal in 2028",
+   "A Beginner's Guide to Local AI with Inkling, Qwen, and Unsloth",
+   "A miniature San Francisco with live buses, planes and boats",
+   "Agent swarm trying to solve P vs. NP",
+   "Show HN: I built a game where you are an LLM's subagent",
+   "Open Social Web Alliance",
+   "Sandwich Simulator"
   ],
   "GitHub 热榜（近 7 天新项目 · 按 ★/天）": [
    "ItsNotRexed/Leonida",
+   "EL4CTEO/fast-anything",
    "erkamyaman/rust-anything",
-   "krisgfx9/Wireless-Device-Battery-Monitor",
    "bookwjitchieni1986/blender-ai-mcp-addon",
+   "os6/nospeaker",
    "omonkeyz/xbox-emulator",
-   "R0Y00/Xbox2Windows",
    "iamajmeena/neonclipping",
-   "opokukopoku/gta-6-pc-release"
+   "R0Y00/Xbox2Windows"
   ],
   "具身智能 · 人形机器人 > 动态（近 24 小时）": [
-   "【城事】具身智能正融入城市生活“第一现场”",
-   "机器人也要“实习”？探访香港首个具身智能国际应用训练场",
-   "共建消费级具身智能开源新生态，启元机器人亮相2026开放原子开发者大会",
-   "人形机器人“贴身肉搏”，搏出了什么？",
-   "工信部:《计算机行业快评报告：发布5项人形机器人标准，评测与训练数据同步立规》",
-   "花数十万买台机器人搬箱子，只顶0.1个人｜蚂蚁灵波圆桌对话",
-   "摩根大通预计美国人形机器人2030年产量达40万台 2035年市场规模或逼近300亿美元",
-   "从拼算力到拼效率 机器人训练成本迎变局"
+   "河南郑州：人形机器人秀“功夫” 吸引观众驻足观看",
+   "绿的谐波毛利率四年回落，人形机器人收入未单列",
+   "把机器人“教”进真实世界（新职·新知㊶）",
+   "[新闻直播间",
+   "马斯克“私人助理” 机器人火了",
+   "开普云：拟与四川发展、智元等共建具身智能场景应用生态",
+   "美国以安全为由禁止进口中国的人形机器人",
+   "以标准创新赋能高质量发展，浦东具身智能等领域多项成果跻身“上海标准”"
   ],
   "具身智能 · 人形机器人 > arXiv 机器人新论文（cs.RO）": [
    "One Prior, Two Dynamics: Repurposing Video Diffusion Transformers for Self-Supervised Latent Action Learning",
@@ -42,61 +42,51 @@
    "PGX: Physically Grounded Execution for Long-Horizon Humanoid Loco-Manipulation"
   ],
   "实验室动态（近 72 小时）": [
+   "Perplexity and Intelligence",
    "Combatting adversarial distillation",
    "Hebbia sees improvements in financial research with GPT-6 Astra",
    "Can AI help scientists identify promising drug candidates?",
    "Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
-   "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
-   "How OpenAI’s Performance Factory keeps ChatGPT fast"
-  ],
-  "前沿资讯（近 24 小时） > 多源印证（多家同时报道）": [
-   "韩国高考AI作弊事件发酵 教育部长引咎辞职",
-   "南水北调“天河”大模型完成升级"
+   "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost"
   ],
   "前沿资讯（近 24 小时） > 海外媒体": [
-   "Tesla rolls out FSD v15, featuring a photorealistic rendering of car surroundings; Elon Musk says it is real-time AI video generation without using game engines (Mike Pearl/Gizmodo)",
+   "How Dario Amodei built Anthropic's tightly knit culture with essays, Slack memos, and \"Vision Quest\" talks, as Anthropic seeds his ideas with opinion-makers (Nitasha Tiku/Washington Post)",
+   "We haven’t seen the last of the major tech outages",
+   "OpenAI’s chief scientist has thoughts on how to limit AI development",
+   "AI coding agents ace isolated tests but complete fewer than one in ten tasks in a simulated workplace",
    "Muru",
-   "Signal restricts mobile screenshots as it confronts ‘existential threat’ of AI surveillance",
-   "The UN fails to agree on rules regulating ‘killer robots’",
-   "Nvidia researchers argue huge AI context windows are a dead end",
-   "Sources: AI server suppliers like Dell, HPE, Lenovo, and Supermicro are demanding substantially higher prices from buyers, months after contracts were signed (Financial Times)",
-   "A tale of two Nvidias",
-   "Can Anthropic afford to put safety first?",
-   "Silicon Valley's growing obsession with AI doomsday is turning parts of the tech industry toward cult-like devotion"
+   "After FAA, Microsoft, and bank outages, DNI Jay Clayton says Americans should prepare for \"bumps in the road\" as systems are upgraded to adapt to the AI age (Garrett Downs/CNBC)",
+   "Binding of Isaac developer removes AI music from Repentance Plus",
+   "Why data centers are at the center of the Big Tech backlash",
+   "Perplexity's new Monitor API turns web search from a one-off query into a nonstop watchdog"
   ],
   "前沿资讯（近 24 小时） > 国内媒体": [
-   "腾讯 Chatterfly 输入法安卓版开启内测，支持语音转写、自动翻译等 AI 功能",
-   "澳大利亚情报主管警示数据中心与AI潜藏风险",
-   "丘成桐回应 AI 辅助证明黎曼猜想相关言论",
-   "特斯拉更新 Robotaxi 应急方案：确认 Cybercab 新硬件，个人车辆入网在即",
-   "AI芯片拉动出口破万亿，韩国出口冲刺全球第四，高度依赖半导体暗藏风险",
-   "Linux 7.4-rc4 内核将支持并行删除 NVMe 命名空间优化性能",
-   "全球电子协会警告 PCB 或短缺至 2027 年上半年，风险堪比 2021 年芯片短缺",
-   "丘成桐回应AI辅助证明黎曼猜想",
-   "因科美 SL10 通过开源鸿蒙测评 成为全球首款星闪音箱"
+   "IT早报 1123：菲尔兹奖得主谈“AI 攻克黎曼猜想”仍需解决关键思路；特斯拉 FSD v15 全新实景视图引热议；张雪机车计划明年推出外卖电摩...",
+   "OpenAI首席科学家呼吁业界限制模型开发，首席执行官Altman表示赞同",
+   "Kimi 也要往 AI for Science 方向发力了",
+   "Anthropic 到 2028 年使用的电力 98% 来自化石燃料",
+   "特朗普表态：英伟达Blackwell芯片可对华销售，但有个条件；OpenAI被曝入局智能手机赛道；DeepSeek第二轮千亿融资落地，31家出资方入局",
+   "Nature：糖尿病大鼠成功恢复正常血糖！用电刺激迷走神经控糖",
+   "郑州“7·6”火灾调查报告公布：非法改装电摩入户充电，锂电池爆燃引发事故致 5 人死亡",
+   "马斯克：AI行业明年可能面临严重资金短缺",
+   "OpenAI 用 GPT 优化 AMD 旗舰 GPU 电路，相关设计已送流片"
   ],
   "Reddit 热帖（近 36 小时 · 按分数）": [
-   "Anthropic’s Claude solves the Riemann Hypothesis (the Holy Grail of maths) with a massive 250,000-page formal proof🚨",
+   "Old Reddit thread discussing if we will ever solve the Riemann Hypothesis",
    "One of my greatest contributions to making Gemini Neon 4 better than Claude fable 5.2",
-   "Basalt: Inkling 2 Mini on one 5090 at up to 613 tok/s decode and 14.100 tok/s prefill (NVFP4)",
-   "Inkling simply *cheff kiss*",
-   "Starting work on a wheeled version. Day 389 of building Asimov, an open-source humanoid robot",
-   "Inkling 2 Mini memory and speed, explained: the loop costs nothing in weights but you pay for it in KV cache and decode speed",
-   "I designed a 3D-printed robotic hand with under $25 in parts",
-   "Hy4-mini is on the Way — a Good Alternative to Qwen3.6-35B-A3B?"
+   "Current situation",
+   "Please add a new rule: when you say \"I can run X at Y\" you also have to say what quant/bpw/size was used.",
+   "Inkling absolutely rips. ~200 tok/s decode, ~6,700 prefill on 2x3090s",
+   "I put Qwen3.8 Flash-Next and Inkling-2-Mini to the test, and the results are surprising!",
+   "First robot I saw in the wild. It had rolled past me 6 ft and I jokingly said out loud \"How rude, didn't even say hello.\" AND I THINK it HEARD ME! 😂",
+   "ICLR 2027 Rebuttal Score Ranked by University [N"
   ],
   "YouTube（近 24 小时发布 · 按 播放/小时）": [
-   "AI日报：智谱GLM5.5终极王炸？Claude称攻克黎曼猜想，AI圈怎么天天在地震？",
-   "谷歌DeepMind最新Genie 4登場！AI開始自己造世界，人類即將失業還是迎來大解放？",
-   "人类历史教科书高光时刻？Claude携手数学家公布167年难题黎曼猜想证明！",
-   "SpaceX董事：「你刚花百亿造出的AI，第一件事就是告诉你这笔投资有多蠢」"
+   "AI周报：GPT-6.2与Gemini 4震撼全球！世纪难题告破，时代变天？",
+   "我们可能低估了AI：它正在触碰人类知识的边界"
   ],
   "国内 · AI / 科技 热度激增": [
-   "特斯拉车载算力实时AI建模",
-   "特斯拉 FSD",
-   "AG版阿里嘎多喵萌到我了",
-   "在B站就能玩到的像素射击游戏，点击即玩！【B站AI创造公开赛】",
-   "特斯拉FSD v15全新可视化UI引热议"
+   "在B站就能玩到的像素射击游戏，点击即玩！【B站AI创造公开赛】"
   ]
  }
 }
