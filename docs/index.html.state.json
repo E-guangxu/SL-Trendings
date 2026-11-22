@@ -1,59 +1,70 @@
 {
- "updated": "11-22 07:50:38",
+ "updated": "11-22 11:38:29",
  "sections": {
   "Hacker News（海外科技圈 · 按 分/小时）": [
-   "Lean verification of the Riemann Hypothesis",
    "Hurried Announcement: Alessandro Masullo GRH",
+   "Lean verification of the Riemann Hypothesis",
    "Inkling-2-Mini in 5.4 GB Memory",
-   "Inkling 2 Mini",
    "Detonating a pile of lead azide",
    "My monitor was cutting my download speed by 75%",
-   "We promoted developers into architects without informing them",
+   "Data Processing Incidents on Inference Providers",
    "Pill to treat pancreatic cancer hailed as 'biggest breakthrough in decades'",
-   "PostgreSQL Extensions in Go",
+   "Leonida – PC Recompilation of the Xbox Version of GTA 6",
+   "We promoted developers into architects without informing them",
+   "Sandwich Simulator",
    "Advice for the next 100 Rust GUIs",
-   "RCE in Gnupg",
-   "Show HN: Zero C# – C# without a runtime or GC"
+   "PcapAnalyzer – self-hosted pcap analyzer with 27 problem detectors"
   ],
   "GitHub 热榜（近 7 天新项目 · 按 ★/天）": [
    "ItsNotRexed/Leonida",
    "erkamyaman/rust-anything",
-   "omonkeyz/xbox-emulator",
    "krisgfx9/Wireless-Device-Battery-Monitor",
+   "omonkeyz/xbox-emulator",
    "bookwjitchieni1986/blender-ai-mcp-addon",
    "R0Y00/Xbox2Windows",
    "iamajmeena/neonclipping",
-   "sybil-solutions/inference-optimisation-skill"
+   "sybil-solutions/skill-distill"
   ],
   "实验室动态（近 72 小时）": [
    "Combatting adversarial distillation",
-   "Hebbia sees improvements in financial research with GPT-6 Astra",
-   "Can AI help scientists identify promising drug candidates?",
    "Welcome Inkling 2 Mini, Cutting-edge Performance for your Local Setup",
    "Introducing harness adapters: adapt your favorite model to your harness to improve performance and cost",
-   "How OpenAI’s Performance Factory keeps ChatGPT fast",
-   "Explore the Codex Security Plugin",
-   "See PR scans in action"
+   "Hebbia sees improvements in financial research with GPT-6 Astra",
+   "Can AI help scientists identify promising drug candidates?",
+   "How OpenAI’s Performance Factory keeps ChatGPT fast"
   ],
-  "前沿资讯（近 24 小时）": [
-   "南水北调“天河”大模型完成升级",
-   "首批五座昇腾AI词元工厂落地！江苏AI产业发展按下“快充键”",
-   "新质生产力大咖说·AI季｜城市大脑的“智控”密码",
-   "Anthropic上市未能止住美股暴跌 华尔街追问什么能拯救AI交易",
-   "双创半导体ETF来了！10家基金公司集体出手",
-   "思想者｜胡延平：打造智能经济新形态，为何需要“生态算法”？",
-   "[朝闻天下",
-   "一款智能盒子，服务20多个行业（创业创富的年轻人） --经济·科技",
-   "最新 | 试题经过大模型测试？官方连夜声明！",
-   "英伟达，被查"
+  "前沿资讯（近 24 小时） > 多源印证（多家同时报道）": [
+   "南水北调“天河”大模型完成升级"
+  ],
+  "前沿资讯（近 24 小时） > 海外媒体": [
+   "Matchmakers say more tech workers fear romantic espionage after the Jensen Huang scandal; an AI companion app pitches \"zero espionage\" executive girlfriends (Wired)",
+   "Muru",
+   "Signal restricts mobile screenshots as it confronts ‘existential threat’ of AI surveillance",
+   "The UN fails to agree on rules regulating ‘killer robots’",
+   "Nvidia researchers argue huge AI context windows are a dead end",
+   "Researchers used canary credentials in requests to AI routers like OpenRouter and Vercel, even under \"ZDR\" policies, and saw \"privacy\" often broken, keys stolen (Dan Goodin/Ars Technica)",
+   "A tale of two Nvidias",
+   "Can Anthropic afford to put safety first?",
+   "Silicon Valley's growing obsession with AI doomsday is turning parts of the tech industry toward cult-like devotion"
+  ],
+  "前沿资讯（近 24 小时） > 国内媒体": [
+   "Claude宣称攻克黎曼猜想数小时后，斯坦福数学家公布纯人类证明",
+   "特斯拉 FSD v15 全新可视化 UI 引热议，消息称是在硬件劣势的情况做了 3D 高斯全场景重建",
+   "行业报告：中国脑机接口产业集聚于三大城市群",
+   "GPT-6.2 Astra再次暴击具身模型：16项任务成功率较GPT-6 Astra翻倍",
+   "特斯拉在美推出FSDv 15",
+   "神舟二十三乘组在轨将满六个月，中国空间站将迎来首位外籍航天员到访",
+   "Nest 应用及网页端 2027 年停服 相关能力迁移至 Google Home",
+   "刚刚，DeepSeek V1作者创业项目曝光：开源Agent",
+   "国家中医药管理局认证中心：未与任何大模型企业合作 亦未开展测评"
   ],
   "YouTube（近 24 小时发布 · 按 播放/小时）": [
+   "POET迎来关键转折！从巨头撤单到九大客户入局，光通信商业模式正在改变！科技股反弹乏力，下一轮真正的考验是什么？POET,LITE,COHR,NVDA,MRVL",
    "November 2026 AI Industry Weekly Recap: Anthropic’s Record-Breaking IPO, AI Solves Century-Old Ma..."
   ],
   "国内 · AI / 科技 热度激增": [
-   "AI剧里的太监都像太子",
-   "星芒O1 Pro与华为阔直板外观对比",
-   "特朗普一句话搅乱硅谷AI企业出海生意"
+   "25万页AI黎曼猜想证明难核验",
+   "Anthropic造富 谁接住了泼天富贵"
   ]
  }
 }
