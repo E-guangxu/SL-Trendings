@@ -156,6 +156,7 @@ AI_ONLY = (os.environ.get("AI_ONLY", "").strip().lower() or "on") not in ("0", "
 AI_TERMS_CN = (
     "人工智能", "大模型", "大语言模型", "多模态", "智能体", "算法", "算力", "芯片",
     "半导体", "光刻", "晶圆", "GPU", "CPU", "NPU", "TPU", "数据中心", "液冷", "光模块",
+    "内存", "闪存", "固态", "显卡", "服务器", "封装", "制程",
     "云计算", "边缘计算", "量子计算", "量子芯片", "核聚变", "机器人", "人形机器人",
     "具身智能", "自动驾驶", "无人驾驶", "智能驾驶", "无人机", "脑机", "神经网络",
     "机器学习", "深度学习", "强化学习", "开源", "编程", "程序员", "开发者", "代码",
@@ -197,7 +198,11 @@ _EN_TERM_SET = tuple(t for t in AI_TERMS_CN if t.isascii())
 
 # 这几个词太泛：热榜里「某科技公司发布会」「新款数码产品」大多是消费导购，
 # strict 模式下不算命中，用于国内榜单这种必须从严的源。
-_WEAK_TERMS = ("科技", "数码", "黑科技", "硬科技", "智能手机")
+_WEAK_TERMS = ("科技", "数码", "黑科技", "硬科技", "智能手机",
+               # 公司名单独出现不算数：「多啃苹果牙齿能变整齐」里的苹果是水果，
+               # 「华为子品牌开卖」是导购稿。标题里另外还有芯片/发布/系统这类
+               # 语境词时，会命中别的白名单词，照样能进。
+               "苹果", "华为", "三星", "小米", "谷歌", "微软", "腾讯", "百度")
 
 # 娱乐内容的强特征。必须单独拦一道：像「黄俊捷出道十周年苹果烟花」这种，
 # 靠「苹果」命中了公司白名单，但整条是粉丝应援，和科技毫无关系。
@@ -220,6 +225,11 @@ def is_ai_tech(text, strict=False):
     s = (text or "").strip()
     if not s:
         return False
+    # 先把「长得像白名单词、其实不是」的说法摘掉：
+    # 「三星系统」是天文（一颗恒星带两颗伴星），不是三星电子；
+    # 「三星堆」是考古。不清掉的话这类纯科学/考古条目会靠一个词混进来。
+    for trap in ("三星系统", "三星堆", "三星伴月", "北斗七星", "人造卫星轨迹"):
+        s = s.replace(trap, "")
     for bad in AI_TERMS_BLOCK:
         if bad in s:
             return False
@@ -512,19 +522,23 @@ def open_bytes(req, timeout=FETCH_TIMEOUT):
             return resp.read()
 
 
-def fetch(url, timeout=FETCH_TIMEOUT):
+def fetch(url, timeout=FETCH_TIMEOUT, direct=False):
+    """direct=True 强制直连：国内源绕代理是「本机→代理→国内」，实测慢 3~5 倍。"""
     req = urllib.request.Request(url, headers={"User-Agent": UA})
+    if direct:
+        with OPENER_DIRECT.open(req, timeout=timeout) as resp:
+            return resp.read().decode("utf-8", "ignore")
     return open_bytes(req, timeout).decode("utf-8", "ignore")
 
 
-def fetch_retry(url, retries=FETCH_RETRIES, backoff=4, timeout=FETCH_TIMEOUT):
+def fetch_retry(url, retries=FETCH_RETRIES, backoff=4, timeout=FETCH_TIMEOUT, direct=False):
     """带重试的 fetch。Google News 会偶发 SSL 中断
     （实测 `[SSL: UNEXPECTED_EOF_WHILE_READING]`），重试基本就好，
     别让一次抖动把整段新闻变成「抓取失败」。"""
     last = None
     for attempt in range(retries):
         try:
-            return fetch(url, timeout=timeout)
+            return fetch(url, timeout=timeout, direct=direct)
         except Exception as exc:
             last = exc
             if attempt < retries - 1:
@@ -685,9 +699,10 @@ def yt_channel_latest(channel_id, limit=5):
     return out
 
 
-# 资讯的时间窗。12 小时是权衡出来的：再短会漏掉「昨晚发生、今早发酵」的，
-# 再长就开始混进已经凉掉的旧闻。
-NEWS_WINDOW_H = float(os.environ.get("NEWS_WINDOW_H", "").strip() or "12")
+# 资讯的时间窗。原来是 12 小时，但垂直媒体（量子位、The Decoder）一天只发
+# 几条，12 小时窗口里经常整段空着 —— 那「来源多」就只是名义上的。放到 24 小时，
+# 每条仍标着「几小时前」，旧的自然看得出旧。
+NEWS_WINDOW_H = float(os.environ.get("NEWS_WINDOW_H", "").strip() or "24")
 
 # 中文科技新闻里一大半是活动稿和政务通稿：「XX 论坛圆满收官」「XX 座谈会召开」
 # 「某地擘画 AI 产业蓝图」。它们含 AI/科技关键词，但没有任何前沿信息 ——
@@ -695,29 +710,29 @@ NEWS_WINDOW_H = float(os.environ.get("NEWS_WINDOW_H", "").strip() or "12")
 NEWS_TITLE_BLOCK = (
     "论坛", "峰会", "揭牌", "签约", "圆满", "共话", "擘画", "调研", "座谈",
     "走访", "宣讲", "党建", "主题教育", "开幕式", "闭幕式", "发布会现场",
+    # 电商促销稿：「XX 开卖」「到手价」「直降」是导购，不是前沿
+    "开卖", "到手价", "直降", "券后", "预售开启",
 )
 
 
 def fmt_age(pub):
     """把 RSS 的 pubDate 换算成「几分钟前」。看板上「什么时候发生的」
-    比「Sat, 21 Nov 2026」有用得多。"""
-    if not pub:
-        return ""
-    try:
-        from email.utils import parsedate_to_datetime
-        dt = parsedate_to_datetime(pub)
-        if dt.tzinfo is None:
-            dt = dt.replace(tzinfo=datetime.timezone.utc)
-        h = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 3600.0
-        if h < 0:
-            return "刚刚"
-        if h < 1:
-            return "%d 分钟前" % max(1, int(h * 60))
-        if h < 24:
-            return "%.0f 小时前" % h
-        return "%.0f 天前" % (h / 24)
-    except Exception:
-        return pub[:16]
+    比「Sat, 21 Nov 2026」有用得多。
+
+    时间格式三种都有：RFC822（大多数 RSS）、ISO8601（Atom / The Verge）、
+    `2026-11-21 20:44:52  +0800`（36氪，两个空格）。统一交给 _rss_dt 认。
+    """
+    dt = _rss_dt(pub)
+    if dt is None:
+        return (pub or "")[:16]
+    h = (datetime.datetime.now(datetime.timezone.utc) - dt).total_seconds() / 3600.0
+    if h < 0:
+        return "刚刚"
+    if h < 1:
+        return "%d 分钟前" % max(1, int(h * 60))
+    if h < 24:
+        return "%.0f 小时前" % h
+    return "%.0f 天前" % (h / 24)
 
 
 def _pub_ts(text):
@@ -852,6 +867,12 @@ GITHUB_BLOCK = (
     "刷星", "引流", "接码", "爬虫池", "优惠券",
     # 凭据提取 / 设备解锁这类工具在榜上常冲到前排，但不是前沿，是灰产。
     "凭据提取", "密码提取", "提取工具", "unlock",
+    # 2026-11-22：一批「游戏外挂 / 盗版密钥」仓库靠刷星挤进前排，特征是
+    # 仓库名带 `portable-x64`、描述里写 preactivated / multi-instance，
+    # 语言标 Jupyter Notebook（其实根本没代码），一天涨一千多星。
+    "preactivated", "portable-x", "portable x64", "multi-instance",
+    "green-timed", "uncensored", "hypixel", "skyblock", "roblox",
+    "war thunder", "emulator keys", "nsp-box", "xci/nsp", "one-click ready",
 )
 # 没写描述的仓库一律跳过：真项目都会写一句干什么用，
 # 空描述 + 高星速基本就是刷量空壳（实测 google-ultra 2555★、google-one-tools 466★ 都是空的）。
@@ -1013,6 +1034,172 @@ def lab_posts(limit=8):
             rows.extend(chunk)
     rows.sort(key=lambda r: r["age_h"])
     return rows[:limit]
+
+
+# ---- 资讯渠道：媒体 RSS ----
+# 只有 Google News 一个源时，一小时内被同一批通讯社稿占满，「谁在报道」
+# 其实只剩一个视角。这里补上各自的 RSS：
+#   ai=True  垂直 AI 媒体，标题天然在范围内，不必再过关键词（过了反而会误杀，
+#            比如「GPT-6.2 暴击具身模型」不含任何白名单词，但显然该收）
+#   ai=False 综合科技/产业媒体，必须过 is_ai_tech，否则半版都是手机导购和财报
+NEWS_FEEDS = [
+    # 海外（走代理）
+    {"name": "TechCrunch", "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+     "cn": False, "ai": True},
+    {"name": "The Decoder", "url": "https://the-decoder.com/feed/",
+     "cn": False, "ai": True},
+    {"name": "The Verge", "url": "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml",
+     "cn": False, "ai": True},
+    {"name": "Techmeme", "url": "https://www.techmeme.com/feed.xml",
+     "cn": False, "ai": False},
+    {"name": "Ars Technica", "url": "https://feeds.arstechnica.com/arstechnica/index",
+     "cn": False, "ai": False},
+    {"name": "Simon Willison", "url": "https://simonwillison.net/atom/everything/",
+     "cn": False, "ai": True},
+    # 国内（直连，走代理反而慢）
+    {"name": "量子位", "url": "https://www.qbitai.com/feed", "cn": True, "ai": True},
+    {"name": "IT之家", "url": "https://www.ithome.com/rss/", "cn": True, "ai": False},
+    {"name": "Solidot", "url": "https://www.solidot.org/index.rss", "cn": True, "ai": False},
+    {"name": "Readhub", "url": "https://readhub.cn/rss", "cn": True, "ai": False},
+    {"name": "雷锋网", "url": "https://www.leiphone.com/feed", "cn": True, "ai": False},
+    {"name": "36氪", "url": "https://www.36kr.com/feed", "cn": True, "ai": False},
+]
+
+# 每个源最多留几条。不设上限时 IT之家（单次 60 条）会把整段吃光，
+# 那就又变回「一个来源」了。
+NEWS_PER_FEED = int(os.environ.get("NEWS_PER_FEED", "").strip() or "3")
+
+
+def _rss_dt(text):
+    """RSS 用 RFC822（`Sun, 22 Nov 2026 03:21:10 GMT`），Atom 用 ISO8601。
+    两种都要认，否则 Atom 源（Simon Willison）会全部因为「没时间」被丢掉。"""
+    s = clean_title(text)
+    if not s:
+        return None
+    try:
+        from email.utils import parsedate_to_datetime
+
+        dt = parsedate_to_datetime(s)
+        if dt is not None:
+            if dt.tzinfo is None:
+                dt = dt.replace(tzinfo=datetime.timezone.utc)
+            return dt
+    except Exception:
+        pass
+    try:
+        # 36氪 给的是 `2026-11-21 20:44:52  +0800`（日期和时间之间两个空格），
+        # fromisoformat 要求单个空格，先压一下。
+        dt = datetime.datetime.fromisoformat(re.sub(r"\s+", " ", s).replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=datetime.timezone.utc)
+        return dt
+    except Exception:
+        return None
+
+
+def _feed_one(feed, window_h):
+    """抓单个媒体源。失败返回空表 —— 一家挂了不能拖垮整段。"""
+    name = feed["name"]
+    try:
+        xml = fetch_retry(feed["url"], retries=2, timeout=20, direct=feed["cn"])
+    except Exception as exc:
+        print("[news] %s 抓取失败: %s" % (name, exc))
+        return []
+
+    blocks = re.findall(r"<item>([\s\S]*?)</item>", xml)
+    atom = False
+    if not blocks:
+        blocks = re.findall(r"<entry>([\s\S]*?)</entry>", xml)
+        atom = True
+    if not blocks:
+        print("[news] %s 不是 RSS/Atom（%d 字节）" % (name, len(xml)))
+        return []
+
+    now = datetime.datetime.now(datetime.timezone.utc)
+    out = []
+    for blk in blocks[:40]:
+        t = re.search(r"<title[^>]*>([\s\S]*?)</title>", blk)
+        if not t:
+            continue
+        title = clean_title(t.group(1))
+        if not title:
+            continue
+        if atom:
+            m = re.search(r'<link[^>]*href="([^"]+)"', blk)
+            link = m.group(1).strip() if m else ""
+        else:
+            m = re.search(r"<link>([\s\S]*?)</link>", blk)
+            link = clean_title(m.group(1)) if m else ""
+        d = re.search(r"<(pubDate|published|updated|dc:date)>([\s\S]*?)</\1>", blk)
+        dt = _rss_dt(d.group(2)) if d else None
+        if dt is None:
+            continue  # 没时间就没法判断「是不是这一小时的事」，宁可不要
+        age_h = (now - dt).total_seconds() / 3600.0
+        if age_h < 0:
+            age_h = 0.0
+        if age_h > window_h:
+            continue
+        if not feed["ai"] and not is_ai_tech(title, strict=True):
+            continue
+        if any(b in title for b in NEWS_TITLE_BLOCK):
+            continue
+        out.append({
+            "title": title,
+            "url": link,
+            "ts": dt.timestamp(),
+            "age_h": age_h,
+            "age": fmt_age(d.group(2)),
+            "source": name,
+            "cn": feed["cn"],
+            "n": 1,
+        })
+    out.sort(key=lambda r: -r["ts"])
+    return out[:NEWS_PER_FEED]
+
+
+def _interleave(rows):
+    """按来源轮转取：每个源先出最新一条，再第二轮。
+
+    纯按时间排会让 IT之家 + 36氪 把 8 个位置占满 —— 明明接了十来个渠道，
+    看上去还是只有两个来源。轮转能把「渠道多」这件事直接体现在版面里。"""
+    buckets, order = {}, []
+    for r in rows:
+        s = r.get("source") or ""
+        if s not in buckets:
+            buckets[s] = []
+            order.append(s)
+        buckets[s].append(r)
+    out, i = [], 0
+    while True:
+        added = False
+        for s in order:
+            if i < len(buckets[s]):
+                out.append(buckets[s][i])
+                added = True
+        if not added:
+            break
+        i += 1
+    return out
+
+
+def news_feed_rows(window_h, seen=None, skip_en=False):
+    """所有媒体源并行抓，去重后分成海外/国内两组。"""
+    seen = seen if seen is not None else set()
+    en, cn = [], []
+    feeds = [f for f in NEWS_FEEDS if not (skip_en and not f["cn"])]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=len(feeds)) as pool:
+        results = list(pool.map(lambda f: _feed_one(f, window_h), feeds))
+    for rows in results:
+        for r in rows:
+            k = _dedup_key(r["title"])
+            if not k or k in seen:
+                continue
+            seen.add(k)
+            (cn if r["cn"] else en).append(r)
+    en.sort(key=lambda r: -r["ts"])
+    cn.sort(key=lambda r: -r["ts"])
+    return _interleave(en), _interleave(cn)
+
 
 
 # 发布时间文本 → 天数。YouTube 会按界面语言给「17 小時前」或「17 hours ago」，
@@ -1610,44 +1797,88 @@ def lab_section(lines):
 
 
 def news_section(lines, specs):
-    """前沿资讯：时间窗卡死，先把活动稿/政务通稿滤掉，剩下的按新鲜度排。"""
+    """前沿资讯：时间窗卡死，多渠道并收。
+
+    原来只有 Google News 一个源，一小时内的稿子基本来自同一批通讯社，
+    「几家转载」看着像多源印证，其实是同一篇通稿被转载。现在三块分开：
+    多源印证（Google News 的转载计数）→ 海外媒体 → 国内媒体。"""
     lines.append("## 前沿资讯（近 %d 小时）" % int(NEWS_WINDOW_H))
     lines.append("")
+    # 代理没开只影响海外那几块，国内 RSS 是直连的，照抓。
+    # （原来这里直接 return，等于 Clash 一关整段都没了。）
     if PROXY_DEAD:
-        lines.append("(代理未开，海外源已跳过)")
+        lines.append("(代理未开，Google News 与海外媒体已跳过)")
         lines.append("")
-        return
-    seen, rows = set(), []
-    for q in _news_queries(specs):
-        try:
-            for it in gnews_topic(q, 8, NEWS_WINDOW_H):
-                if not is_ai_tech(it["title"]):
-                    continue
-                if any(b in it["title"] for b in NEWS_TITLE_BLOCK):
-                    continue
-                k = _dedup_key(it["title"])
-                if not k or k in seen:
-                    continue
-                seen.add(k)
-                rows.append(it)
-        except Exception as exc:
-            print("[news] %s 抓取失败: %s" % (q, exc))
-    if not rows:
+
+    seen = set()
+
+    # 1) Google News：唯一能给出「N 家转载」这个热度信号的源
+    g_rows = []
+    if not PROXY_DEAD:
+        for q in _news_queries(specs):
+            try:
+                for it in gnews_topic(q, 8, NEWS_WINDOW_H):
+                    if not is_ai_tech(it["title"]):
+                        continue
+                    if any(b in it["title"] for b in NEWS_TITLE_BLOCK):
+                        continue
+                    k = _dedup_key(it["title"])
+                    if not k or k in seen:
+                        continue
+                    seen.add(k)
+                    g_rows.append(it)
+            except Exception as exc:
+                print("[news] %s 抓取失败: %s" % (q, exc))
+        g_rows.sort(key=lambda x: (-x["n"], -x.get("ts", 0)))
+        # 只有一条媒体在发的稿子，媒体自己的 RSS 会收得更准（还带原文链接）。
+        # 这里只留「两家以上同时报道」的 —— 那才是转载数想表达的信号，
+        # 否则这一段会重新变成本地政务稿和活动通稿的堆放处。
+        g_rows = [r for r in g_rows if r["n"] >= 2]
+
+    # 2) 各家媒体的 RSS（并行，逐源容错）
+    en_rows, cn_rows = news_feed_rows(NEWS_WINDOW_H, seen, skip_en=PROXY_DEAD)
+
+    if not (g_rows or en_rows or cn_rows):
         lines.append("(近 %d 小时没有抓到相关资讯)" % int(NEWS_WINDOW_H))
         lines.append("")
         return
-    rows.sort(key=lambda x: (-x["n"], -x.get("ts", 0)))
-    for i, r in enumerate(rows[:10], 1):
-        extra = []
-        if r["n"] > 1:
-            extra.append("%d 家转载" % r["n"])
-        if r["age"]:
-            extra.append(r["age"])
-        if r["src"]:
-            extra.append(r["src"])
-        lines.append("%d. [%s](%s)%s" % (
-            i, r["title"], r["url"], (" · " + " · ".join(extra)) if extra else ""))
+
+    # 把实际用到的渠道列在开头，一眼能看出「来源有多少」
+    used = []
+    if g_rows:
+        used.append("Google News")
+    for r in en_rows + cn_rows:
+        if r["source"] not in used:
+            used.append(r["source"])
+    lines.append("渠道：%s" % " · ".join(used))
     lines.append("")
+
+    def emit(rows, cap):
+        for i, r in enumerate(rows[:cap], 1):
+            extra = []
+            if r.get("n", 1) > 1:
+                extra.append("%d 家转载" % r["n"])
+            if r.get("age"):
+                extra.append(r["age"])
+            if r.get("source"):
+                extra.append(r["source"])
+            lines.append("%d. [%s](%s)%s" % (
+                i, r["title"], r["url"], (" · " + " · ".join(extra)) if extra else ""))
+        lines.append("")
+
+    if g_rows:
+        lines.append("### 多源印证（多家同时报道）")
+        lines.append("")
+        emit(g_rows, 6)
+    if en_rows:
+        lines.append("### 海外媒体")
+        lines.append("")
+        emit(en_rows, 9)
+    if cn_rows:
+        lines.append("### 国内媒体")
+        lines.append("")
+        emit(cn_rows, 9)
+
 
 
 def yt_section(lines, specs):

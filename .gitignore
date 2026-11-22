@@ -17,5 +17,6 @@ board.html.state.json
 # 命中缓存反而会拿到昨天的星数，所以那边 GITHUB_CACHE_H=0 关掉，
 # 缓存文件也不该进仓库。
 *.github.json
+*.github_cache.json
 
 logs/
