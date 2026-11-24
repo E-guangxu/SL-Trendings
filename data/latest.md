@@ -1,113 +1,122 @@
-# AI · 科技前沿 · 2026-11-24
+# AI · 科技前沿 · 2026-11-25
 
 > 范围：AI（主） / 科技（辅）｜只收 AI / 科技，无关话题已滤除；各段按热度涨速排序。
 
 ## Hacker News（海外科技圈 · 按 分/小时）
 
-1. [Nvidia Reinstates Jensen Huang as CEO](https://www.cnbc.com/2026/11/23/nvidia-jensen-huang-ceo.html) · 195分/h · 1922 分 · 10h · 3019 评论
-2. [Per Arm's request, this site will be discontinued on 4 December 2026 :(](https://arm.jonpalmisc.com/) · 171分/h · 775 分 · 5h · 158 评论
-3. [Ladybird is now in alpha](https://ladybird.org/posts/alpha/) · 170分/h · 1294 分 · 8h · 311 评论
-4. [Dario is hyping the dangers so OSS models are illegal and he stays in control](https://twitter.com/ylecun/status/2124550037912920090) · 145分/h · 976 分 · 7h · 564 评论
-5. [Apple removed my open-source app from EU App Stores after 9 years](https://github.com/glushchenko/fsnotes/discussions/2056) · 91分/h · 459 分 · 5h · 96 评论
-6. [VP ≠ VNP over Every Field](https://github.com/anthropics/formal-math/tree/main/vp-vnp) · 87分/h · 147 分 · 2h · 104 评论
-7. [GLM-5.4: Toward generalized coding with our first loop transformer](https://z.ai/blog/glm-5.4) · 75分/h · 1024 分 · 14h · 333 评论
-8. [Stalwart is now a drop-in replacement for Microsoft Exchange](https://stalw.art/blog/microsoft-exchange-replacement/) · 62分/h · 80 分 · 1h · 41 评论
-9. [Kagi Mail (public beta)](https://blog.kagi.com/kagi-mail-public-beta) · 48分/h · 317 分 · 7h · 250 评论
-10. [Free alternative TV network built from the Internet Archive's forgotten videos](https://spelunkr.tv) · 41分/h · 923 分 · 23h · 159 评论
-11. [Levent Alpöge comments on his Riemann Hypothesis proof](https://twitter.com/__alpoge__/status/2124987173439209561) · 35分/h · 51 分 · 1h · 34 评论
-12. [GPUI is getting its own repository](https://github.com/zed-industries/gpui) · 24分/h · 71 分 · 3h · 13 评论
+1. [LLM agents work for their parent companies, not for you](https://michaelharley.net/posts/2026/11/01/llm-agents-work-for-their-parent-companies-not-for-you/) · 78分/h · 870 分 · 11h · 367 评论
+2. [Ternary Bonsai 2.5 27B](https://prismml.com/news/bonsai-2-5-27b) · 73分/h · 270 分 · 4h · 90 评论
+3. [Heart attack and stroke risk detectable decades in advance](https://www.ed.ac.uk/news/heart-attack-and-stroke-risk-detectable-decades-in-advance) · 46分/h · 91 分 · 2h · 34 评论
+4. [GPT-6 models demonstrate intrinsic protein-design capabilities](https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities/) · 41分/h · 114 分 · 3h · 23 评论
+5. [Active intrusion campaign against Check Point security management servers](https://www.greynoise.io/blog/check-point-security-management-servers-intrusion-campaign) · 34分/h · 248 分 · 7h · 113 评论
+6. [Jetty Pro](http://hypercritical.co/2026/11/23/jetty-pro) · 33分/h · 246 分 · 7h · 113 评论
+7. [An unclassified CIA system was breached in a cyberattack](https://apnews.com/article/cia-cyberattack-unclassified-system-bfa6d3b02e3b0e2779dfb613c900bd77) · 32分/h · 78 分 · 2h · 26 评论
+8. [Cloudflare hides shortcomings of the underlying infrastructure](https://charlie.fish/posts/2026/11/what-cloudflare-doesnt-tell-you/) · 30分/h · 141 分 · 5h · 95 评论
+9. [Anthropic breaks below $83 IPO price](https://www.bloomberg.com/news/articles/2026-11-24/anthropic-breaks-below-83-ipo-price-in-premarket-trading) · 29分/h · 307 分 · 10h · 614 评论
+10. [Grafana 12.4.16, 13.0.14, 13.1.11, 13.2.7 and 13.3.2 (multiple CVEs)](https://grafana.com/grafana/download) · 26分/h · 115 分 · 4h · 19 评论
+11. [GTA 6 Running on Windows](https://twitter.com/raul_bs3/status/2125213756238291075) · 23分/h · 245 分 · 11h · 291 评论
+12. [Quad9 pulled their DNS service from France](https://quad9.net/news/blog/quad9-service-deactivation-in-france/) · 22分/h · 333 分 · 15h · 165 评论
 
 ## GitHub 热榜（近 7 天新项目 · 按 ★/天）
 
-1. [Marvisak/VIctory](https://github.com/Marvisak/VIctory) · An attempt at running GTA VI on PC · 1179★ · 1.4万★/天 · 2h · Rust
-2. [EL4CTEO/fast-anything](https://github.com/EL4CTEO/fast-anything) · Don't rewrite it in Rust. Rewrite the 5% that's slow: profil… · 3107★ · 1304★/天 · 2天 · Rust
-3. [os6/nospeaker](https://github.com/os6/nospeaker) · make your macbook's trackpad talk using its haptic motor · 1409★ · 946★/天 · 36h · Swift
-4. [omonkeyz/xbox-emulator](https://github.com/omonkeyz/xbox-emulator) · Progress notes for running Xbox Series X S builds on PC (Tom… · 1655★ · 624★/天 · 3天 · Rust
-5. [AFK-surf/xnulinux](https://github.com/AFK-surf/xnulinux) · XNU as a loadable kernel module inside Linux (macOS personal… · 1993★ · 559★/天 · 4天 · Objective-C++
-6. [iamajmeena/neonclipping](https://github.com/iamajmeena/neonclipping) · Paste a link, get captioned 9:16 clips in ~2 min. Free, loca… · 2304★ · 503★/天 · 5天 · Python
-7. [ivall/xcl](https://github.com/ivall/xcl) · Xbox Series compatibility layer for Windows - runs console g… · 1502★ · 476★/天 · 3天 · Rust
-8. [R0Y00/Xbox2Windows](https://github.com/R0Y00/Xbox2Windows) · Static recompilation research for Xbox Series X S software o… · 1495★ · 459★/天 · 3天 · Python
+1. [Marvisak/VIctory](https://github.com/Marvisak/VIctory) · An attempt at running GTA VI on PC · 1.1万★ · 1.0万★/天 · 26h · Rust
+2. [fxceless/victory-fork](https://github.com/fxceless/victory-fork) · Work-in-progress fork of VIctory: getting an Xbox Series tit… · 1712★ · 7089★/天 · 6h · Rust
+3. [xcl-dev/xcl](https://github.com/xcl-dev/xcl) · Xbox Series compatibility layer for Windows - runs console g… · 7801★ · 1876★/天 · 4天 · Rust
+4. [ubiquitarianism/leonida](https://github.com/ubiquitarianism/leonida) · A continuation of Leonida, the Xbox PC port interface of GTA… · 1858★ · 1864★/天 · 24h · Python
+5. [EL4CTEO/fast-anything](https://github.com/EL4CTEO/fast-anything) · Don't rewrite it in Rust. Rewrite the 5% that's slow: profil… · 3594★ · 1063★/天 · 3天 · Rust
+6. [4lwayz/portwatch-vi](https://github.com/4lwayz/portwatch-vi) · Does GTA VI run on PC yet? A live tracker of community recom… · 2807★ · 928★/天 · 3天 · JavaScript
+7. [AFK-surf/xnulinux](https://github.com/AFK-surf/xnulinux) · XNU as a loadable kernel module inside Linux (macOS personal… · 3339★ · 732★/天 · 5天 · Objective-C++
+8. [os6/nospeaker](https://github.com/os6/nospeaker) · make your macbook's trackpad talk using its haptic motor · 1750★ · 703★/天 · 2天 · Swift
 
 ## 具身智能 · 人形机器人
 
 ### 动态（近 24 小时）
 
-1. [90后西交大博士 冲刺港交所“移动操作机器人第一股”](https://news.google.com/rss/articles/CBMihgFBVV95cUxPNzlIcV9fM3dwX0NHdXVCelVMQjV1RER2aGlKcjJlanJGR0J3MVoyaHFIUUVuZFNnbXdQT2daem53VTZPem1uUEtKY213RFRVLW4xWU9qdVlNQld2LUVWRVVTMld3elg5SEVKRXZsSEFpZC1WLUh4eFFTTXJNdFZjTGFRcU1Idw?oc=5) · 50 分钟前
-2. [吉利小米长安撤出人形机器人 精度不足成本高](https://news.google.com/rss/articles/CBMiW0FVX3lxTE5DVWI0TEdxY0JUVEFTcG9QTTNfOXNSS0JkLUxZSFlfYURqRkVRR3Jad19uLXpLaGZEWmk2b0JkMWpzb09tWHliQzNNNldBVUtHOVpHSkdFMFQ3bE0?oc=5) · 2 小时前
-3. [光合创投朱嘉：宇树的真正底色，是具身智能的基础设施价值](https://news.google.com/rss/articles/CBMiUEFVX3lxTFBvVy1YaFFNMEtkQ2RaampYY2N2Y0dZNXlWZ2R5MmNNSDd5S3BDVmZxS0xlUm40WDNyV0s2YXpHVkZJQ1lwN1l2dEdpOUZBc09E?oc=5) · 3 小时前
-4. [发行价下调近三成，无基石，“工业具身智能第一股”微亿智造重启招股](https://news.google.com/rss/articles/CBMioAFBVV95cUxQblFPR2ZCQ09rZXM5TUpjd05abU1GWFppRjJ2LVJncjVLR19fWXB5clJYLXl0VTdUYnFrdnZ0YlRpWGhMeFJRalAyTTUzSGd5eVI5bWI4aGNzU1lHNl92VFVidWNkVWFwUnl4RVFMbUhMZ2FseTlBTHR0UFByc3pyanl6VGZ3TzgzU2Z0Tl9rbFBOMlpULTZ3VGNpZkhCYWpv?oc=5) · 5 小时前
-5. [人形机器人步入商业化关键期 多重利好共振板块走强](https://news.google.com/rss/articles/CBMiYkFVX3lxTE9zRjBzRUtxY0ZjM0Vubmdud2Q0OHI2ZU4yaHRvTkN6Z29YeTVUWGdjbDI1TWk5X0ZvZmZfQVdHcVZkVUU5cXNDZXlKTk4yRjJDbXZVQ0dFa1VuSFF0YmZoU0R3?oc=5) · 6 小时前
-6. [2026年春季开yun彩票手机版下载发布首款具身智能家居中枢，多模态传感重构人机交互](https://news.google.com/rss/articles/CBMiUkFVX3lxTFBldEFCUzB2ZVNvOUdpQlFDY3UzTUt5YnZsck9aQV9HZ3ZIT0Jsd1Iwdkh3QnVvZ1A5QjNvU1c5cHpYVzVoYXR5WVRMOXFPVHhxVEE?oc=5) · 6 小时前
-7. [四足探勘铺路、人形进场验证：波士顿动力Atlas人形机器人首次进入半导体制造领域](https://news.google.com/rss/articles/CBMiSEFVX3lxTE5BekMteTZqN2RKLXpzUjNaSVRNY2ZHcU9CTzVsaVZVcV9xNmswOVNhcWNEdlJ5M05vcWxjS0RRQUMtbDZYeUY0Rg?oc=5) · 7 小时前
-8. [以标准创新赋能高质量发展，浦东具身智能等领域多项成果跻身“上海标准”](https://news.google.com/rss/articles/CBMicEFVX3lxTE9jb09Ja2FPME1GZUxGSm1ZRkQ1Y2ozQ19ibXowOFVOcWVuMTk3dFBBWW03Z0Z6MzJORjNEUzl1cjlGY0d5T29aeHQ5T3hNX2U3cXFabS1TU3JDQWdETUFXTFB2RWgzdDNmS2tQdnNYNDY?oc=5) · 7 小时前
+1. [江西首个工业制造具身智能软件工厂上线](https://news.google.com/rss/articles/CBMifkFVX3lxTE9DN3VyVjAtWEQxSzQ5eUFRdnNIRDNUeWJYYkZVWDRPOHM3RkhPbWtKYlp5YzVBZUVibUxQdUtieEJvazBqZzY0V3oyRk9zWGpSWUhFNFFrQWhPSVhDdEdOT2tRdFhCRWJmMC1PV3V4X3ZhMlhyazFZMEJaMGJoQQ?oc=5) · 2 家转载 · 10 小时前
+2. [【投融资】软银5亿美元押注Agile Robots：估值85亿美元，瞄准人形机器人规模化生产](https://news.google.com/rss/articles/CBMijAFBVV95cUxQaEx6N0ZtR25JSERmT0JnZGs0ZUZzSDllemxLNThDNE5nQnRVVUtWTDN6MXFvVzlCLWw3NXhCX2JzNlBGdVR2TkRpTk1jLURwMzh0dXRvNlFFcE5RZTJXYUNyMTViZm12V3Fzcm5vdXJkMTFab3BtbDdKTl9qRnBfQ3ZQOGd5WDd4MG1hTg?oc=5) · 16 分钟前
+3. [南山智尚11月24日回应人形机器人话题：相关业务依规划有序开展_公司新闻](https://news.google.com/rss/articles/CBMiYkFVX3lxTFBISFZVTUpWOHdqb0ZPTHJUUzRxa0tLWXVTMC1vLU1Zc25JS2VkTU5ZQzhKOVJvcGZpWWFtenJjc3p3cDBBR3pJUlpzNUloNWtzb0ZVb09lVThxa1JWaGVraThR?oc=5) · 43 分钟前
+4. [帮机器人“看懂”环境 “想清” 路径解决问题](https://news.google.com/rss/articles/CBMiggFBVV95cUxNQVFCSG5TVGxLRGo3SW5UOUZhcmpkLUFQaUl0bEp1d1hGVE0wcmJPaHM5RG1taWJHSVd2VF9IWnJnZGE1eHNDTU9NdTI5aXlqS2ZQT0llWGJudWVSR2Ywejc5SmlhTGMwc3dNOG0yV2dXakhYWm5SV3FCZ00xeWxGRVpB?oc=5) · 2 小时前
+5. [省市区协同助力人才发展，华科大博士后心无旁骛创业- 湖北日报新闻客户端](https://news.google.com/rss/articles/CBMiWEFVX3lxTFBSMTBHeWVSb09wUlExZ29Ba1g2M25VMUxDM1lsaUZsYkZJTUdCSlZuaVZGUjNvckVnX3NPZU1jSWt0bHduMjFKVFVaSEk0MHNhSk5pTXk0T0k?oc=5) · 3 小时前
+6. [“手把手”训练 人形机器人](https://news.google.com/rss/articles/CBMieEFVX3lxTFBkZVlGTC05Wm1wMzA0T05FQUpvVWlLcnl2dW42N2xWUVM3WC1kY3hjWGwxTXlDcDJkRVNXUmZqU2pSN1lFbG5DNnJiQUZaTlg1ZU5kUDEtN21BS0lETnhoUzBxOHpQcTBNcThuLVpQaTdpUkpUbi10dg?oc=5) · 4 小时前
+7. [苹果披露人形机器人自主控制系统HALO 物理AI有望加速落地](https://news.google.com/rss/articles/CBMiSEFVX3lxTFBqVWEzUTJXQWxVak1wbnlib1NDM2Z2U0p4OEwzQWhaS1dkX2VyN0Qyc2hvLThXV1BRYmRyRGQzMlVsMVV0ZXRRag?oc=5) · 5 小时前
+8. [把机器人“教”进真实世界](https://news.google.com/rss/articles/CBMiakFVX3lxTE9kV0dsRWYxTjNWMHM4cFdUM2JqN3VzV2FNV0VUZTlNMkxfZjBnUlEwYTJaRXRDUmNRTXZzUzRmeFRyc0ptTllTeW1VcVF0eXFIVUh1a3ZRb3h5WnpOWXJPMkpDZlhXQ3Fic0E?oc=5) · 5 小时前
 
 ### arXiv 机器人新论文（cs.RO）
 
-1. [Task2Hand: A Contact-Grounded Skill for Parametric Dexterous-Hand Morphology Design](https://arxiv.org/abs/2611.27967v1) · 3 天前
-2. [Real-time neuromorphic audio and vision perception for autonomous robotic applications: Integration and experimental evaluation on a rover platform](https://arxiv.org/abs/2611.27953v1) · 3 天前
-3. [What Must a Model Tell a Planner? Outcome Interfaces for Risk-Aware Planning After Robot Damage](https://arxiv.org/abs/2611.27939v1) · 3 天前
-4. [Interactive Semi-Parametric On-Track Learning for Vehicle Dynamics in Autonomous Racing](https://arxiv.org/abs/2611.27932v1) · 3 天前
+1. [Pruning Autonomous Driving VLAs: What to Preserve for Reasoning and Action](https://arxiv.org/abs/2611.31240v1) · 1 天前
+2. [ACAP: Asynchronous Coding Agents for Efficient Robot Control](https://arxiv.org/abs/2611.31205v1) · 1 天前
+3. [Embo-Harness: Towards Understanding Frontier-Model-as-Policy Harness](https://arxiv.org/abs/2611.31201v1) · 1 天前
+4. [VITA-WAM: Manifold-Aligned World-Action Modeling for Real-Time Robot Control](https://arxiv.org/abs/2611.31195v1) · 1 天前
 
 ## 实验室动态（近 72 小时）
 
-1. [OpenAI and Cisco introduce Shirudo](https://openai.com/index/introducing-shirudo) · OpenAI · 3 小时前
-2. [RoboTrack: Point tracking for real-world robotic manipulation](https://huggingface.co/blog/allenai/robotrack) · Hugging Face · 7 小时前
-3. [Finding faster quantum algorithms with agents and formal verification](https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/) · Google DeepMind · 7 小时前
-4. [Connected intelligence for in-house legal](https://openai.com/business/learn/connected-intelligence-for-in-house-legal) · OpenAI · 16 小时前
-5. [Richpanel helps companies automate 50% of support in 30 days](https://openai.com/business/customer-stories/richpanel-ai-customer-support) · OpenAI · 16 小时前
-6. [How to build and maintain an agentic evaluation](https://huggingface.co/blog/agentic-evals) · Hugging Face · 24 小时前
-7. [Perplexity and Intelligence](https://openai.com/index/perplexity-and-intelligence) · OpenAI · 2 天前
+1. [Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton](https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance) · Hugging Face · 7 小时前
+2. [GPT-6 models demonstrate intrinsic protein-design capabilities](https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities) · OpenAI · 11 小时前
+3. [Searching for distant planets with Astra](https://openai.com/index/searching-for-distant-planets-with-astra) · OpenAI · 13 小时前
+4. [How Intentful uses dots to make more time for growth](https://openai.com/business/customer-stories/intentful-dots) · OpenAI · 24 小时前
+5. [How iFood scales coding agents across 15,000 repositories](https://openai.com/business/customer-stories/ifood) · OpenAI · 24 小时前
+6. [Clay helps sales teams win with Codex and ChatGPT](https://openai.com/business/customer-stories/clay-plugins-openai) · OpenAI · 24 小时前
+7. [OpenAI and Cisco introduce Shirudo](https://openai.com/index/introducing-shirudo) · OpenAI · 1 天前
+8. [RoboTrack: Point tracking for real-world robotic manipulation](https://huggingface.co/blog/allenai/robotrack) · Hugging Face · 1 天前
 
 ## 前沿资讯（近 24 小时）
 
-渠道：Google News · The Verge · TechCrunch · Simon Willison · Techmeme · Ars Technica · The Decoder · 36氪 · IT之家 · Readhub · Solidot · 量子位 · 雷锋网
+渠道：Google News · Techmeme · Simon Willison · Ars Technica · TechCrunch · The Verge · The Decoder · Readhub · 36氪 · IT之家 · 雷锋网 · Solidot · 量子位
 
 ### 多源印证（多家同时报道）
 
-1. [第四届人工智能与马克思主义理论学科交叉研究学术研讨会举行](https://news.google.com/rss/articles/CBMiWkFVX3lxTE1ZTzBnSGpQanhwTEQ2OUhoQUxZczFSbUkyV3NEVTVJY3NFVUwzTkNIVnB3SUZOQ2w0SDdwOWxvNzZ3cnFadm14c2hrNW1nUDVRYkloOWVsalhzQQ?oc=5) · 2 家转载 · 16 小时前
-2. [东方雨虹在北京成立华砂石晶装饰科技公司 注册资本300万元](https://news.google.com/rss/articles/CBMiYkFVX3lxTE9hdnNVSjVFQW1sWDN0WS1wS1ZlZF9ZTllSbUI0aDgxQjRxTDVrZnpYMGhaWEFHdUtDdjFrQU14dXk4T3RhRWI5SVhSOTJ5XzloVS1HWUtxaVVqenJLQ1lpcmN3?oc=5) · 2 家转载 · 18 小时前
+1. [我国牵头推动全球首个生成式人工智能治理国际标准提案](https://news.google.com/rss/articles/CBMiaEFVX3lxTFBvZkhULVd4LWZXY3BwdjBaVjk5LWtEZzlVNG5JS2MxNXZVM3lHaWlvSXJlN2hxNHcwMHpUWHp1cVFjYUJ1WjdRWFFRMUxxOFZWcHlQUUd1Z0w5ZU1kRWZDVnR6dVJ4eEpm?oc=5) · 3 家转载 · 10 小时前
+2. [三七互娱投资成立智算科技公司](https://news.google.com/rss/articles/CBMiYEFVX3lxTE9Qb1Z4TmNHaENtRzRMU0dSRFJST0FCb0YxY3RuZm95OFpSeXBzdVcwSTBYa1IzcERwLXJ6cXhoY0xLdS1QQncyRHgyMm9lQWVYSzQ4MS1ZNnh3YjlXekhVVg?oc=5) · 2 家转载 · 21 小时前
 
 ### 海外媒体
 
-1. [Trump engineered a risky comeback for Jensen Huang](https://www.theverge.com/ai-artificial-intelligence/1040652/jensen-huang-nvidia-trump-reinstated) · 1 小时前 · The Verge
-2. [Anthropic launches Claude Ship, letting AI agents review, fix, and approve code changes](https://techcrunch.com/2026/11/23/anthropic-launches-claude-ship-letting-ai-agents-review-fix-and-approve-code-changes/) · 2 小时前 · TechCrunch
-3. [Ladybird's first alpha release](https://simonwillison.net/2026/Nov/23/ladybird/) · 2 小时前 · Simon Willison
-4. [Tech stocks rally as Jensen Huang returns as Nvidia CEO; the Nasdaq 100 jumped 7%, a Magnificent Seven basket rose 8%, CoreWeave 22%, Tesla 11%, and AMD 7% (Jess Menton/Bloomberg)](https://www.techmeme.com/261123/p42#a261123p42) · 2 小时前 · Techmeme
-5. [States sue SpaceX to stop Grok from generating child sex images, revenge porn](https://arstechnica.com/tech-policy/2026/11/states-sue-spacex-to-stop-grok-from-generating-child-sex-images-revenge-porn/) · 2 小时前 · Ars Technica
-6. [OpenAI updates ChatGPT to handle complex everyday questions, web searches, and images more reliably](https://the-decoder.com/openai-updates-chatgpt-to-handle-complex-everyday-questions-web-searches-and-images-more-reliably/) · 3 小时前 · The Decoder
-7. [Welcome to elite impunity, Jensen Huang](https://www.theverge.com/ai-artificial-intelligence/1040819/welcome-to-elite-impunity-jensen-huang) · 1 小时前 · The Verge
-8. [Supertake raises $20M to let AI agents turn your market predictions into stock portfolios](https://techcrunch.com/2026/11/23/supertake-raises-20m-to-let-ai-agents-turn-your-market-predictions-into-stock-portfolios/) · 2 小时前 · TechCrunch
-9. [datasette-charts 0.1a0](https://simonwillison.net/2026/Nov/23/datasette-charts/) · 23 小时前 · Simon Willison
+1. [OpenAI says GPT-6 models can design new protein shapes and sequences using only reasoning and code, without calling specialized biology models to generate them (OpenAI)](https://www.techmeme.com/261124/p44#a261124p44) · 10 分钟前 · Techmeme
+2. [Three LLM inflection points in twelve months](https://simonwillison.net/2026/Nov/24/llm-inflection-points/) · 48 分钟前 · Simon Willison
+3. [Microsoft's historic cloud outage exposed an engineering “fog of war”](https://arstechnica.com/gadgets/2026/11/microsofts-historic-cloud-outage-exposed-an-engineering-fog-of-war/) · 1 小时前 · Ars Technica
+4. [Jensen Huang still thinks a succession plan creates unnecessary hierarchy](https://techcrunch.com/2026/11/24/jensen-huang-still-thinks-a-succession-plan-creates-unnecessary-hierarchy/) · 1 小时前 · TechCrunch
+5. [Nvidia CEO Jensen Huang is back. What happens next?](https://www.theverge.com/ai-artificial-intelligence/1030422/nvidia-jensen-huang-ai-china-alice-huang) · 2 小时前 · The Verge
+6. [Anthropic turns Claude Artifacts into standalone desktop apps for macOS and Windows](https://the-decoder.com/anthropic-turns-claude-artifacts-into-standalone-desktop-apps-for-macos-and-windows/) · 3 小时前 · The Decoder
+7. [Trump says a pardon for Jensen Huang is "always an option" but likely unnecessary, and it's "probably not too late" for the US to take an equity stake in Nvidia (New York Post)](https://www.techmeme.com/261124/p42#a261124p42) · 40 分钟前 · Techmeme
+8. [GPT 6.2 Astra Solves a Historical Mystery](https://simonwillison.net/2026/Nov/24/astra-historical-mystery/) · 7 小时前 · Simon Willison
+9. [Tidal announces ban on AI-generated music; 27 million tracks will be deleted](https://arstechnica.com/ai/2026/11/tidal-will-ban-fully-ai-generated-music-on-december-9/) · 6 小时前 · Ars Technica
 
 ### 国内媒体
 
-1. [三星据悉拟扩大西安工厂先进NAND闪存产能，供应AI数据中心](https://36kr.com/newsflashes/4082979874575238?f=rss) · 1 分钟前 · 36氪
-2. [Anthropic CEO 达里奥 · 阿莫代伊出售 337.8 万股股票，IPO 当天套现约 2.8 亿美元](https://www.ithome.com/1/031/253.htm) · 20 分钟前 · IT之家
-3. [Anthropic 首席执行官 Amodei 以每股 83 美元出售 340 万股股票](https://readhub.cn/topic/8yIyXTrkWW1) · 40 分钟前 · Readhub
-4. [越来越多的年轻远足者因过于依赖 Google Maps 迷路或遇险](https://www.solidot.org/story?sid=85970) · 9 小时前 · Solidot
-5. [实测：1450亿参数塞进笔记本，每秒狂飙80+Token！国产端侧大模型杀疯了](https://www.qbitai.com/2026/11/512195.html) · 13 小时前 · 量子位
-6. [华为星芒限时5499元起，网友喊话再便宜500，刘赫回应：我们选择创新优先；英伟达才说H200芯片不卖中国，美财长突喊：不用再限丨雷峰早报](https://www.leiphone.com/category/zaobao/WvQYh5bertpjOZdF.html) · 13 小时前 · 雷锋网
-7. [数百名员工欢呼，黄仁勋重返英伟达：感谢给我第二次机会](https://36kr.com/newsflashes/4082983049286534?f=rss) · 5 分钟前 · 36氪
-8. [IT早报 1124：英伟达恢复黄仁勋 CEO 职务；中国汽车在 39 国的份额超过日本汽车；3399 元起荣耀 700 系列手机发布；智谱 GLM-5.4 模型发布...](https://www.ithome.com/1/031/252.htm) · 28 分钟前 · IT之家
-9. [Anthropic 推出 Claude Ship 测试版 可自动审查修复代码](https://readhub.cn/topic/8yIoAw6DlDe) · 1 小时前 · Readhub
+1. [脑机系统可选择符合用户表达意图的内容](https://readhub.cn/topic/8yKfwULfXSw) · 1 分钟前 · Readhub
+2. [半导体ETF接连举牌上市公司，机构看好科技板块配置价值](https://36kr.com/newsflashes/4084395613481346?f=rss) · 8 分钟前 · 36氪
+3. [马斯克：特斯拉 AI4 足以实现“超人驾驶”，AI5 优先留给 Optimus 机器人](https://www.ithome.com/1/031/915.htm) · 12 分钟前 · IT之家
+4. [百度智能云等发起香港前沿科技产业发展联盟，助力具身智能企业拓展全球市场](https://www.leiphone.com/category/industrynews/uFuwhvMHGUY0Qeu0.html) · 15 小时前 · 雷锋网
+5. [Google 申请专利为用户量身定制 AI 电视频道](https://www.solidot.org/story?sid=85973) · 16 小时前 · Solidot
+6. [业界首提“端侧超节点”，让端侧AI组队计算：AI效率暴涨270%，不用换芯片或模型](https://www.qbitai.com/2026/11/512362.html) · 17 小时前 · 量子位
+7. [我国首套半导体设备质量标准发布 由北方华创牵头](https://readhub.cn/topic/8yJpUE0W3PD) · 10 分钟前 · Readhub
+8. [欧洲阿丽亚娜6型火箭发射36颗亚马逊低轨卫星](https://36kr.com/newsflashes/4084393841863049?f=rss) · 10 分钟前 · 36氪
+9. [黄仁勋复职后首次主持全员大会：感谢 CFO 克雷斯代管公司，称英伟达不需要接班人计划、承诺调整往日的强硬管理风格](https://www.ithome.com/1/031/914.htm) · 23 分钟前 · IT之家
 
 ## Reddit 热帖（近 36 小时 · 按分数）
 
-1. [The AI Community's Biggest Disagreement Captured In One Exchange](https://www.reddit.com/comments/1y31pza) · 6074 分 · 1369 评论 · r/singularity
-2. [Employees welcome back Jensen to Nvidia](https://www.reddit.com/comments/1y3s3m3) · 1592 分 · 633 评论 · r/singularity
-3. [GLM-5.4: Toward Generalized Coding with Our First Loop Transformer](https://www.reddit.com/comments/1y3enps) · 789 分 · 260 评论 · r/LocalLLaMA
-4. [GLM 5.4 is great at coding. But absolutely garbage at writing and anything but that. Are future open weight models going to be just codemaxxed??](https://www.reddit.com/comments/1y3lqu3) · 564 分 · 276 评论 · r/LocalLLaMA
-5. [Yann LeCun weighing in](https://www.reddit.com/comments/1y3j5ui) · 272 分 · 34 评论 · r/LocalLLM
-6. [UPDATE: I built a balancing robot with reinforcement learning](https://www.reddit.com/comments/1y3dioe) · 264 分 · 28 评论 · r/robotics
-7. [We made Inkling 2 Mini run 1.9x faster locally via Unsloth!](https://www.reddit.com/comments/1y3ml28) · 79 分 · 35 评论 · r/LocalLLM
-8. [Peak ICLR 2027 rebuttal experiences [D]](https://www.reddit.com/comments/1y3oh22) · 53 分 · 10 评论 · r/MachineLearning
+1. [Employees welcome back Jensen to Nvidia](https://www.reddit.com/comments/1y3s3m3) · 5094 分 · 1910 评论 · r/singularity
+2. [Anthropic claimed to have proved VP ≠ VNP over every field, the algebraic counterpart to the P vs NP problem](https://www.reddit.com/comments/1y3w34p) · 1642 分 · 543 评论 · r/singularity
+3. [How the memory for 1M tokens shrank from 130TB to 890MB](https://www.reddit.com/comments/1y4kikk) · 353 分 · 43 评论 · r/LocalLLaMA
+4. [Yann LeCun on Dario's framing of open weight models](https://www.reddit.com/comments/1y465ey) · 293 分 · 74 评论 · r/LocalLLaMA
+5. [Benchmarked 7 local Qwen3.8 builds (27B dense vs 125B Flash MoE) on 54 real tasks, fully autonomous on a single 5090 . Full report + playable demos attached](https://www.reddit.com/comments/1y4dxn4) · 119 分 · 38 评论 · r/LocalLLM
+6. [I gave my WatcheRobot a new job: keyboard sidekick. It looks at whichever key I hit, and its little face changes as I type.](https://www.reddit.com/comments/1y437rx) · 90 分 · 9 评论 · r/robotics
+7. [Peak ICLR 2027 rebuttal experiences [D]](https://www.reddit.com/comments/1y3oh22) · 75 分 · 13 评论 · r/MachineLearning
+8. [School project.](https://www.reddit.com/comments/1y3q21a) · 70 分 · 16 评论 · r/robotics
 
 (分数来自归档接口，约滞后半天；新发的帖子在归档里还只有 1 分)
 
 ## YouTube（近 24 小时发布 · 按 播放/小时）
 
-(近 24 小时没有抓到新视频)
+1. [Anthropic破发捞底机会? TSLA SPCX合并新进展! AAOI喜获百亿大单! NVDA ANT TSLA MU AMD AAOI！11242026 #美股 #股票 #美股分析 #投資](https://youtu.be/lLZUaIpyybw) · 951播放/h · 总 951 播放 · 1h
+
+(近 7 小时内发布，按每小时播放量排序)
 
 ## 国内 · AI / 科技 热度激增
 
-1. [在B站就能玩到的像素射击游戏，点击即玩！【B站AI创造公开赛】](https://www.bilibili.com/video/BV1vBypzDECn) · B站 · +7.8万 / 24.0h（3247/h）
+本轮暂无上涨条目（观测不足 60 分钟，或热度持平/回落）。当前在榜 9 条：
+1. [神24航天员到达发射塔架](https://s.weibo.com/weibo?q=%23%E7%A5%9E24%E8%88%AA%E5%A4%A9%E5%91%98%E5%88%B0%E8%BE%BE%E5%8F%91%E5%B0%84%E5%A1%94%E6%9E%B6%23) · 微博 · 新 · 热 45万
+2. [AI换脸还没完AI融脸又来了](https://s.weibo.com/weibo?q=%23AI%E6%8D%A2%E8%84%B8%E8%BF%98%E6%B2%A1%E5%AE%8CAI%E8%9E%8D%E8%84%B8%E5%8F%88%E6%9D%A5%E4%BA%86%23) · 微博 · 新 · 热 29万
+3. [美AI科技股集体暴跌](https://s.weibo.com/weibo?q=%23%E7%BE%8EAI%E7%A7%91%E6%8A%80%E8%82%A1%E9%9B%86%E4%BD%93%E6%9A%B4%E8%B7%8C%23) · 微博 · 新 · 热 16万
+4. [黄仁勋英伟达全员会议](https://s.weibo.com/weibo?q=%23%E9%BB%84%E4%BB%81%E5%8B%8B%E8%8B%B1%E4%BC%9F%E8%BE%BE%E5%85%A8%E5%91%98%E4%BC%9A%E8%AE%AE%23) · 微博 · 新 · 热 13万
+5. [中国航天又一项新的历史](https://s.weibo.com/weibo?q=%23%E4%B8%AD%E5%9B%BD%E8%88%AA%E5%A4%A9%E5%8F%88%E4%B8%80%E9%A1%B9%E6%96%B0%E7%9A%84%E5%8E%86%E5%8F%B2%23) · 微博 · 新 · 热 13万
+6. [巴高官连发三帖贺航天员入选](https://www.douyin.com/search/%E5%B7%B4%E9%AB%98%E5%AE%98%E8%BF%9E%E5%8F%91%E4%B8%89%E5%B8%96%E8%B4%BA%E8%88%AA%E5%A4%A9%E5%91%98%E5%85%A5%E9%80%89) · 抖音 · 热度 1203万

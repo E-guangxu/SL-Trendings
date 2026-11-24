@@ -1,93 +1,102 @@
 {
- "updated": "11-24 07:51:02",
+ "updated": "11-25 07:50:37",
  "sections": {
   "Hacker News（海外科技圈 · 按 分/小时）": [
-   "Nvidia Reinstates Jensen Huang as CEO",
-   "Per Arm's request, this site will be discontinued on 4 December 2026 :(",
-   "Ladybird is now in alpha",
-   "Dario is hyping the dangers so OSS models are illegal and he stays in control",
-   "Apple removed my open-source app from EU App Stores after 9 years",
-   "VP ≠ VNP over Every Field",
-   "GLM-5.4: Toward generalized coding with our first loop transformer",
-   "Stalwart is now a drop-in replacement for Microsoft Exchange",
-   "Kagi Mail (public beta)",
-   "Free alternative TV network built from the Internet Archive's forgotten videos",
-   "Levent Alpöge comments on his Riemann Hypothesis proof",
-   "GPUI is getting its own repository"
+   "LLM agents work for their parent companies, not for you",
+   "Ternary Bonsai 2.5 27B",
+   "Heart attack and stroke risk detectable decades in advance",
+   "GPT-6 models demonstrate intrinsic protein-design capabilities",
+   "Active intrusion campaign against Check Point security management servers",
+   "Jetty Pro",
+   "An unclassified CIA system was breached in a cyberattack",
+   "Cloudflare hides shortcomings of the underlying infrastructure",
+   "Anthropic breaks below $83 IPO price",
+   "Grafana 12.4.16, 13.0.14, 13.1.11, 13.2.7 and 13.3.2 (multiple CVEs)",
+   "GTA 6 Running on Windows",
+   "Quad9 pulled their DNS service from France"
   ],
   "GitHub 热榜（近 7 天新项目 · 按 ★/天）": [
    "Marvisak/VIctory",
+   "fxceless/victory-fork",
+   "xcl-dev/xcl",
+   "ubiquitarianism/leonida",
    "EL4CTEO/fast-anything",
-   "os6/nospeaker",
-   "omonkeyz/xbox-emulator",
+   "4lwayz/portwatch-vi",
    "AFK-surf/xnulinux",
-   "iamajmeena/neonclipping",
-   "ivall/xcl",
-   "R0Y00/Xbox2Windows"
+   "os6/nospeaker"
   ],
   "具身智能 · 人形机器人 > 动态（近 24 小时）": [
-   "90后西交大博士 冲刺港交所“移动操作机器人第一股”",
-   "吉利小米长安撤出人形机器人 精度不足成本高",
-   "光合创投朱嘉：宇树的真正底色，是具身智能的基础设施价值",
-   "发行价下调近三成，无基石，“工业具身智能第一股”微亿智造重启招股",
-   "人形机器人步入商业化关键期 多重利好共振板块走强",
-   "2026年春季开yun彩票手机版下载发布首款具身智能家居中枢，多模态传感重构人机交互",
-   "四足探勘铺路、人形进场验证：波士顿动力Atlas人形机器人首次进入半导体制造领域",
-   "以标准创新赋能高质量发展，浦东具身智能等领域多项成果跻身“上海标准”"
+   "江西首个工业制造具身智能软件工厂上线",
+   "【投融资】软银5亿美元押注Agile Robots：估值85亿美元，瞄准人形机器人规模化生产",
+   "南山智尚11月24日回应人形机器人话题：相关业务依规划有序开展_公司新闻",
+   "帮机器人“看懂”环境 “想清” 路径解决问题",
+   "省市区协同助力人才发展，华科大博士后心无旁骛创业- 湖北日报新闻客户端",
+   "“手把手”训练 人形机器人",
+   "苹果披露人形机器人自主控制系统HALO 物理AI有望加速落地",
+   "把机器人“教”进真实世界"
   ],
   "具身智能 · 人形机器人 > arXiv 机器人新论文（cs.RO）": [
-   "Task2Hand: A Contact-Grounded Skill for Parametric Dexterous-Hand Morphology Design",
-   "Real-time neuromorphic audio and vision perception for autonomous robotic applications: Integration and experimental evaluation on a rover platform",
-   "What Must a Model Tell a Planner? Outcome Interfaces for Risk-Aware Planning After Robot Damage",
-   "Interactive Semi-Parametric On-Track Learning for Vehicle Dynamics in Autonomous Racing"
+   "Pruning Autonomous Driving VLAs: What to Preserve for Reasoning and Action",
+   "ACAP: Asynchronous Coding Agents for Efficient Robot Control",
+   "Embo-Harness: Towards Understanding Frontier-Model-as-Policy Harness",
+   "VITA-WAM: Manifold-Aligned World-Action Modeling for Real-Time Robot Control"
   ],
   "实验室动态（近 72 小时）": [
+   "Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton",
+   "GPT-6 models demonstrate intrinsic protein-design capabilities",
+   "Searching for distant planets with Astra",
+   "How Intentful uses dots to make more time for growth",
+   "How iFood scales coding agents across 15,000 repositories",
+   "Clay helps sales teams win with Codex and ChatGPT",
    "OpenAI and Cisco introduce Shirudo",
-   "RoboTrack: Point tracking for real-world robotic manipulation",
-   "Finding faster quantum algorithms with agents and formal verification",
-   "Connected intelligence for in-house legal",
-   "Richpanel helps companies automate 50% of support in 30 days",
-   "How to build and maintain an agentic evaluation",
-   "Perplexity and Intelligence"
+   "RoboTrack: Point tracking for real-world robotic manipulation"
   ],
   "前沿资讯（近 24 小时） > 多源印证（多家同时报道）": [
-   "第四届人工智能与马克思主义理论学科交叉研究学术研讨会举行",
-   "东方雨虹在北京成立华砂石晶装饰科技公司 注册资本300万元"
+   "我国牵头推动全球首个生成式人工智能治理国际标准提案",
+   "三七互娱投资成立智算科技公司"
   ],
   "前沿资讯（近 24 小时） > 海外媒体": [
-   "Trump engineered a risky comeback for Jensen Huang",
-   "Anthropic launches Claude Ship, letting AI agents review, fix, and approve code changes",
-   "Ladybird's first alpha release",
-   "Tech stocks rally as Jensen Huang returns as Nvidia CEO; the Nasdaq 100 jumped 7%, a Magnificent Seven basket rose 8%, CoreWeave 22%, Tesla 11%, and AMD 7% (Jess Menton/Bloomberg)",
-   "States sue SpaceX to stop Grok from generating child sex images, revenge porn",
-   "OpenAI updates ChatGPT to handle complex everyday questions, web searches, and images more reliably",
-   "Welcome to elite impunity, Jensen Huang",
-   "Supertake raises $20M to let AI agents turn your market predictions into stock portfolios",
-   "datasette-charts 0.1a0"
+   "OpenAI says GPT-6 models can design new protein shapes and sequences using only reasoning and code, without calling specialized biology models to generate them (OpenAI)",
+   "Three LLM inflection points in twelve months",
+   "Microsoft's historic cloud outage exposed an engineering “fog of war”",
+   "Jensen Huang still thinks a succession plan creates unnecessary hierarchy",
+   "Nvidia CEO Jensen Huang is back. What happens next?",
+   "Anthropic turns Claude Artifacts into standalone desktop apps for macOS and Windows",
+   "Trump says a pardon for Jensen Huang is \"always an option\" but likely unnecessary, and it's \"probably not too late\" for the US to take an equity stake in Nvidia (New York Post)",
+   "GPT 6.2 Astra Solves a Historical Mystery",
+   "Tidal announces ban on AI-generated music; 27 million tracks will be deleted"
   ],
   "前沿资讯（近 24 小时） > 国内媒体": [
-   "三星据悉拟扩大西安工厂先进NAND闪存产能，供应AI数据中心",
-   "Anthropic CEO 达里奥 · 阿莫代伊出售 337.8 万股股票，IPO 当天套现约 2.8 亿美元",
-   "Anthropic 首席执行官 Amodei 以每股 83 美元出售 340 万股股票",
-   "越来越多的年轻远足者因过于依赖 Google Maps 迷路或遇险",
-   "实测：1450亿参数塞进笔记本，每秒狂飙80+Token！国产端侧大模型杀疯了",
-   "华为星芒限时5499元起，网友喊话再便宜500，刘赫回应：我们选择创新优先；英伟达才说H200芯片不卖中国，美财长突喊：不用再限丨雷峰早报",
-   "数百名员工欢呼，黄仁勋重返英伟达：感谢给我第二次机会",
-   "IT早报 1124：英伟达恢复黄仁勋 CEO 职务；中国汽车在 39 国的份额超过日本汽车；3399 元起荣耀 700 系列手机发布；智谱 GLM-5.4 模型发布...",
-   "Anthropic 推出 Claude Ship 测试版 可自动审查修复代码"
+   "脑机系统可选择符合用户表达意图的内容",
+   "半导体ETF接连举牌上市公司，机构看好科技板块配置价值",
+   "马斯克：特斯拉 AI4 足以实现“超人驾驶”，AI5 优先留给 Optimus 机器人",
+   "百度智能云等发起香港前沿科技产业发展联盟，助力具身智能企业拓展全球市场",
+   "Google 申请专利为用户量身定制 AI 电视频道",
+   "业界首提“端侧超节点”，让端侧AI组队计算：AI效率暴涨270%，不用换芯片或模型",
+   "我国首套半导体设备质量标准发布 由北方华创牵头",
+   "欧洲阿丽亚娜6型火箭发射36颗亚马逊低轨卫星",
+   "黄仁勋复职后首次主持全员大会：感谢 CFO 克雷斯代管公司，称英伟达不需要接班人计划、承诺调整往日的强硬管理风格"
   ],
   "Reddit 热帖（近 36 小时 · 按分数）": [
-   "The AI Community's Biggest Disagreement Captured In One Exchange",
    "Employees welcome back Jensen to Nvidia",
-   "GLM-5.4: Toward Generalized Coding with Our First Loop Transformer",
-   "GLM 5.4 is great at coding. But absolutely garbage at writing and anything but that. Are future open weight models going to be just codemaxxed??",
-   "Yann LeCun weighing in",
-   "UPDATE: I built a balancing robot with reinforcement learning",
-   "We made Inkling 2 Mini run 1.9x faster locally via Unsloth!",
-   "Peak ICLR 2027 rebuttal experiences [D"
+   "Anthropic claimed to have proved VP ≠ VNP over every field, the algebraic counterpart to the P vs NP problem",
+   "How the memory for 1M tokens shrank from 130TB to 890MB",
+   "Yann LeCun on Dario's framing of open weight models",
+   "Benchmarked 7 local Qwen3.8 builds (27B dense vs 125B Flash MoE) on 54 real tasks, fully autonomous on a single 5090 . Full report + playable demos attached",
+   "I gave my WatcheRobot a new job: keyboard sidekick. It looks at whichever key I hit, and its little face changes as I type.",
+   "Peak ICLR 2027 rebuttal experiences [D",
+   "School project."
+  ],
+  "YouTube（近 24 小时发布 · 按 播放/小时）": [
+   "Anthropic破发捞底机会? TSLA SPCX合并新进展! AAOI喜获百亿大单! NVDA ANT TSLA MU AMD AAOI！11242026 #美股 #股票 #美股分析 #投資"
   ],
   "国内 · AI / 科技 热度激增": [
-   "在B站就能玩到的像素射击游戏，点击即玩！【B站AI创造公开赛】"
+   "神24航天员到达发射塔架",
+   "AI换脸还没完AI融脸又来了",
+   "美AI科技股集体暴跌",
+   "黄仁勋英伟达全员会议",
+   "中国航天又一项新的历史",
+   "巴高官连发三帖贺航天员入选"
   ]
  }
 }
