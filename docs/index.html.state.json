@@ -1,39 +1,39 @@
 {
- "updated": "11-27 07:50:44",
+ "updated": "11-28 07:50:42",
  "sections": {
   "Hacker News（海外科技圈 · 按 分/小时）": [
+   "Michael Nielsen took down his book on neural nets",
+   "States sue SpaceX to stop Grok from generating child sex images, revenge porn",
+   "Credit card skimming scripts using WebRTC found on popular shopping sites",
    "AI made self-hosting fun again",
-   "Kamil Khan Mumtaz: Pakistani architect, admired at home, almost invisible abroad",
-   "Holy shit holy shit holy shit holy shit: The magnitude of what’s now happening",
-   "Tell HN: Happy Thanksgiving",
-   "AMD-specific fork of llama.cpp",
-   "YouTube Ad Punisher – Auto-reloads YouTube pages when an ad plays",
-   "Intel One Mono font (2023)",
-   "Nextcloud Office Desktop app",
-   "CTO of 'RansomwareHelp' Indicted for Wire Fraud",
-   "IBM gives H-1B, green card holders 3 weeks to relocate from US or leave company",
-   "Collection of preserved UI style guides",
-   "Lions' Commentary on Unix: Why It Was Secretly Copied for 20 Years"
+   "Group chat where your AI talks behind your back",
+   "Show HN: bouncemarket – a live prediction market game for a bouncing ball",
+   "I am scared: Careless People – Sarah Wynn-Williams on living under a gag order",
+   "Convex skills send the user's app idea to a remote server without telling them",
+   "9/UX: a Macintosh-inspired desktop for 9front",
+   "False computer-checked proofs",
+   "Source Control from Hell",
+   "The need for a formally verifiable mainstream programming language"
   ],
   "GitHub 热榜（近 7 天新项目 · 按 ★/天）": [
    "Marvisak/VIctory",
-   "avatarmanz/VIctory-7900XTX",
-   "fxceless/victory-fork",
-   "xcl-dev/xcl",
+   "trustno1-coder/VIctory-NVIDIA",
+   "Pixel679-cmyk/windows-titlebar-blur-customizer",
    "4lwayz/portwatch-vi",
+   "fxceless/victory-fork",
+   "nexu-io/opengame",
    "alesha-pro/llm.asm",
-   "ubiquitarianism/leonida",
    "EL4CTEO/fast-anything"
   ],
   "具身智能 · 人形机器人 > 动态（近 24 小时）": [
-   "人形机器人开发者北京亦庄集结，多项具身智能成果发布",
-   "公告全知道",
-   "当物理AI遇上6G，机器人多边协作完成任务的实现不再遥远",
-   "2026具身智能十大年度开发者成果发布",
-   "这场嘉年华集中展示一批“机器人新物种”｜组图",
-   "全通教育11月26日回应具身智能话题：子公司获云深处山东省教育行业总代理_公司新闻",
-   "双林股份11月26日回应人形机器人话题：丝杠一期10万套量产线已获定点进入小批量生产_公司新闻",
-   "粤宏远Ａ11月26日回应人形机器人话题：金旺达精密减速机有向人形机器人相关企业供货_公司新闻"
+   "扎根国家网安基地，帕西尼武汉具身超级数据工厂打造具身智能数据生产新支点",
+   "融资周报｜至简动力完成1亿美元融资；章鱼动力完成数亿元新融资",
+   "恒辉安防11月27日回应人形机器人话题：聚焦柔性执行层配套方案开发并推进客户对接_公司新闻",
+   "麦捷科技11月27日回应人形机器人话题：仿生灵巧手项目仅处前期研发阶段_公司新闻",
+   "能科科技11月27日回应具身智能话题：政策契合公司AI业务布局_公司新闻",
+   "2026广州车展：小鹏人形机器人IRON首次公开亮相 多款车型亮相",
+   "聚焦应用安全具身智能评测体系发布|北青网|清华大学|北京大学|安全意识|大模型_手机新浪网",
+   "数字筑基，抢占科创新赛道"
   ],
   "具身智能 · 人形机器人 > arXiv 机器人新论文（cs.RO）": [
    "DexLink: Synthesizing Dexterous Behaviors from Chained Hand-object Poses",
@@ -42,60 +42,56 @@
    "Memory Is Not Ground Truth: Revising Navigation Authority under Unreliable VLM Evidence for Persistent Semantic Navigation"
   ],
   "实验室动态（近 72 小时）": [
+   "Taking Trainium3 to the Track: Generating Videos with LTX-2.5",
    "Introducing the llama.cpp benchmark dashboard for AMD Ryzen and Radeon",
    "Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference",
    "Swarms, Flocks, Gangs: How to build, train, and evaluate multi-agent systems",
    "Where scientists draw the line on AI agents",
    "An Indic Voice Agent with CUGA",
-   "Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000",
-   "GPT-6 models demonstrate intrinsic protein-design capabilities",
-   "Searching for distant planets with Astra"
+   "Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000"
   ],
   "前沿资讯（近 24 小时） > 多源印证（多家同时报道）": [
-   "首个农耕文明领域大模型“天稷”发布",
-   "英国央行警告AI融资风险，大型科技公司债务及表外承诺超4万亿美元"
+   "港股“大模型双雄”，大涨20%"
   ],
   "前沿资讯（近 24 小时） > 海外媒体": [
-   "A US judge sentences a Florida man to 47 months in prison for using AI to impersonate Kick streamer N3on, defrauding a memecoin's organizers out of ~$260K (Nathan Grayson/Aftermath)",
-   "Nvidia hits pause on chip shipments to Southeast Asia",
-   "Former OpenAI researcher says the Riemann proof matters less than the fact that an AI system can produce it",
-   "Quoting Jack Despain Zhou",
-   "Jensen Huang deepfakes are the hot new AI slop",
-   "Sources: SAP is preparing a plan to eliminate at least 10,000 positions, or 9% of its staff globally, to transform its software business for the AI era (Christina Kyriasoglou/Bloomberg)",
-   "Grand Theft Auto VI proves why efficiency isn’t a virtue",
-   "GPT-6.2 Astra users now hit limits 40% faster after OpenAI patched a pricing error",
-   "sqlite3_rsync: Database Remote-Copy Tool For SQLite"
+   "Some users claim Claude is silently sabotaging projects, but the behavior may stem from a clash between its proactive nature and strict instruction following (Drew Breunig)",
+   "OpenAI countersues Apple over trade secret theft and alleged coercion of shared suppliers",
+   "Intel faced a choice: Give Trump 10% or face the consequences",
+   "Q&A with AI researchers Ege Erdil and Daniel Kokotajlo on the odds of an intelligence explosion before 2029, pausing AI, the US antagonizing China, and more (Dwarkesh Patel/Dwarkesh Podcast)",
+   "Banned Nvidia Blackwell chips turn up in a Shanghai data center linked to Alice Huang, Bloomberg reports",
+   "OpenAI countersues Apple for allegedly stealing trade secrets via a staffer who returned to Apple and \"coercing and threatening\" suppliers that work with both (Financial Times)",
+   "Three studies from Meta and AMI Labs back Yann LeCun's bet on JEPA world models over large language models"
   ],
   "前沿资讯（近 24 小时） > 国内媒体": [
-   "Anthropic团队主管称，AI正在改变工程师的晋升方式",
-   "IT早报 1127：商务部将进一步扩大二手商品流通；马斯克向全美孩子每人赠送 2 股 SpaceX 股票；华为星驰辅助驾驶发布；曝苹果 iOS 28 将彻底翻新通知中心...",
-   "OpenAI 修正计量错误 GPT-6.2 Astra 额度达上限速度提 40%",
-   "381个AI直播冲刺证明P=NP！把GitHub干崩了",
-   "深耕核心零部件，钛虎机器人轻量化关节模组Lite-1系列助力整机降本增效",
-   "图库平台充斥着生成式 AI 图像",
-   "AI算力建设催生需求，多家公司扩产高端电子树脂",
-   "育碧：我们并没有在全公司范围强制推行 AI",
-   "40 亿参数小模型逼近 Astra，MIT 探索低成本 AI 芯片设计"
+   "OpenAI 转守为攻：反诉苹果窃密，喊话“不公平竞争”",
+   "OpenAI 起诉苹果窃取商业秘密",
+   "独家丨瞄准 AI 算力天花板，「闪科光联」完成数千万融资",
+   "Kimi 向科学家提供最高 2 万美元 API 免费额度",
+   "人形机器人开发者集合！众擎开放大小脑，10亿产业级生态支持计划也来了",
+   "AI数据中心开发商LIAN选定伦敦上市，IPO拟募资5亿美元",
+   "英国养老金机构发生网络安全事件，系统紧急暂停运行",
+   "广汽弹匣电池 3.0 亮相，两硬三防守护用车安全",
+   "美团2026年三季报：营收1156亿元，AI经营工作台“妙手”已服务200万商家"
   ],
   "Reddit 热帖（近 36 小时 · 按分数）": [
-   "Singularity for me not for thee",
-   "Inside You There Are Two AI Swarms",
-   "Latency doesn't lie: Jev is (probably) Qwen3.5-35B-A3B!",
-   "Reuters confirms: Cutting off distillation and compute works and slows down Chinese Models massively",
-   "Update on the 56cm Microduck (XDuck): testing stability and get-up recovery… until it tipped backward and cracked its head open",
-   "Research agents set 50 packing problem records [R",
-   "Qwen Flash Next on an 8GB Card ~50-70tkps at 512k CTX!!"
+   "Using AI people decompiled the Xbox executable for GTA VI, ported to PC and are now adding multiplayer to it",
+   "Throttled",
+   "My experience with Qwen_3.8_27B after two months of heavy usage",
+   "54% faster generation by removing the Linux OS and llama.cpp",
+   "Last Demo by Unitree: real-time full-body teleoperation of robots",
+   "Countless users are coming out about Claude sabotaging Local ML work",
+   "AI Newbie here. Runing Qwen3.8 27b q8_0 on 5090+5080 \"gaming\" rig. I'm impressed with the answers I get compared to my paid claude opus model",
+   "Yet another duck clone I built \"for my one-year-old\" - a 40 cm xlduck. The RL policy runs on an ESP32-S3"
   ],
   "YouTube（近 24 小时发布 · 按 播放/小时）": [
-   "The Economist | The World Ahead 2027: When the AI Singularity Collides with a Political Tsunami—F..."
+   "科技股暴跌，账户波动太大？这3只长牛股拿10年睡得香"
   ],
   "国内 · AI / 科技 热度激增": [
-   "从5到24看载人航天之路",
-   "英伟达东南亚停供或影响评级",
-   "巴航天员进驻天宫进入工作状态",
-   "马斯克为何要让美国儿童成SpaceX股东",
-   "美媒为何关注中国8吨载重无人机",
-   "王兴兴：5-10年内机器人产量或超汽车"
+   "巴基斯坦航天员视频音轨被篡改",
+   "我把Steam复刻搬进了B站游玩Toy【点击即玩】ToyToy【B站AI创造公开赛】",
+   "科创板一天收复全年跌幅",
+   "巴基斯坦航天员离开地球的48小时",
+   "普京与印度AI领域天才少年自拍"
   ]
  }
 }
